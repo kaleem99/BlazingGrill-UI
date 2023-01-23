@@ -38,11 +38,11 @@ function AddMenuItems() {
   };
   return (
     <div className="AddMenu">
+    <img className="BlazingImage" src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"></img>
       <form onSubmit={handleSubmit} className="form">
-        <label>category:</label>
         <br></br>
         <select name="category" id="category" onChange={handleChange}>
-          <option value="None">None</option>
+          <option value="None">Category</option>
           {MenuItemsSection.map((item, i) => (
             <option key={i} value={item.name}>
               {item.name}
@@ -50,20 +50,22 @@ function AddMenuItems() {
           ))}
         </select>
         <br></br>
-        <label>name:</label>
+        {/* <label>name:</label> */}
         <br></br>
         <input
           type="name"
           name="name"
           value={formData.name}
+          placeholder="Name"
           onChange={handleChange}
         />
         <br />
-        <label>Price:</label>
+        {/* <label>Price:</label> */}
         <br></br>
         <input
           type="number"
           name="price"
+          placeholder="Price"
           value={formData.price}
           onChange={handleChange}
         />

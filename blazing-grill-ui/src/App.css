@@ -5,22 +5,59 @@
   /* background-color: black; */
 }
 .AddMenu {
-  width: 700px;
-  height: 400px;
-  background-color: gray;
-  margin: 10% auto;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  margin: 0% auto;
+}
+::placeholder {
+  color: white;
+  font-weight: 600;
+}
+.BlazingImage {
+  width: 400px;
+  margin: 2% auto;
+}
+.form {
+  margin: 2% auto;
+  background: #f7941d;
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+  padding-top: 20px;
+  padding-bottom: 30px;
 }
 .form > input {
-  width: 50%;
-  height: 25px;
+  background-color: #000000;
+  border: 1px solid white;
+  border-radius: 5px;
+  width: 80%;
+  height: 40px;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: white;
 }
 .form > select {
-  width: 50%;
-  height: 25px;
+  background-color: #000000;
+  color: white;
+  border: 1px solid white;
+  width: 80%;
+  font-size: 20px;
+  height: 40px;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-weight: 400;
 }
 .form > button {
-  width: 50%;
-  height: 30px;
+  width: 80%;
+  height: 40px;
+  background-color: #000000;
+  border: 1px solid white;
+  border-radius: 5px;
+  font-size: 20px;
+  color: white;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-weight: 400;
 }
 
 /* Navigation Bar */
@@ -29,7 +66,7 @@ ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #000000;
 }
 
 li {
@@ -38,7 +75,9 @@ li {
 
 li a {
   display: block;
+  font-family: "Libre Caslon Text", Sans-serif;
   color: white;
+  font-size: 25px;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -51,21 +90,24 @@ li a:hover {
   background-color: #f7941d;
 }
 .Menu {
-  width: 100%;
+  width: 90%;
   height: 800px;
   margin: 0% auto;
-  background-color: black;
+  /* background-color: black; */
 }
 .menuNameImage {
   display: grid;
   grid-template-columns: auto;
-  width: 350px;
-  height: 300px;
+  width: auto;
+  height: auto;
   margin: 10px auto;
   cursor: pointer;
 }
 .itemName {
-  color: white;
+  color: #ffffff;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-size: 40px;
+  font-weight: 500;
 }
 
 .items {
@@ -76,16 +118,102 @@ li a:hover {
 .MenuImage {
   width: 300px;
   height: 200px;
+  margin: 10% auto;
+}
+.sectionImage {
+  width: 300px;
+  height: 200px;
+  margin: 0% auto;
+}
+.Home {
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  /* padding: 20px; */
+}
+.BackItemsMenu {
+  color: #ffffff;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-size: 45px;
+  font-weight: 500;
 }
 .ItemsSections {
-  width: 100%;
-  height: 500px;
-  background-color: #333;
-  padding: 20px;
+  width: 80%;
+  height: auto;
+  background-color: #f7941d;
+  border-radius: 10px;
+  margin: 2% auto;
+  padding-bottom: 20px;
 }
 .ItemsSections > h1 {
-  color: white;
+  color: #ffffff;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-size: 45px;
+  font-weight: 500;
 }
 .BackItemsMenu {
   float: left;
+}
+.HomeFoodItemName {
+  width: 80%;
+  height: 50px;
+  display: grid;
+  margin: auto;
+  border: 2px solid white;
+  padding: 10px;
+  text-align: left;
+  grid-template-columns: 50% 30% auto auto;
+}
+.FuncButtons {
+  width: 100px;
+  height: 50px;
+  color: #f7941d;
+  font-size: 25px;
+  font-family: "Libre Caslon Text", Sans-serif;
+  font-weight: 800;
+  border-radius: 10px;
+  border: 1px solid;
+}
+#input0,
+.input0 {
+  border: none;
+  height: 50px;
+  background-color: #f7941d;
+  font-weight: 800;
+  font-size: 30px;
+}
+@media only screen and (max-width: 600px) {
+  .menuNameImage {
+    width: 150px;
+    height: auto;
+  }
+  .MenuImage {
+    width: 100px;
+    height: 100px;
+  }
+  .items {
+    grid-template-columns: auto auto;
+  }
+  .Menu {
+    height: 100vh;
+  }
+  .AddMenu {
+    width: 100%;
+    color: white;
+  }
+  .form > input,
+  .form > select,
+  .form > button {
+    width: 80%;
+    height: 30px;
+  }
+  .BlazingImage {
+    width: 300px;
+  }
+  .itemName {
+    font-size: 25px;
+  }
+  li a {
+    font-size: 20px;
+  }
 }
