@@ -123,7 +123,7 @@ li a:hover {
 .sectionImage {
   width: 300px;
   height: 200px;
-  margin: 0% auto;
+  margin: 3% auto;
 }
 .Home {
   width: 100%;
@@ -167,12 +167,14 @@ li a:hover {
 .FuncButtons {
   width: 100px;
   height: 50px;
-  color: #f7941d;
+  /* color: #f7941d; */
+  color: black;
+  border: none;
   font-size: 25px;
   font-family: "Libre Caslon Text", Sans-serif;
   font-weight: 800;
   border-radius: 10px;
-  border: 1px solid;
+  /* border: 1px solid; */
 }
 #input0,
 .input0 {
@@ -188,7 +190,7 @@ li a:hover {
     height: auto;
   }
   .MenuImage {
-    width: 100px;
+    width: 120px;
     height: 100px;
   }
   .items {
@@ -215,5 +217,31 @@ li a:hover {
   }
   li a {
     font-size: 20px;
+  }
+  .form{
+    width: 80%;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  .BackItemsMenu{
+    font-size: 25px;
+  }
+  .ItemsSections{
+    width: 90%;
+  }
+  #input0, .input0{
+    font-size: 17px;
+    height: auto;
+  }
+  .HomeFoodItemName{
+    width: 90%;
+    height: auto;
+    grid-template-columns: auto 25%;
+  }
+  .FuncButtons{
+    width: 70px;
+    height: 40px;
+    font-size: 14px;
+   
   }
 }

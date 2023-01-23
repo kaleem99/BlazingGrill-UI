@@ -7,6 +7,7 @@ import {
   getDocs,
   updateDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 function MenuItems() {
   const [itemSection, setItemSection] = useState("");
@@ -39,7 +40,13 @@ function MenuItems() {
                 >
                   Update
                 </button>
-                <button className="FuncButtons">Delete</button>
+                <button
+                  id={food.id}
+                  onClick={(e) => handleDelete(e, name)}
+                  className="FuncButtons"
+                >
+                  Delete
+                </button>
               </div>
             );
           })}
@@ -84,17 +91,38 @@ function MenuItems() {
       alert("Please ensure not leave the input empty");
       return false;
     }
+    if (tableRowPrice.value[0] === "R") {
+      tableRowPrice.value = tableRowPrice.value.slice(
+        1,
+        tableRowPrice.value.length
+      );
+    }
     try {
       await updateDoc(taskDocRef, {
         name: tableRow.value,
         price: tableRowPrice.value,
       });
       alert("Table row has been succesfully updated.");
+      fetchPost(name);
     } catch (err) {
       alert(err);
     }
   };
-
+  const handleDelete = async (e, name) => {
+    const taskDocRef = doc(db, name, e.target.id);
+    let result = window.confirm("Are you sure to delete?");
+    console.log(result);
+    if (!result) {
+      return false;
+    }
+    try {
+      await deleteDoc(taskDocRef);
+      alert("Menu item has been deleted successfully.");
+      fetchPost(name);
+    } catch (err) {
+      alert(err);
+    }
+  };
   return (
     <div className="Home">
       {itemSection === "" ? (

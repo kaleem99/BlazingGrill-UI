@@ -5,7 +5,7 @@ import { useState } from "react";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import NavMenu from "./frontend/NavigationMenu";
 import Sections from "./frontend/sections";
-const sections = ["Home", "Add Menu Item"];
+const sections = ["Home", "Add Menu Item", "Orders"];
 function App() {
   const [state, setState] = useState("Home");
   const [todo, setTodo] = useState("");
