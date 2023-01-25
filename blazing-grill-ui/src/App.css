@@ -4,11 +4,19 @@
   height: 100vh;
   /* background-color: black; */
 }
+.NavMenu {
+  position: fixed;
+  width: 100%;
+}
+button {
+  cursor: pointer;
+}
 .AddMenu {
   width: 100%;
   height: 100vh;
   background-color: #000000;
   margin: 0% auto;
+  overflow-x: scroll;
 }
 ::placeholder {
   color: white;
@@ -24,8 +32,8 @@
   width: 50%;
   height: auto;
   border-radius: 10px;
-  padding-top: 20px;
-  padding-bottom: 30px;
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 .form > input {
   background-color: #000000;
@@ -42,14 +50,15 @@
   background-color: #000000;
   color: white;
   border: 1px solid white;
-  width: 80%;
+  width: 81% !important;
   font-size: 20px;
   height: 40px;
+  border-radius: 5px;
   font-family: "Libre Caslon Text", Sans-serif;
   font-weight: 400;
 }
 .form > button {
-  width: 80%;
+  width: 81% !important;
   height: 40px;
   background-color: #000000;
   border: 1px solid white;
@@ -113,7 +122,7 @@ li a:hover {
 .items {
   display: grid;
   grid-template-columns: auto auto auto;
-  margin: 0px auto;
+  margin: 5% auto;
 }
 .MenuImage {
   width: 300px;
@@ -129,20 +138,29 @@ li a:hover {
   width: 100%;
   height: 100vh;
   background-color: #000000;
+  overflow-x: scroll;
   /* padding: 20px; */
 }
 .BackItemsMenu {
   color: #ffffff;
+  background-color: #f7941d;
+  border-radius: 15px;
+  /* float: right; */
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 200px;
   font-family: "Libre Caslon Text", Sans-serif;
   font-size: 45px;
   font-weight: 500;
 }
 .ItemsSections {
   width: 80%;
-  height: auto;
+  overflow-x: scroll;
+  height: 550px;
   background-color: #f7941d;
   border-radius: 10px;
-  margin: 2% auto;
+  margin: 5% auto;
   padding-bottom: 20px;
 }
 .ItemsSections > h1 {
@@ -151,18 +169,17 @@ li a:hover {
   font-size: 45px;
   font-weight: 500;
 }
-.BackItemsMenu {
-  float: left;
-}
+
 .HomeFoodItemName {
-  width: 80%;
-  height: 50px;
+  width: 96%;
+  height: 120px;
   display: grid;
-  margin: auto;
-  border: 2px solid white;
-  padding: 10px;
+  margin: 10px auto;
+  border-bottom: 4px solid white;
+  padding: 20px;
   text-align: left;
-  grid-template-columns: 50% 30% auto auto;
+  border-radius: 10px;
+  grid-template-columns: 85% auto;
 }
 .FuncButtons {
   width: 100px;
@@ -170,31 +187,55 @@ li a:hover {
   /* color: #f7941d; */
   color: black;
   border: none;
-  font-size: 25px;
+  font-size: 20px;
   font-family: "Libre Caslon Text", Sans-serif;
   font-weight: 800;
   border-radius: 10px;
+  margin-left: auto;
+  margin-right: 0%;
   /* border: 1px solid; */
+}
+.inputDetails {
+  display: grid;
+  grid-template-columns: auto;
+  margin-top: -10px;
+}
+.ButtonsDiv {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: auto;
 }
 #input0,
 .input0 {
   border: none;
-  height: 50px;
+  height: 40px;
+  border-radius: 5px;
   background-color: #f7941d;
   font-weight: 800;
-  font-size: 30px;
+  margin-bottom: 5px;
+  font-size: 25px;
+  border: 0.5px solid white;
 }
-@media only screen and (max-width: 600px) {
+.input0:nth-child(3) {
+  font-size: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+  text {
+    display: none;
+  }
   .menuNameImage {
     width: 150px;
     height: auto;
   }
   .MenuImage {
-    width: 120px;
+    width: 140px;
     height: 100px;
   }
   .items {
     grid-template-columns: auto auto;
+    margin: 15% auto;
   }
   .Menu {
     height: 100vh;
@@ -211,6 +252,7 @@ li a:hover {
   }
   .BlazingImage {
     width: 300px;
+    margin: 12% auto;
   }
   .itemName {
     font-size: 25px;
@@ -218,30 +260,48 @@ li a:hover {
   li a {
     font-size: 20px;
   }
-  .form{
+  .form {
     width: 80%;
     padding-bottom: 10px;
     padding-top: 10px;
+    margin: 0% auto;
   }
-  .BackItemsMenu{
+  .BackItemsMenu {
     font-size: 25px;
+    position: inherit;
+    margin-bottom: 20px;
   }
-  .ItemsSections{
-    width: 90%;
+  .ItemsSections {
+    width: 96%;
+    height: auto;
+    border-radius: 4px;
   }
-  #input0, .input0{
+  #input0,
+  .input0 {
     font-size: 17px;
     height: auto;
   }
-  .HomeFoodItemName{
+  .input0:nth-child(3) {
+    font-size: 12px;
+  }
+  .HomeFoodItemName {
     width: 90%;
-    height: auto;
+    height: 100px;
     grid-template-columns: auto 25%;
   }
-  .FuncButtons{
+  .FuncButtons {
     width: 70px;
     height: 40px;
     font-size: 14px;
-   
+  }
+  .ItemName {
+    top: 65px !important;
+    font-size: 30px !important;
+  }
+  .sectionImage {
+    margin: 15% auto;
+  }
+  .Home {
+    height: auto;
   }
 }

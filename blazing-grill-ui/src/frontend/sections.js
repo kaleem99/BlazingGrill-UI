@@ -1,10 +1,12 @@
 import { MenuItem } from "@mui/material";
 import { useState } from "react";
 import AddMenuItems from "./sections/AddMenuItems";
+import Login from "./sections/Login";
 import MenuItems from "./sections/MenuItems";
 import Orders from "./sections/Orders";
+import Register from "./sections/Register";
 
-function Sections({ state }) {
+function Sections({ state, setState }) {
   switch (state) {
     case "Home":
       return <MenuItems />;
@@ -12,6 +14,10 @@ function Sections({ state }) {
       return <AddMenuItems />;
     case "Orders":
       return <Orders />;
+    case "Login":
+      return <Login setState={setState} />;
+    case "Register":
+      return <Register />;
     default:
       return <MenuItems />;
   }

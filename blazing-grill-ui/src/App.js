@@ -24,7 +24,7 @@ function App() {
     <div className="App">
       <NavMenu sections={sections} setState={setState} state={state} />
       <div className="sections">
-        <Sections state={state} />
+        <Sections state={state} setState={setState} />
       </div>
       {/* <button onClick={() => fetchPost()}>Testing</button> */}
     </div>

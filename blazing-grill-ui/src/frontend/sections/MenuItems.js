@@ -17,36 +17,45 @@ function MenuItems() {
     // fetchPost();
     return (
       <div className="ItemsSections">
-        <h1 className="ItemName">{name}</h1>
         <div>
           {items.map((food, i) => {
             return (
               <div className="HomeFoodItemName">
-                <input
-                  id="input0"
-                  className={food.id}
-                  name={"name"}
-                  defaultValue={food.name}
-                />
-                <input
-                  className="input0"
-                  id={food.id}
-                  defaultValue={"R" + food.price}
-                />
-                <button
-                  className="FuncButtons"
-                  id={food.id}
-                  onClick={(e) => updateData(e, name)}
-                >
-                  Update
-                </button>
-                <button
-                  id={food.id}
-                  onClick={(e) => handleDelete(e, name)}
-                  className="FuncButtons"
-                >
-                  Delete
-                </button>
+                <div className="inputDetails">
+                  <input
+                    id="input0"
+                    className={food.id}
+                    name={"name"}
+                    defaultValue={food.name}
+                  />
+                  <input
+                    className="input0"
+                    id={food.id}
+                    defaultValue={"R" + food.price}
+                  />
+                  <input
+                    className="input0"
+                    id={food.id + "Info"}
+                    defaultValue={food.Information}
+                  />
+                </div>
+
+                <div className="ButtonsDiv">
+                  <button
+                    className="FuncButtons"
+                    id={food.id}
+                    onClick={(e) => updateData(e, name)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    id={food.id}
+                    onClick={(e) => handleDelete(e, name)}
+                    className="FuncButtons"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -84,8 +93,14 @@ function MenuItems() {
     e.preventDefault();
     let tableRow = document.querySelector(`.${e.target.id}`);
     let tableRowPrice = document.querySelector(`#${e.target.id}`);
+    let tableRowInformation = document.querySelector(`#${e.target.id}Info`);
+
     const taskDocRef = await doc(db, name, e.target.id);
-    if (tableRow.value === "" || tableRowPrice.value === "") {
+    if (
+      tableRow.value === "" ||
+      tableRowPrice.value === "" ||
+      tableRowInformation.value === ""
+    ) {
       tableRow.value = tableRow.defaultValue;
       tableRowPrice.value = tableRowPrice.defaultValue;
       alert("Please ensure not leave the input empty");
@@ -101,6 +116,7 @@ function MenuItems() {
       await updateDoc(taskDocRef, {
         name: tableRow.value,
         price: tableRowPrice.value,
+        Information: tableRowInformation.value,
       });
       alert("Table row has been succesfully updated.");
       fetchPost(name);
@@ -144,10 +160,25 @@ function MenuItems() {
         </div>
       ) : (
         <>
+          <text
+            className="ItemName"
+            style={{
+              fontSize: "40px",
+              color: "white",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              margin: "auto",
+              maxWidth: "300px",
+            }}
+          >
+            {itemSection}
+          </text>
           <img className="sectionImage" src={image}></img>
-          <h1 className="BackItemsMenu" onClick={() => goBack()}>
+          <button className="BackItemsMenu" onClick={() => goBack()}>
             Back
-          </h1>
+          </button>
           {itemsSectionComp(itemSection)}
         </>
       )}

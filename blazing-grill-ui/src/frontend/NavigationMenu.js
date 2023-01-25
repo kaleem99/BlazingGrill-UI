@@ -14,6 +14,12 @@ function NavMenu({ sections, setState, state }) {
             </li>
           );
         })}
+        <li
+          style={{ position: "absolute", right: 0 }}
+          className={"Login" === state ? "active" : ""}
+        >
+          <a onClick={() => setState("Login")}>Login</a>
+        </li>
       </ul>
     </div>
   );
