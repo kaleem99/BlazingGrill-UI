@@ -7,36 +7,51 @@ function Register() {
     store: "",
     adminUsername: "",
     password: "",
-    cresedentials: "",
+    isLoggedIn: false,
   });
+  const [credentials, setCredentials] = useState("");
+  const [address, setAddress] = useState("");
+  const Register = async (e) => {
+    e.preventDefault();
+    if (
+      formData.store === "" ||
+      formData.adminUsername === "None" ||
+      formData.password === "" ||
+      formData.credentials === ""
+    ) {
+      return alert("Please enter all valid details.");
+    }
+    if (credentials !== "EnterSuper****User@2000+") {
+      return alert("Incorrect admin credentials");
+    }
+    try {
+      const docRef = await addDoc(collection(db, formData.store), formData);
+      const docRef2 = await addDoc(collection(db, "BlazingStores"), {
+        storeName: formData.store,
+      });
 
+      console.log("Document written with ID: ", docRef.id);
+      alert("store has been created successfully");
+    } catch (e) {
+      console.error("Error adding store: ", e);
+    }
+  };
   const handleChange = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
   };
-
+  const handleChange2 = (event) => {
+    if (event.target.name === "credentials") {
+      setCredentials(event.target.value);
+    } else {
+      setAddress(event.target.value);
+    }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add code to submit form data to server
-  };
-  const addTodo = async (e) => {
-    e.preventDefault();
-    if (
-      formData.store === "" ||
-      formData.adminUsername === "None" ||
-      formData.password === ""
-    ) {
-      return alert("Please enter all valid details.");
-    }
-    try {
-      const docRef = await addDoc(collection(db, formData.store), formData);
-      console.log("Document written with ID: ", docRef.id);
-      alert("Food Item has been added successfully.");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
   };
   return (
     <div className="AddMenu">
@@ -77,30 +92,27 @@ function Register() {
         <br></br>
         <input
           type="password"
-          name="cresedentials"
-          placeholder="admin cresedentials"
-          value={formData.password}
-          onChange={handleChange}
+          name="credentials"
+          placeholder="admin credentials"
+          value={credentials}
+          onChange={handleChange2}
         />
         <br />
         <br></br>
-        <button onClick={(e) => addTodo(e)}>Register</button>
+        <input
+          type="search"
+          name="address"
+          placeholder="Store address"
+          value={address}
+          onChange={handleChange2}
+        />
+        <br />
+        <br></br>
+        <button onClick={(e) => Register(e)}>Register</button>
       </form>
       <p style={{ color: "white" }}>
         Dont Have a store yet Please contact your admin to register.
       </p>
-      <button
-        style={{
-          width: "180px",
-          height: "40px",
-          backgroundColor: "#f7941d",
-          borderRadius: "7px",
-          color: "white",
-          fontSize: "20px",
-        }}
-      >
-        Register a store
-      </button>
     </div>
   );
 }

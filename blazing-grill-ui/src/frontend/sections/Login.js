@@ -1,14 +1,23 @@
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc,
+  deleteDoc,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../database/config";
 import MenuItemsSection from "../data/menuSections";
-function Login({ setState }) {
+function Login({ setState, store }) {
   const [formData, setFormData] = useState({
     store: "",
     adminUsername: "",
     password: "",
   });
-
+  const [items, setItems] = useState([]);
   const handleChange = (event) => {
     setFormData({
       ...formData,
@@ -20,22 +29,31 @@ function Login({ setState }) {
     event.preventDefault();
     // Add code to submit form data to server
   };
-  const addTodo = async (e) => {
-    e.preventDefault();
+  const Login = async (e) => {
     if (
       formData.store === "" ||
-      formData.adminUsername === "None" ||
+      formData.store === "None" ||
+      formData.adminUsername === "" ||
       formData.password === ""
     ) {
       return alert("Please enter all valid details.");
     }
-    try {
-      const docRef = await addDoc(collection(db, formData.store), formData);
-      console.log("Document written with ID: ", docRef.id);
-      alert("Food Item has been added successfully.");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    const q = query(
+      collection(db, formData.store),
+      where("adminUsername", "==", formData.adminUsername)
+    );
+
+    const querySnapshot = await getDocs(q);
+    let docID = "";
+    querySnapshot.forEach((doc) => {
+      // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
+      docID = doc.id;
+    });
+    const user = doc(db, formData.store, docID);
+    await updateDoc(user, {
+      isLoggedIn: true,
+    });
+    e.preventDefault();
   };
   return (
     <div className="AddMenu">
@@ -50,9 +68,9 @@ function Login({ setState }) {
         <br></br>
         <select name="store" id="store" onChange={handleChange}>
           <option value="None">store Name</option>
-          {MenuItemsSection.map((item, i) => (
-            <option key={i} value={item.name}>
-              {item.name}
+          {store.map((item, i) => (
+            <option key={i} value={item.storeName}>
+              {item.storeName}
             </option>
           ))}
         </select>
@@ -78,7 +96,7 @@ function Login({ setState }) {
         />
         <br />
         <br></br>
-        <button onClick={(e) => addTodo(e)}>Login</button>
+        <button onClick={(e) => Login(e)}>Login</button>
       </form>
       <p style={{ color: "white" }}>
         Dont Have a store yet Please contact your admin to register.
