@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../database/config";
+import { db, storage } from "../../database/config";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+
 import MenuItemsSection from "../data/menuSections";
 function AddMenuItems() {
   const [formData, setFormData] = useState({
@@ -8,34 +10,54 @@ function AddMenuItems() {
     name: "",
     price: "",
     Information: "",
+    fileURL: "",
   });
-
   const handleChange = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
-    console.log(event)
+  };
+  const handleChange2 = async (e) => {
+    e.preventDefault();
+  
+    const file = e.target.files[0];
+    if (!file) return null;
+    const storageRef = ref(storage, `files/${formData.name || "image"}`);
+    uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        if (downloadURL) {
+          alert("image has been uploaded successfully");
+        }
+        setFormData({
+          ...formData,
+          [e.target.name]: downloadURL,
+        });
+      });
+    });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add code to submit form data to server
   };
   const addTodo = async (e) => {
     e.preventDefault();
     if (formData.category === "" || formData.category === "None") {
       return alert("Please select a valid category");
     }
-    if (formData.name === "" || formData.price === "" || formData.Information === "") {
+    if (
+      formData.name === "" ||
+      formData.price === "" ||
+      formData.Information === "" ||
+      formData.fileURL === ""
+    ) {
       return alert("Please enter input");
     }
+
     try {
       const docRef = await addDoc(collection(db, formData.category), formData);
-      console.log("Document written with ID: ", docRef.id);
       alert("Food Item has been added successfully.");
     } catch (e) {
-      console.error("Error adding document: ", e);
     }
   };
   return (
@@ -82,6 +104,14 @@ function AddMenuItems() {
           placeholder="Information"
           value={formData.Information}
           onChange={handleChange}
+        />
+        <br />
+        <br></br>
+        <input
+          type="file"
+          name="fileURL"
+          placeholder="upload image"
+          onChange={handleChange2}
         />
         <br />
         <br></br>

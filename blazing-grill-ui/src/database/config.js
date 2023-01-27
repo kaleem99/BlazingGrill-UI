@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,10 +15,11 @@ const firebaseConfig = {
   storageBucket: "blazing-grills.appspot.com",
   messagingSenderId: "35396218725",
   appId: "1:35396218725:web:3cd15729d528388e22fb8c",
-  measurementId: "G-L31CDZM39Y"
+  measurementId: "G-L31CDZM39Y",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
