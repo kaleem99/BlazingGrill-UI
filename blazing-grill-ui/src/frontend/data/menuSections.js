@@ -23,5 +23,9 @@ const MenuItemsSection = [
     name: "Pizzas",
     img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/Blazing-Grill-Pizza.png",
   },
+  {
+    name: "Specials",
+    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/burger-web-banner.png",
+  },
 ];
 export default MenuItemsSection;
