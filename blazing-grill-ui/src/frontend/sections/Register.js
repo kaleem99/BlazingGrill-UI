@@ -25,6 +25,7 @@ function Register() {
       return alert("Incorrect admin credentials");
     }
     try {
+      formData["address"] = address;
       const docRef = await addDoc(collection(db, formData.store), formData);
       const docRef2 = await addDoc(collection(db, "BlazingStores"), {
         storeName: formData.store,
