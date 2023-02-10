@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MenuItemsSection from "../data/menuSections";
-import { db } from "../../database/config";
+import { db, storage } from "../../database/config";
 import {
   collection,
   addDoc,
@@ -9,63 +9,110 @@ import {
   doc,
   deleteDoc,
 } from "firebase/firestore";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 function MenuItems() {
   const [itemSection, setItemSection] = useState("");
   const [items, setItems] = useState([]);
   const [image, setImage] = useState("");
+  const [itemName, setItemName] = useState("");
+  const itemsFields = ["name", "price", "Information", "Update Image"];
+
   const itemsSectionComp = (name) => {
     // fetchPost();
+    console.log(items, name);
     return (
       <div className="ItemsSections">
-        <div>
-          {items.map((food, i) => {
-            return (
-              <div className="HomeFoodItemName">
-                <div className="inputDetails">
-                  <input
-                    id="input0"
-                    className={food.id}
-                    name={"name"}
-                    defaultValue={food.name}
-                  />
-                  <input
-                    className="input0"
-                    id={food.id}
-                    defaultValue={"R" + food.price}
-                  />
-                  <input
-                    className="input0"
-                    id={food.id + "Info"}
-                    defaultValue={food.Information}
-                  />
+        {itemName === "" ? (
+          <div>
+            {items.map((food, i) => {
+              return (
+                <div className="HomeFoodItemName">
+                  <div className="inputDetails">
+                    <div
+                      id="input0"
+                      className={food.id}
+                      name={"name"}
+                      onClick={() => setItemName(food)}
+                      // defaultValue={food.name}
+                    >
+                      {food.name}
+                    </div>
+                  </div>
                 </div>
-
-                <div className="ButtonsDiv">
-                  <button
-                    className="FuncButtons"
-                    id={food.id}
-                    onClick={(e) => updateData(e, name)}
-                  >
-                    Update
-                  </button>
-                  <button
-                    id={food.id}
-                    onClick={(e) => handleDelete(e, name)}
-                    className="FuncButtons"
-                  >
-                    Delete
-                  </button>
+              );
+            })}
+          </div>
+        ) : (
+          <>
+            {itemsFields.map((item, i) => {
+              return (
+                <div
+                  style={{ display: "grid", gridTemplateColumns: "15% auto" }}
+                >
+                  {i < itemsFields.length - 1 ? (
+                    <label>{item}:</label>
+                  ) : (
+                    <label>Update Image:</label>
+                  )}
+                  {i < itemsFields.length - 1 ? (
+                    <input
+                      id={itemName.id}
+                      className="input01"
+                      value={itemName[item]}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      name="fileURL"
+                      className="input01"
+                      placeholder="upload image"
+                      onChange={UploadImage}
+                    />
+                  )}
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+            <img
+              style={{
+                width: "300px",
+                height: "300px",
+                marginLeft: "0px",
+                marginRight: "auto",
+              }}
+              src={itemName.fileURL}
+            ></img>
+            <div
+              style={{
+                width: "400px",
+                margin: "auto",
+                display: "grid",
+                gridTemplateColumns: "auto auto",
+              }}
+            >
+              <button
+                className="FuncButtons"
+                id={itemName.id}
+                onClick={(e) => updateData(e, name)}
+              >
+                Update
+              </button>
+              <button
+                className="FuncButtons"
+                id={itemName.id}
+                onClick={(e) => handleDelete(e, name)}
+              >
+                Delete
+              </button>
+            </div>
+          </>
+        )}
       </div>
     );
   };
   const goBack = () => {
     setItemSection("");
     setItems([]);
+    setItemName("");
   };
   const itemClick = (name) => {
     fetchPost(name);
@@ -91,11 +138,13 @@ function MenuItems() {
   };
   const updateData = async (e, name) => {
     e.preventDefault();
-    let tableRow = document.querySelector(`.${e.target.id}`);
-    let tableRowPrice = document.querySelector(`#${e.target.id}`);
-    let tableRowInformation = document.querySelector(`#${e.target.id}Info`);
-
+    let data = document.querySelectorAll(`.input01`);
+    let tableRow = data[0];
+    let tableRowPrice = data[1];
+    let tableRowInformation = data[2];
+    // return false;
     const taskDocRef = await doc(db, name, e.target.id);
+    console.log(taskDocRef, name);
     if (
       tableRow.value === "" ||
       tableRowPrice.value === "" ||
@@ -139,6 +188,37 @@ function MenuItems() {
       alert(err);
     }
   };
+  const UploadImage = async (e) => {
+    e.preventDefault();
+    const taskDocRef = await doc(db, itemName.category, itemName.id);
+    console.log(taskDocRef);
+    const file = e.target.files[0];
+    if (!file) return null;
+    const storageRef = ref(storage, `files/${itemName.name || "image"}`);
+    console.log(storageRef, "+++");
+    uploadBytes(storageRef, file).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        if (downloadURL) {
+          alert("image has been uploaded successfully");
+        }
+        try {
+          updateDoc(taskDocRef, {
+            fileURL: downloadURL,
+          });
+          alert("Table row has been succesfully updated.");
+          fetchPost(itemSection);
+          setItemName(itemName);
+          itemsSectionComp(itemSection);
+        } catch (err) {
+          alert(err);
+        }
+        // setFormData({
+        //   ...formData,
+        //   [e.target.name]: downloadURL,
+        // });
+      });
+    });
+  };
   return (
     <div className="Home">
       {itemSection === "" ? (
@@ -160,25 +240,33 @@ function MenuItems() {
         </div>
       ) : (
         <>
-          <text
-            className="ItemName"
+          <div
             style={{
-              fontSize: "40px",
-              color: "white",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
+              display: "grid",
+              gridTemplateColumns: "20% auto 20%",
               margin: "auto",
-              maxWidth: "300px",
+              width: "80%",
             }}
           >
-            {itemSection}
-          </text>
-          <img className="sectionImage" src={image}></img>
-          <button className="BackItemsMenu" onClick={() => goBack()}>
-            Back
-          </button>
+            <button className="FuncButtons" onClick={() => goBack()}>
+              Back
+            </button>
+            <p
+              className="ItemName"
+              style={{
+                fontSize: "40px",
+                color: "white",
+                // position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                margin: "10px auto",
+                maxWidth: "300px",
+              }}
+            >
+              {itemSection}
+            </p>
+          </div>
           {itemsSectionComp(itemSection)}
         </>
       )}

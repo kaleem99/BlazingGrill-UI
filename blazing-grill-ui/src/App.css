@@ -15,10 +15,10 @@
 .NavMenu {
   /* position: fixed; */
   width: 100%;
-  height: auto;
+  height: 250px;
   display: grid;
   text-transform: uppercase;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: 10% 25% auto 25% 10%;
 }
 
 .NavItemMenuSections {
@@ -26,7 +26,7 @@
   margin: auto;
   color: white;
 }
-.NavItemMenuSections:hover{
+.NavItemMenuSections:hover {
   color: #f7941d;
   transform: scale(1.1);
   cursor: pointer;
@@ -39,9 +39,9 @@ button:hover {
 }
 .AddMenu {
   width: 100%;
-  height: 100vh;
+  height: auto;
   /* background-color: #000000; */
-  margin: 10% auto;
+  margin: 5% auto;
   overflow-x: scroll;
 }
 ::placeholder {
@@ -125,8 +125,10 @@ li a:hover {
   cursor: pointer;
   background-color: #f7941d;
 }
-.active {
-  background-color: #f7941d;
+.NavItemMenuSectionsactive {
+  color: #f7941d;
+  font-size: 22px;
+  margin: auto;
 }
 .Menu {
   width: 90%;
@@ -151,12 +153,12 @@ li a:hover {
 
 .items {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 33% 33% 33%;
   margin: 5% auto;
 }
 .MenuImage {
-  width: 300px;
-  height: 200px;
+  width: 70%;
+  height: 60%;
   margin: 10% auto;
 }
 .sectionImage {
@@ -171,26 +173,15 @@ li a:hover {
   /* overflow-x: scroll; */
   /* padding: 20px; */
 }
-.BackItemsMenu {
-  color: #ffffff;
-  background-color: #f7941d;
-  border-radius: 15px;
-  /* float: right; */
-  position: absolute;
-  top: 20%;
-  right: 10%;
-  width: 200px;
-  font-family: "Libre Caslon Text", Sans-serif;
-  font-size: 45px;
-  font-weight: 500;
-}
+
 .ItemsSections {
   width: 80%;
   /* overflow-x: scroll; */
-  height: 550px;
-  background-color: #f7941d;
-  border-radius: 10px;
+  height: auto;
+  /* background-color: #202124; */
+  /* border-radius: 10px; */
   margin: 5% auto;
+  border: 0.5px solid white;
   padding-bottom: 20px;
 }
 .ItemsSections > h1 {
@@ -202,14 +193,14 @@ li a:hover {
 
 .HomeFoodItemName {
   width: 96%;
-  height: 120px;
+  /* height: 120px; */
   display: grid;
   margin: 10px auto;
-  border-bottom: 4px solid white;
-  padding: 20px;
+  /* border-bottom: 4px solid white; */
+  padding: 10px;
   text-align: left;
   border-radius: 10px;
-  grid-template-columns: 85% auto;
+  /* grid-template-columns: 85% auto; */
 }
 .FuncButtons {
   width: 100px;
@@ -222,7 +213,7 @@ li a:hover {
   font-weight: 800;
   border-radius: 10px;
   margin-left: auto;
-  margin-right: 0%;
+  margin-right: auto;
   /* border: 1px solid; */
 }
 .inputDetails {
@@ -241,11 +232,32 @@ li a:hover {
   border: none;
   height: 40px;
   border-radius: 5px;
-  background-color: #f7941d;
+  background-color: transparent;
   font-weight: 800;
   margin-bottom: 5px;
+  /* width: 80%; */
+  border-bottom: 1px solid;
   font-size: 25px;
-  border: 0.5px solid white;
+  color: white;
+}
+label {
+  color: white;
+  float: left;
+  text-align: left;
+  font-size: 30px;
+}
+.input01 {
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  background-color: transparent;
+  font-weight: 800;
+  margin-bottom: 5px;
+  /* float: right; */
+  width: 90%;
+  border-bottom: 1px solid;
+  font-size: 25px;
+  color: white;
 }
 .input0:nth-child(3) {
   font-size: 20px;

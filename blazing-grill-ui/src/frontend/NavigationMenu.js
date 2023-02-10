@@ -1,13 +1,7 @@
 import { useState } from "react";
 
 function NavMenu({ sections, setState, state, isLoggedIn }) {
-  const userStatus = () => {
-    if (isLoggedIn) {
-      return "Logout";
-    } else {
-      return "Login";
-    }
-  };
+  
   const changeStatus = (type) => {
     setState(type);
   };
@@ -25,7 +19,11 @@ function NavMenu({ sections, setState, state, isLoggedIn }) {
         } else {
           return (
             <div
-              className="NavItemMenuSections"
+              className={
+                section === state
+                  ? "NavItemMenuSectionsactive"
+                  : "NavItemMenuSections"
+              }
               onClick={() => setState(section)}
             >
               {section}
@@ -37,7 +35,16 @@ function NavMenu({ sections, setState, state, isLoggedIn }) {
       {/* <div className="NavItemMenuSections">{sections[2]}</div>
 
       <div className="NavItemMenuSections">{sections[1]}</div> */}
-      <div className="NavItemMenuSections">Login</div>
+      <div
+        className={
+          state === "Login"
+            ? "NavItemMenuSectionsactive"
+            : "NavItemMenuSections"
+        }
+        onClick={() => setState("Login")}
+      >
+        Login
+      </div>
 
       {/* <ul>
         {sections.map((section, i) => {

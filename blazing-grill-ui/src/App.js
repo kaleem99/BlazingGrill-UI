@@ -10,7 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 const sections = ["Home", "Add Menu Item", "image", "Orders"];
 function App() {
-  const [state, setState] = useState("Home");
+  const [state, setState] = useState("Add Menu Item");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [storeDetails, setStoreDetails] = useState([]);
   useEffect(() => {
@@ -31,20 +31,11 @@ function App() {
       } else {
         setIsLoggedIn(false);
         console.log("user is logged out", isLoggedIn);
-        setState("Login");
+        setState("Home");
       }
     });
   }, []);
-  // const fetchPost = async () => {
-  //   await getDocs(collection(db, "Burgers")).then((querySnapshot) => {
-  //     const newData = querySnapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       id: doc.id,
-  //     }));
-  //     setTodos(newData);
-  //     console.log(newData);
-  //   });
-  // };
+
   return (
     <div className="App">
       <NavMenu

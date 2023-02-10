@@ -54,7 +54,7 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
         console.log(errorCode, errorMessage);
       });
   };
-  console.log(storeDetails)
+  console.log(storeDetails);
   return (
     <div className="AddMenu">
       <h1 style={{ color: "white" }}>
@@ -95,22 +95,30 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
         <br></br>
         <button onClick={(e) => Login(e)}>Login</button>
       </form>
-      <div style={{display: "grid", gridTemplateColumns: "70% auto", maxWidth: "650px", margin: "auto"}}> 
-      <h3 style={{ color: "white" }}>
-        Dont Have a store yet Please contact your admin to register.
-      </h3>
-      <h2
-        onClick={() => setState("Register")}
+      <div
         style={{
-          // width: "180px",
-          // height: "40px",
-          color: "#f7941d",
-          borderRadius: "7px",
-          fontSize: "20px",
+          display: "grid",
+          gridTemplateColumns: "70% auto",
+          maxWidth: "650px",
+          margin: "auto",
         }}
       >
-        Register a store
-      </h2>
+        <p style={{ color: "white" }}>
+          Dont Have a store yet Please contact your admin to register.
+        </p>
+        <h2
+          onClick={() => setState("Register")}
+          style={{
+            // width: "180px",
+            // height: "40px",
+            color: "#f7941d",
+            borderRadius: "7px",
+            fontSize: "20px",
+            cursor: "pointer"
+          }}
+        >
+          Register a store
+        </h2>
       </div>
     </div>
   );
