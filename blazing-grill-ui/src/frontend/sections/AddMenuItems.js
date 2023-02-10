@@ -62,10 +62,10 @@ function AddMenuItems() {
   };
   return (
     <div className="AddMenu">
-      <img
+      {/* <img
         className="BlazingImage"
         src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
-      ></img>
+      ></img> */}
       <form onSubmit={handleSubmit} className="form">
         <br></br>
         <select name="category" id="category" onChange={handleChange}>

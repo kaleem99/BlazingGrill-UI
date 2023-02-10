@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../database/config";
+import { auth } from "../../database/config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
 import MenuItemsSection from "../data/menuSections";
-function Register() {
+function Register({ setState }) {
   const [formData, setFormData] = useState({
     store: "",
     adminUsername: "",
@@ -24,18 +27,36 @@ function Register() {
     if (credentials !== "EnterSuper****User@2000+") {
       return alert("Incorrect admin credentials");
     }
-    try {
-      formData["address"] = address;
-      const docRef = await addDoc(collection(db, formData.store), formData);
-      const docRef2 = await addDoc(collection(db, "BlazingStores"), {
-        storeName: formData.store,
-      });
+    // try {
+    formData["address"] = address;
+    //   const docRef = await addDoc(collection(db, formData.store), formData);
+    const docRef2 = await addDoc(collection(db, "BlazingStores"), {
+      formData,
+    });
 
-      console.log("Document written with ID: ", docRef.id);
-      alert("store has been created successfully");
-    } catch (e) {
-      console.error("Error adding store: ", e);
-    }
+    //   console.log("Document written with ID: ", docRef.id);
+    //   alert("store has been created successfully");
+    // } catch (e) {
+    //   console.error("Error adding store: ", e);
+    // }
+    await createUserWithEmailAndPassword(
+      auth,
+      formData.adminUsername,
+      formData.password
+    )
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        alert("Successful");
+        // navigate("/login");
+        setState("Logout");
+        // ...
+      })
+      .catch((error) => {
+        alert(error.message);
+        // ..
+      });
   };
   const handleChange = (event) => {
     setFormData({
@@ -58,6 +79,7 @@ function Register() {
     <div className="AddMenu">
       <img
         className="BlazingImage"
+        alt=""
         src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
       ></img>
       <h1 style={{ color: "white" }}>Register a store.</h1>
@@ -73,10 +95,10 @@ function Register() {
         {/* <label>name:</label> */}
         <br></br>
         <input
-          type="text"
+          type="email"
           name="adminUsername"
           value={formData.adminUsername}
-          placeholder="store Username"
+          placeholder="store email"
           onChange={handleChange}
         />
         <br />

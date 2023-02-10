@@ -14,17 +14,24 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../database/config";
-function Sections({ state, setState }) {
+import Logout from "./sections/Logout";
+function Sections({
+  state,
+  setState,
+  isLoggedIn,
+  storeDetails,
+  setStoreDetails,
+}) {
   const [store, setStore] = useState([]);
   const [hasbeenClicked, setHasBeenClicked] = useState(false);
   const loginDetails = async () => {
-    getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
-      const newData = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setStore(newData);
-    });
+    // getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
+    //   const newData = querySnapshot.docs.map((doc) => ({
+    //     ...doc.data(),
+    //     id: doc.id,
+    //   }));
+    //   setStore(newData);
+    // });
   };
   if (state === "Login" && !hasbeenClicked) {
     loginDetails();
@@ -38,9 +45,25 @@ function Sections({ state, setState }) {
     case "Orders":
       return <Orders />;
     case "Login":
-      return <Login setState={setState} store={store} />;
+      return (
+        <Login
+          setState={setState}
+          store={store}
+          storeDetails={storeDetails}
+          setStoreDetails={setStoreDetails}
+        />
+      );
     case "Register":
-      return <Register />;
+      return <Register setState={setState} />;
+    case "Logout":
+      return (
+        <Logout
+          setState={setState}
+          storeDetails={storeDetails}
+          setStoreDetails={setStoreDetails}
+          store={store}
+        />
+      );
     default:
       return <MenuItems />;
   }

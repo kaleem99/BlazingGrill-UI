@@ -1,15 +1,40 @@
 import "./App.css";
 // import { collection, addDoc } from "firebase/firestore";
 import { db } from "./database/config";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import NavMenu from "./frontend/NavigationMenu";
 import Sections from "./frontend/sections";
-const sections = ["Home", "Add Menu Item", "Orders"];
+import { auth } from "./database/config";
+import { onAuthStateChanged } from "firebase/auth";
+
+const sections = ["Home", "Add Menu Item", "image", "Orders"];
 function App() {
   const [state, setState] = useState("Home");
-  const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [storeDetails, setStoreDetails] = useState([]);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
+        const newData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setStoreDetails(newData);
+      });
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        setIsLoggedIn(true);
+        console.log(uid);
+      } else {
+        setIsLoggedIn(false);
+        console.log("user is logged out", isLoggedIn);
+        setState("Login");
+      }
+    });
+  }, []);
   // const fetchPost = async () => {
   //   await getDocs(collection(db, "Burgers")).then((querySnapshot) => {
   //     const newData = querySnapshot.docs.map((doc) => ({
@@ -22,9 +47,20 @@ function App() {
   // };
   return (
     <div className="App">
-      <NavMenu sections={sections} setState={setState} state={state} />
+      <NavMenu
+        sections={sections}
+        setState={setState}
+        state={state}
+        isLoggedIn={isLoggedIn}
+      />
       <div className="sections">
-        <Sections state={state} setState={setState} />
+        <Sections
+          state={state}
+          setState={setState}
+          isLoggedIn={isLoggedIn}
+          setStoreDetails={setStoreDetails}
+          storeDetails={storeDetails}
+        />
       </div>
       {/* <button onClick={() => fetchPost()}>Testing</button> */}
     </div>

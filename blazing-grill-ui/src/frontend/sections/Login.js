@@ -11,7 +11,10 @@ import {
 } from "firebase/firestore";
 import { db } from "../../database/config";
 import MenuItemsSection from "../data/menuSections";
-function Login({ setState, store }) {
+import { auth } from "../../database/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+function Login({ setState, store, setStoreDetails, storeDetails }) {
   const [formData, setFormData] = useState({
     store: "",
     adminUsername: "",
@@ -38,29 +41,22 @@ function Login({ setState, store }) {
     ) {
       return alert("Please enter all valid details.");
     }
-    const q = query(
-      collection(db, formData.store),
-      where("adminUsername", "==", formData.adminUsername)
-    );
-
-    const querySnapshot = await getDocs(q);
-    let docID = "";
-    querySnapshot.forEach((doc) => {
-      // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
-      docID = doc.id;
-    });
-    const user = doc(db, formData.store, docID);
-    await updateDoc(user, {
-      isLoggedIn: true,
-    });
-    e.preventDefault();
+    signInWithEmailAndPassword(auth, formData.adminUsername, formData.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        setState("Logout");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
+  console.log(storeDetails)
   return (
     <div className="AddMenu">
-      <img
-        className="BlazingImage"
-        src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
-      ></img>
       <h1 style={{ color: "white" }}>
         Login to your store daily to recieve orders.
       </h1>
@@ -68,11 +64,12 @@ function Login({ setState, store }) {
         <br></br>
         <select name="store" id="store" onChange={handleChange}>
           <option value="None">store Name</option>
-          {store.map((item, i) => (
-            <option key={i} value={item.storeName}>
-              {item.storeName}
-            </option>
-          ))}
+          {storeDetails.length > 0 &&
+            storeDetails.map((item, i) => (
+              <option key={i} value={item["formData"].store}>
+                {item["formData"].store}
+              </option>
+            ))}
         </select>
         <br></br>
         {/* <label>name:</label> */}
@@ -98,22 +95,23 @@ function Login({ setState, store }) {
         <br></br>
         <button onClick={(e) => Login(e)}>Login</button>
       </form>
-      <p style={{ color: "white" }}>
+      <div style={{display: "grid", gridTemplateColumns: "70% auto", maxWidth: "650px", margin: "auto"}}> 
+      <h3 style={{ color: "white" }}>
         Dont Have a store yet Please contact your admin to register.
-      </p>
-      <button
+      </h3>
+      <h2
         onClick={() => setState("Register")}
         style={{
-          width: "180px",
-          height: "40px",
-          backgroundColor: "#f7941d",
+          // width: "180px",
+          // height: "40px",
+          color: "#f7941d",
           borderRadius: "7px",
-          color: "white",
           fontSize: "20px",
         }}
       >
         Register a store
-      </button>
+      </h2>
+      </div>
     </div>
   );
 }
