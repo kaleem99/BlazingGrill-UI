@@ -47,16 +47,17 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
         const user = userCredential.user;
         console.log(user);
         setState("Logout");
+        alert("Welcome ")
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        alert(errorMessage);
       });
   };
-  console.log(storeDetails);
   return (
     <div className="AddMenu">
+     
       <h1 style={{ color: "white" }}>
         Login to your store daily to recieve orders.
       </h1>
@@ -97,14 +98,12 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
       </form>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "70% auto",
-          maxWidth: "650px",
+          maxWidth: "auto",
           margin: "auto",
         }}
       >
         <p style={{ color: "white" }}>
-          Dont Have a store yet Please contact your admin to register.
+          Dont Have a store yet. Please contact your admin to Register.
         </p>
         <h2
           onClick={() => setState("Register")}
@@ -114,7 +113,7 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
             color: "#f7941d",
             borderRadius: "7px",
             fontSize: "20px",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
           Register a store

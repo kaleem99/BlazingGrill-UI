@@ -75,11 +75,17 @@ function MenuItems() {
             <img
               style={{
                 width: "300px",
-                height: "300px",
+                height: "280px",
                 marginLeft: "0px",
                 marginRight: "auto",
               }}
-              src={itemName.fileURL}
+              alt=""
+              // alt="no Image added"
+              src={
+                itemName.fileURL
+                  ? itemName.fileURL
+                  : require("../../assets/NoImage.jpeg")
+              }
             ></img>
             <div
               style={{

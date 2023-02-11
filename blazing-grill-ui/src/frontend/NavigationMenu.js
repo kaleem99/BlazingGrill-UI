@@ -35,7 +35,7 @@ function NavMenu({ sections, setState, state, isLoggedIn }) {
       {/* <div className="NavItemMenuSections">{sections[2]}</div>
 
       <div className="NavItemMenuSections">{sections[1]}</div> */}
-      <div
+      {/* <div
         className={
           state === "Login"
             ? "NavItemMenuSectionsactive"
@@ -44,7 +44,7 @@ function NavMenu({ sections, setState, state, isLoggedIn }) {
         onClick={() => setState("Login")}
       >
         Login
-      </div>
+      </div> */}
 
       {/* <ul>
         {sections.map((section, i) => {

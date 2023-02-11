@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../database/config";
 import Logout from "./sections/Logout";
+import AccountDetails from "./sections/Account";
 function Sections({
   state,
   setState,
@@ -64,6 +65,8 @@ function Sections({
           store={store}
         />
       );
+    case "Account":
+      return <AccountDetails storeDetails={storeDetails} />;
     default:
       return <MenuItems />;
   }

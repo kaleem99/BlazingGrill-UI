@@ -50,7 +50,7 @@ function Register({ setState }) {
         console.log(user);
         alert("Successful");
         // navigate("/login");
-        setState("Logout");
+        setState("Login");
         // ...
       })
       .catch((error) => {
@@ -77,11 +77,6 @@ function Register({ setState }) {
   };
   return (
     <div className="AddMenu">
-      <img
-        className="BlazingImage"
-        alt=""
-        src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
-      ></img>
       <h1 style={{ color: "white" }}>Register a store.</h1>
       <form onSubmit={handleSubmit} className="form">
         <input
@@ -136,6 +131,19 @@ function Register({ setState }) {
       <p style={{ color: "white" }}>
         Dont Have a store yet Please contact your admin to register.
       </p>
+      <h2
+        onClick={() => setState("")}
+        style={{
+          // width: "180px",
+          // height: "40px",
+          color: "#f7941d",
+          borderRadius: "7px",
+          fontSize: "20px",
+          cursor: "pointer",
+        }}
+      >
+        Login
+      </h2>
     </div>
   );
 }
