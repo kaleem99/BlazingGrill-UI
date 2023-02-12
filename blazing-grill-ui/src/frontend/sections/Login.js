@@ -27,7 +27,13 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
       [event.target.name]: event.target.value,
     });
   };
-
+  // let testing = storeDetails[0];
+  // if (testing) {
+  //   testing = Object.keys(storeDetails[0])[0];
+  // }
+  // console.log(testing);
+  // console.log(Object.keys(testing)[0]);
+  // console.log(storeDetails[0][Object.keys(obj)[0]]);
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add code to submit form data to server
@@ -46,8 +52,11 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
         // Signed in
         const user = userCredential.user;
         console.log(user);
-        setState("Logout");
-        alert("Welcome ")
+        if (!user.emailVerified) {
+          return alert("Please ensure to verify your email.");
+        }
+        setState("Home");
+        alert("Welcome");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -57,7 +66,6 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
   };
   return (
     <div className="AddMenu">
-     
       <h1 style={{ color: "white" }}>
         Login to your store daily to recieve orders.
       </h1>
@@ -67,8 +75,8 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
           <option value="None">store Name</option>
           {storeDetails.length > 0 &&
             storeDetails.map((item, i) => (
-              <option key={i} value={item["formData"].store}>
-                {item["formData"].store}
+              <option key={i} value={Object.keys(storeDetails[i])[0]}>
+                {Object.keys(storeDetails[i])[0]}
               </option>
             ))}
         </select>

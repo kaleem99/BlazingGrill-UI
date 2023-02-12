@@ -22,6 +22,8 @@ function Sections({
   isLoggedIn,
   storeDetails,
   setStoreDetails,
+  setstoreStatus,
+  storeStatus,
 }) {
   const [store, setStore] = useState([]);
   const [hasbeenClicked, setHasBeenClicked] = useState(false);
@@ -44,18 +46,20 @@ function Sections({
     case "Add Menu Item":
       return <AddMenuItems />;
     case "Orders":
-      return <Orders />;
-    case "Login":
       return (
-        <Login
-          setState={setState}
-          store={store}
-          storeDetails={storeDetails}
-          setStoreDetails={setStoreDetails}
-        />
+        <Orders storeStatus={storeStatus} setstoreStatus={setstoreStatus} />
       );
-    case "Register":
-      return <Register setState={setState} />;
+    // case "Login":
+    //   return (
+    //     <Login
+    //       setState={setState}
+    //       store={store}
+    //       storeDetails={storeDetails}
+    //       setStoreDetails={setStoreDetails}
+    //     />
+    //   );
+    // case "Register":
+    //   return <Register setState={setState} />;
     case "Logout":
       return (
         <Logout

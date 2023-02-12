@@ -20,26 +20,28 @@ const defaultOptions = {
 };
 const sections = ["Home", "Add Menu Item", "image", "Orders", "Account"];
 function App() {
-  const [state, setState] = useState("Add Menu Item");
+  const [state, setState] = useState("Home");
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
   const [storeDetails, setStoreDetails] = useState([]);
-  const [signInRegister, setSignInRegister] = useState("Login");
+  // const [signInRegister, setSignInRegister] = useState("Login");
+  const [storeStatus, setstoreStatus] = useState(false);
+  const [currentStore, setCurrentStore] = useState("");
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
-        console.log(querySnapshot.docs[0].data);
         const newData = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
         setStoreDetails(newData);
       });
-      console.log(auth);
-      if (user) {
+      if (user && user.emailVerified) {
         const uid = user.uid;
         setIsLoggedIn(true);
-        console.log(uid);
-        console.log(user);
+
+        const initialStore = storeDetails.map((stores) =>
+          stores.email === user.email ? setCurrentStore(stores) : stores
+        );
       } else {
         setIsLoggedIn(false);
         console.log("user is logged out", isLoggedIn);
@@ -48,22 +50,13 @@ function App() {
     });
   }, []);
   const loginRegister = () => {
-    switch (signInRegister) {
+    switch (state) {
       case "Register":
-        return <Register setState={setSignInRegister} />;
-      // case "Login":
-      //   return (
-      //     <Login
-      //       setState={setSignInRegister}
-      //       // store={store}
-      //       storeDetails={storeDetails}
-      //       setStoreDetails={setStoreDetails}
-      //     />
-      //   );
+        return <Register setState={setState} />;
       default:
         return (
           <Login
-            setState={setSignInRegister}
+            setState={setState}
             // store={store}
             storeDetails={storeDetails}
             setStoreDetails={setStoreDetails}
@@ -105,6 +98,8 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setStoreDetails={setStoreDetails}
                 storeDetails={storeDetails}
+                storeStatus={storeStatus}
+                setstoreStatus={setstoreStatus}
               />
             </div>
           </>

@@ -2,9 +2,12 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../database/config";
 import { auth } from "../../database/config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import MenuItemsSection from "../data/menuSections";
+
 function Register({ setState }) {
   const [formData, setFormData] = useState({
     store: "",
@@ -29,9 +32,11 @@ function Register({ setState }) {
     }
     // try {
     formData["address"] = address;
+    const { store } = formData;
     //   const docRef = await addDoc(collection(db, formData.store), formData);
+    console.log(store);
     const docRef2 = await addDoc(collection(db, "BlazingStores"), {
-      formData,
+      [store]: formData,
     });
 
     //   console.log("Document written with ID: ", docRef.id);
@@ -50,6 +55,7 @@ function Register({ setState }) {
         console.log(user);
         alert("Successful");
         // navigate("/login");
+        sendEmailVerification(user);
         setState("Login");
         // ...
       })

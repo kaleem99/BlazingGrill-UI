@@ -42,7 +42,7 @@ button:hover {
   height: auto;
   /* background-color: #000000; */
   margin: 5% auto;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 }
 ::placeholder {
   color: white;
@@ -239,6 +239,7 @@ li a:hover {
   border-bottom: 1px solid;
   font-size: 25px;
   color: white;
+  cursor: pointer;
 }
 label {
   color: white;

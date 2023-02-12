@@ -27,5 +27,9 @@ const MenuItemsSection = [
     name: "Specials",
     img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/burger-web-banner.png",
   },
+  {
+    name: "sources",
+    img: "https://firebasestorage.googleapis.com/v0/b/blazing-grills.appspot.com/o/files%2FWhatsApp%20Image%202023-02-06%20at%2021.57.06%20(1).jpeg?alt=media&token=7a7902b3-3d71-4ab5-a07b-919faf364ee2",
+  },
 ];
 export default MenuItemsSection;

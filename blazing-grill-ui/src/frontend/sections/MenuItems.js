@@ -16,13 +16,32 @@ function MenuItems() {
   const [image, setImage] = useState("");
   const [itemName, setItemName] = useState("");
   const itemsFields = ["name", "price", "Information", "Update Image"];
-
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    Information: "",
+  });
+  const setItemsData = (food) => {
+    setItemName(food);
+    setFormData({
+      ...formData,
+      name: food.name,
+      price: food.price,
+      Information: food.Information,
+    });
+  };
+  const handleChange = (event) => {
+    console.log(event.target)
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
   const itemsSectionComp = (name) => {
     // fetchPost();
-    console.log(items, name);
-    return (
-      <div className="ItemsSections">
-        {itemName === "" ? (
+    if (itemName === "") {
+      return (
+        <div className="ItemsSections">
           <div>
             {items.map((food, i) => {
               return (
@@ -32,7 +51,7 @@ function MenuItems() {
                       id="input0"
                       className={food.id}
                       name={"name"}
-                      onClick={() => setItemName(food)}
+                      onClick={() => setItemsData(food)}
                       // defaultValue={food.name}
                     >
                       {food.name}
@@ -42,78 +61,87 @@ function MenuItems() {
               );
             })}
           </div>
-        ) : (
-          <>
-            {itemsFields.map((item, i) => {
-              return (
-                <div
-                  style={{ display: "grid", gridTemplateColumns: "15% auto" }}
-                >
-                  {i < itemsFields.length - 1 ? (
-                    <label>{item}:</label>
-                  ) : (
-                    <label>Update Image:</label>
-                  )}
-                  {i < itemsFields.length - 1 ? (
-                    <input
-                      id={itemName.id}
-                      className="input01"
-                      value={itemName[item]}
-                    />
-                  ) : (
-                    <input
-                      type="file"
-                      name="fileURL"
-                      className="input01"
-                      placeholder="upload image"
-                      onChange={UploadImage}
-                    />
-                  )}
-                </div>
-              );
-            })}
-            <img
-              style={{
-                width: "300px",
-                height: "280px",
-                marginLeft: "0px",
-                marginRight: "auto",
-              }}
-              alt=""
-              // alt="no Image added"
-              src={
-                itemName.fileURL
-                  ? itemName.fileURL
-                  : require("../../assets/NoImage.jpeg")
-              }
-            ></img>
-            <div
-              style={{
-                width: "400px",
-                margin: "auto",
-                display: "grid",
-                gridTemplateColumns: "auto auto",
-              }}
+        </div>
+      );
+    } else {
+      // setFormData({
+      //   ...formData,
+      //   name: itemName.name,
+      //   price: itemName.price,
+      //   Information: itemName.Information,
+      // });
+      return (
+        <div className="ItemsSections">
+          {itemsFields.map((item, i) => {
+            return (
+              <div style={{ display: "grid", gridTemplateColumns: "15% auto" }}>
+                {i < itemsFields.length - 1 ? (
+                  <label>{item}:</label>
+                ) : (
+                  <label>Update Image:</label>
+                )}
+                {i < itemsFields.length - 1 ? (
+                  <input
+                    id={itemName.id}
+                    className="input01"
+                    // defaultValue={itemName[item]}
+                    name={item}
+                    value={formData[item]}
+                    onChange={handleChange}
+                  />
+                ) : (
+                  <input
+                    type="file"
+                    name="fileURL"
+                    className="input01"
+                    placeholder="upload image"
+                    onChange={UploadImage}
+                  />
+                )}
+              </div>
+            );
+          })}
+          <img
+            style={{
+              width: "300px",
+              height: "280px",
+              marginLeft: "0px",
+              marginRight: "auto",
+            }}
+            alt=""
+            // alt="no Image added"
+            src={
+              itemName.fileURL
+                ? itemName.fileURL
+                : require("../../assets/NoImage.jpeg")
+            }
+          ></img>
+          <div
+            style={{
+              width: "400px",
+              margin: "auto",
+              display: "grid",
+              gridTemplateColumns: "auto auto",
+            }}
+          >
+            <button
+              className="FuncButtons"
+              id={itemName.id}
+              onClick={(e) => updateData(e, name)}
             >
-              <button
-                className="FuncButtons"
-                id={itemName.id}
-                onClick={(e) => updateData(e, name)}
-              >
-                Update
-              </button>
-              <button
-                className="FuncButtons"
-                id={itemName.id}
-                onClick={(e) => handleDelete(e, name)}
-              >
-                Delete
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    );
+              Update
+            </button>
+            <button
+              className="FuncButtons"
+              id={itemName.id}
+              onClick={(e) => handleDelete(e, name)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      );
+    }
   };
   const goBack = () => {
     setItemSection("");
@@ -197,11 +225,9 @@ function MenuItems() {
   const UploadImage = async (e) => {
     e.preventDefault();
     const taskDocRef = await doc(db, itemName.category, itemName.id);
-    console.log(taskDocRef);
     const file = e.target.files[0];
     if (!file) return null;
     const storageRef = ref(storage, `files/${itemName.name || "image"}`);
-    console.log(storageRef, "+++");
     uploadBytes(storageRef, file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
         if (downloadURL) {
@@ -237,7 +263,7 @@ function MenuItems() {
                   className="menuNameImage"
                   onClick={() => itemClick(item.name)}
                 >
-                  <img className="MenuImage" src={item.img}></img>
+                  <img alt="" className="MenuImage" src={item.img}></img>
                   <h1 className="itemName">{item.name}</h1>
                 </div>
               );
