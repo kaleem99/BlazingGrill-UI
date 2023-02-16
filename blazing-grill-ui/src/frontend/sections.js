@@ -24,8 +24,8 @@ function Sections({
   setStoreDetails,
   setstoreStatus,
   storeStatus,
+  store,
 }) {
-  const [store, setStore] = useState([]);
   const [hasbeenClicked, setHasBeenClicked] = useState(false);
   const loginDetails = async () => {
     // getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
@@ -66,11 +66,26 @@ function Sections({
           setState={setState}
           storeDetails={storeDetails}
           setStoreDetails={setStoreDetails}
-          store={store}
         />
       );
     case "Account":
-      return <AccountDetails storeDetails={storeDetails} />;
+      if (store[0]) {
+        let storeName = Object.keys(store[0]);
+        const detailsOfStore = store[0][storeName[0]] || {
+          adminUsername: "",
+          storeName: "",
+          address: "",
+        };
+        return (
+          <AccountDetails
+            store={store}
+            setState={setState}
+            storeName={storeName}
+            detailsOfStore={detailsOfStore}
+          />
+        );
+      }
+      break;
     default:
       return <MenuItems />;
   }

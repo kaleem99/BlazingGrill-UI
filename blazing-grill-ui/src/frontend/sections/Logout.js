@@ -14,7 +14,7 @@ import MenuItemsSection from "../data/menuSections";
 import { auth } from "../../database/config";
 import { signOut } from "firebase/auth";
 
-function Logout({ setState, setStoreDetails, storeDetails, store }) {
+function Logout({ setState, setStoreDetails, storeDetails }) {
   const Logout = async (e) => {
     if (window.confirm("Are you sure you want to logout!")) {
     } else {

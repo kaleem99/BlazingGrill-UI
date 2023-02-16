@@ -26,6 +26,7 @@ function App() {
   // const [signInRegister, setSignInRegister] = useState("Login");
   const [storeStatus, setstoreStatus] = useState(false);
   const [currentStore, setCurrentStore] = useState("");
+  const [email, setEmail] = useState("");
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
@@ -38,7 +39,7 @@ function App() {
       if (user && user.emailVerified) {
         const uid = user.uid;
         setIsLoggedIn(true);
-
+        setEmail(user.email);
         const initialStore = storeDetails.map((stores) =>
           stores.email === user.email ? setCurrentStore(stores) : stores
         );
@@ -49,6 +50,11 @@ function App() {
       }
     });
   }, []);
+  const store = storeDetails.map((stores, i) => {
+    if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
+      return stores;
+    }
+  });
   const loginRegister = () => {
     switch (state) {
       case "Register":
@@ -98,6 +104,7 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setStoreDetails={setStoreDetails}
                 storeDetails={storeDetails}
+                store={store}
                 storeStatus={storeStatus}
                 setstoreStatus={setstoreStatus}
               />
