@@ -11,9 +11,20 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../database/config";
+import {
+  signInWithEmailAndPassword,
+  updatePhoneNumber,
+  updateProfile,
+} from "firebase/auth";
 
-function AccountDetails({ store, setState, storeName, detailsOfStore }) {
-  console.log(store[0].id);
+function AccountDetails({
+  store,
+  setState,
+  storeName,
+  detailsOfStore,
+  storeStatus,
+}) {
+  console.log(storeName);
   // const [storeInformation, setStoreInformation] = useState({
   //   email: detailsOfStore.adminUsername,
   //   storeName: detailsOfStore.store,
@@ -55,19 +66,22 @@ function AccountDetails({ store, setState, storeName, detailsOfStore }) {
   console.log(storeName);
   const SaveStoreInfor = () => {
     const examcollref = doc(db, "BlazingStores", store[0].id);
-    updateDoc(examcollref, {
-      [storeName[0]]: {
-        adminUsername: email,
-        address: address,
-        store: storeN,
-      },
-    })
-      .then((response) => {
-        alert("updated");
-      })
-      .catch((error) => {
-        console.log(error.message);
+    try {
+      updateProfile(auth.currentUser, {
+        email: email,
       });
+      updateDoc(examcollref, {
+        [storeName[0]]: {
+          adminUsername: email,
+          address: address,
+          store: storeN,
+          storeStatus: storeStatus,
+        },
+      });
+      alert("updated");
+    } catch (err) {
+      alert(err.message);
+    }
   };
   return (
     <div className="AddMenu">

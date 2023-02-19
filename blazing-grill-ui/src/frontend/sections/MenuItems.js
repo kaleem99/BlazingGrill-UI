@@ -31,7 +31,7 @@ function MenuItems() {
     });
   };
   const handleChange = (event) => {
-    console.log(event.target)
+    console.log(event.target);
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
@@ -64,12 +64,6 @@ function MenuItems() {
         </div>
       );
     } else {
-      // setFormData({
-      //   ...formData,
-      //   name: itemName.name,
-      //   price: itemName.price,
-      //   Information: itemName.Information,
-      // });
       return (
         <div className="ItemsSections">
           {itemsFields.map((item, i) => {
@@ -144,9 +138,12 @@ function MenuItems() {
     }
   };
   const goBack = () => {
-    setItemSection("");
-    setItems([]);
-    setItemName("");
+    if (itemName === "") {
+      setItemSection("");
+      setItems([]);
+    } else {
+      setItemName("");
+    }
   };
   const itemClick = (name) => {
     fetchPost(name);
@@ -232,6 +229,10 @@ function MenuItems() {
       getDownloadURL(snapshot.ref).then((downloadURL) => {
         if (downloadURL) {
           alert("image has been uploaded successfully");
+          // let result = itemName;
+          // let result2 = (itemSection);
+          setItemName("");
+          // window.location.reload();
         }
         try {
           updateDoc(taskDocRef, {
@@ -244,10 +245,6 @@ function MenuItems() {
         } catch (err) {
           alert(err);
         }
-        // setFormData({
-        //   ...formData,
-        //   [e.target.name]: downloadURL,
-        // });
       });
     });
   };

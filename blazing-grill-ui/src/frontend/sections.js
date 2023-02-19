@@ -46,9 +46,24 @@ function Sections({
     case "Add Menu Item":
       return <AddMenuItems />;
     case "Orders":
-      return (
-        <Orders storeStatus={storeStatus} setstoreStatus={setstoreStatus} />
-      );
+      if (store[0]) {
+        let storeName = Object.keys(store[0]);
+        const detailsOfStore = store[0][storeName[0]] || {
+          adminUsername: "",
+          storeName: "",
+          address: "",
+        };
+        return (
+          <Orders
+            storeName={storeName}
+            storeStatus={storeStatus}
+            setstoreStatus={setstoreStatus}
+            store={store}
+            detailsOfStore={detailsOfStore}
+          />
+        );
+      }
+      break;
     // case "Login":
     //   return (
     //     <Login
@@ -82,6 +97,7 @@ function Sections({
             setState={setState}
             storeName={storeName}
             detailsOfStore={detailsOfStore}
+            storeStatus={storeStatus}
           />
         );
       }

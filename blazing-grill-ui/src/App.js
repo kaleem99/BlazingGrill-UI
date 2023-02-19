@@ -27,6 +27,7 @@ function App() {
   const [storeStatus, setstoreStatus] = useState(false);
   const [currentStore, setCurrentStore] = useState("");
   const [email, setEmail] = useState("");
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
@@ -49,6 +50,16 @@ function App() {
         setState("Login");
       }
     });
+    const data = getDocs(collection(db, "BlazingStores")).then(
+      (querySnapshot) => {
+        const newData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        let Name = Object.keys(newData[0])[0];
+        setstoreStatus(newData[0][Name].storeStatus);
+      }
+    );
   }, []);
   const store = storeDetails.map((stores, i) => {
     if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
