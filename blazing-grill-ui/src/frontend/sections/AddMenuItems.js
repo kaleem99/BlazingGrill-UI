@@ -48,8 +48,8 @@ function AddMenuItems() {
     if (
       formData.name === "" ||
       formData.price === "" ||
-      formData.Information === "" ||
-      formData.fileURL === ""
+      formData.Information === "" 
+      // || formData.fileURL === ""
     ) {
       return alert("Please enter input");
     }
