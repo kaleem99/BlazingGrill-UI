@@ -17,7 +17,21 @@ function Orders({
   store,
   detailsOfStore,
 }) {
+  const [PendingOrders, setPendingOrders] = useState([]);
   const examcollref = doc(db, "BlazingStores", store[0].id);
+  useEffect(() => {
+    getDocs(collection(db, "Orders")).then((querySnapshot) => {
+      const newData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      const filteredData = newData.filter(
+        (data) =>
+          data.storeName === storeName[0] && data.status === "Pending" && data
+      );
+      setPendingOrders(filteredData);
+    });
+  }, [PendingOrders, storeName]);
   const handleChange = () => {
     let status = "";
 
@@ -45,8 +59,25 @@ function Orders({
     return status;
   };
 
+  const incomingOrder = () => {
+    if (PendingOrders.length > 0) {
+      const docRef = doc(db, "Orders", PendingOrders[0].id);
+      if (window.confirm("New Incoming Order")) {
+        const newOrderData = PendingOrders[0];
+        newOrderData.status = "Accepted";
+        updateDoc(docRef, newOrderData);
+        alert("Order has been accepted");
+      } else {
+        deleteDoc(docRef);
+        alert("Order has been declined.");
+      }
+    }
+  };
+  // console.log(PendingOrders);
+
   return (
     <div className="Home">
+      {incomingOrder()}
       <Switch
         onChange={() => setstoreStatus(handleChange())}
         checked={storeStatus}
@@ -59,7 +90,14 @@ function Orders({
       <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
       <br></br>
       <div class="ItemsSections">
-        <h1>Currently no orders</h1>
+        <h2 style={{ color: "white", fontSize: "15px" }}>
+          Currently no orders
+        </h2>
+        <div className="container">
+          <div className="column">Column 1</div>
+          <div className="column">Column 2</div>
+          <div className="column">Column 3</div>
+        </div>
       </div>
     </div>
   );

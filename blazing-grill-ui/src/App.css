@@ -348,3 +348,14 @@ label {
     height: auto;
   }
 }
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.column {
+  background-color: #ccc;
+  padding: 20px;
+}
