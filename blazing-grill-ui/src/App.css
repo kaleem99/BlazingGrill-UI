@@ -351,11 +351,42 @@ label {
 
 .container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
+  width: 50%;
+  margin: auto;
 }
 
 .column {
   background-color: #ccc;
-  padding: 20px;
+  padding: 10px;
+  font-size: large;
+  height: 50px;
+  border-radius: 10px;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  font-size: large;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+  color: black;
+}
+
+tr:nth-child(odd) {
+  color: white;
+}
+
+.btnActiveOrders {
+  background-color: #f7941d;
 }

@@ -18,7 +18,11 @@ function Orders({
   detailsOfStore,
 }) {
   const [PendingOrders, setPendingOrders] = useState([]);
+  const [inProgress, setInProgress] = useState([]);
   const examcollref = doc(db, "BlazingStores", store[0].id);
+  const [customersOrders, setCustomersOrders] = useState([]);
+  const [orderSection, setOrderSection] = useState("Collection");
+  const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
   useEffect(() => {
     getDocs(collection(db, "Orders")).then((querySnapshot) => {
       const newData = querySnapshot.docs.map((doc) => ({
@@ -29,6 +33,10 @@ function Orders({
         (data) =>
           data.storeName === storeName[0] && data.status === "Pending" && data
       );
+      const filteredInProgressData = newData.filter(
+        (data) => data.storeName === storeName[0] && data
+      );
+      setInProgress(filteredInProgressData);
       setPendingOrders(filteredData);
     });
   }, [PendingOrders, storeName]);
@@ -74,7 +82,18 @@ function Orders({
     }
   };
   // console.log(PendingOrders);
+  const setOrders = (data) => {
+    setCustomersOrders(data);
+  };
+  const changeOrderStatus = (userId, data) => {
+    const userRef = doc(db, "Orders", userId);
 
+    let x = document.getElementById("SelectValue");
+    console.log(x.value);
+    const newData = data;
+    newData.status = x.value;
+    updateDoc(userRef, newData);
+  };
   return (
     <div className="Home">
       {incomingOrder()}
@@ -94,9 +113,77 @@ function Orders({
           Currently no orders
         </h2>
         <div className="container">
-          <div className="column">Column 1</div>
-          <div className="column">Column 2</div>
-          <div className="column">Column 3</div>
+          {ButtonStatus.map((value) => (
+            <button
+            className={orderSection === value ? "column btnActiveOrders" : "column"}
+              onClick={() =>
+                setOrderSection(value === "In Progress" ? "Accepted" : value)
+              }
+            >
+              {value}
+            </button>
+          ))}
+        </div>
+        <div>
+          {customersOrders.length === 0 ? (
+            <table>
+              <tr>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>View Orders</th>
+                <th>Change Status</th>
+              </tr>
+
+              {inProgress.map(
+                (data, i) =>
+                  data.status === orderSection && (
+                    <tr>
+                      <td>{data.Name}</td>
+                      <td>{data.email}</td>
+                      <td>
+                        <button
+                          onClick={() => setOrders(data)}
+                          style={{ height: "35px", borderRadius: "10px" }}
+                        >
+                          View Customers Orders
+                        </button>
+                      </td>
+                      <td>
+                        <select id="SelectValue">
+                          <option value="Collection">Collection</option>
+                          <option value="Complete">Complete</option>
+                          <option value="Delivery">Delivery</option>
+                        </select>
+                        <button
+                          onClick={() => changeOrderStatus(data.id, data)}
+                        >
+                          Save
+                        </button>
+                      </td>
+                    </tr>
+                  )
+              )}
+            </table>
+          ) : (
+            <table>
+              <tr>
+                <th>Product Type</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+              </tr>
+              {customersOrders.food.map((items) => (
+                <tr>
+                  <td>{items.productType}</td>
+                  <td>{items.productName}</td>
+                  <td>{items.productQuantity}</td>
+                </tr>
+              ))}
+              <button onClick={() => setCustomersOrders([])}>
+                Back To Customer Details
+              </button>
+              ;
+            </table>
+          )}
         </div>
       </div>
     </div>
