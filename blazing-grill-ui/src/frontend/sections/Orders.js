@@ -76,7 +76,12 @@ function Orders({
         updateDoc(docRef, newOrderData);
         alert("Order has been accepted");
       } else {
-        deleteDoc(docRef);
+        const newOrderData = PendingOrders[0];
+        newOrderData.status = "Declined";
+        updateDoc(docRef, newOrderData);
+        setTimeout(() => {
+          deleteDoc(docRef);
+        }, 10000);
         alert("Order has been declined.");
       }
     }
@@ -115,7 +120,9 @@ function Orders({
         <div className="container">
           {ButtonStatus.map((value) => (
             <button
-            className={orderSection === value ? "column btnActiveOrders" : "column"}
+              className={
+                orderSection === value ? "column btnActiveOrders" : "column"
+              }
               onClick={() =>
                 setOrderSection(value === "In Progress" ? "Accepted" : value)
               }
