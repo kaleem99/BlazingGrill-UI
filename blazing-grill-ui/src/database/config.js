@@ -10,13 +10,13 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDmYar9MBNc_6Z0-jrjQixRslC2Fo_yyVI",
-  authDomain: "blazing-grills.firebaseapp.com",
-  projectId: "blazing-grills",
-  storageBucket: "blazing-grills.appspot.com",
-  messagingSenderId: "35396218725",
-  appId: "1:35396218725:web:3cd15729d528388e22fb8c",
-  measurementId: "G-L31CDZM39Y",
+  // apiKey: "AIzaSyDmYar9MBNc_6Z0-jrjQixRslC2Fo_yyVI",
+  // authDomain: "blazing-grills.firebaseapp.com",
+  // projectId: "blazing-grills",
+  // storageBucket: "blazing-grills.appspot.com",
+  // messagingSenderId: "35396218725",
+  // appId: "1:35396218725:web:3cd15729d528388e22fb8c",
+  // measurementId: "G-L31CDZM39Y",
 };
 
 // Initialize Firebase
