@@ -39,7 +39,7 @@ function Orders({
       setInProgress(filteredInProgressData);
       setPendingOrders(filteredData);
     });
-  }, [PendingOrders, storeName]);
+  }, []);
   const handleChange = () => {
     let status = "";
 
