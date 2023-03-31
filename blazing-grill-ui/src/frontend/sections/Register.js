@@ -7,6 +7,19 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import MenuItemsSection from "../data/menuSections";
+import Geocode from "react-geocode";
+// set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+Geocode.setApiKey("AIzaSyAe8Q7gExQ3CEzxqr4PFm3ikcMboQPKJIg");
+Geocode.setLanguage("en");
+
+Geocode.setRegion("za");
+
+Geocode.setLocationType("ROOFTOP");
+
+// Enable or disable logs. Its optional.
+Geocode.enableDebug();
+
+// Get latitude & longitude from address.
 
 function Register({ setState }) {
   const [formData, setFormData] = useState({
@@ -14,6 +27,8 @@ function Register({ setState }) {
     adminUsername: "",
     password: "",
     isLoggedIn: false,
+    longitude: "",
+    latitude: "",
   });
   const [credentials, setCredentials] = useState("");
   const [address, setAddress] = useState("");
@@ -23,7 +38,8 @@ function Register({ setState }) {
       formData.store === "" ||
       formData.adminUsername === "None" ||
       formData.password === "" ||
-      formData.credentials === ""
+      formData.credentials === "" ||
+      address === ""
     ) {
       return alert("Please enter all valid details.");
     }
@@ -44,6 +60,7 @@ function Register({ setState }) {
     // } catch (e) {
     //   console.error("Error adding store: ", e);
     // }
+
     await createUserWithEmailAndPassword(
       auth,
       formData.adminUsername,
@@ -75,12 +92,26 @@ function Register({ setState }) {
       setCredentials(event.target.value);
     } else {
       setAddress(event.target.value);
+      Geocode.fromAddress(event.target.value).then(
+        (response) => {
+          const { lat, lng } = response.results[0].geometry.location;
+          setFormData({
+            ...formData,
+            latitude: lat,
+            longitude: lng,
+          });
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
     }
   };
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add code to submit form data to server
   };
+
   return (
     <div className="AddMenu">
       <h1 style={{ color: "white" }}>Register a store.</h1>
@@ -130,6 +161,7 @@ function Register({ setState }) {
           value={address}
           onChange={handleChange2}
         />
+
         <br />
         <br></br>
         <button onClick={(e) => Register(e)}>Register</button>
