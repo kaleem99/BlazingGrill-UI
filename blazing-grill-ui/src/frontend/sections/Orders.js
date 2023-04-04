@@ -36,8 +36,11 @@ function Orders({
       const filteredInProgressData = newData.filter(
         (data) => data.storeName === storeName[0] && data
       );
+      console.log(filteredData);
       setInProgress(filteredInProgressData);
       setPendingOrders(filteredData);
+      console.log(filteredInProgressData);
+      console.log(PendingOrders);
     });
   }, []);
   const handleChange = () => {
@@ -75,13 +78,15 @@ function Orders({
         newOrderData.status = "Accepted";
         updateDoc(docRef, newOrderData);
         alert("Order has been accepted");
+        let newPendingOrder = PendingOrders.shift();
+        setPendingOrders(PendingOrders);
       } else {
         const newOrderData = PendingOrders[0];
         newOrderData.status = "Declined";
         updateDoc(docRef, newOrderData);
         setTimeout(() => {
           deleteDoc(docRef);
-        }, 10000);
+        }, 1000);
         alert("Order has been declined.");
       }
     }
@@ -113,7 +118,7 @@ function Orders({
       </p>
       <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
       <br></br>
-      <div class="ItemsSections">
+      <div className="ItemsSections">
         <h2 style={{ color: "white", fontSize: "15px" }}>
           Currently no orders
         </h2>
@@ -123,9 +128,7 @@ function Orders({
               className={
                 orderSection === value ? "column btnActiveOrders" : "column"
               }
-              onClick={() =>
-                setOrderSection(value === "In Progress" ? "Accepted" : value)
-              }
+              onClick={() => setOrderSection(value)}
             >
               {value}
             </button>
@@ -135,8 +138,10 @@ function Orders({
           {customersOrders.length === 0 ? (
             <table>
               <tr>
+                <th>Order Number</th>
                 <th>Customer Name</th>
                 <th>Customer Email</th>
+                <th>Test</th>
                 <th>View Orders</th>
                 <th>Change Status</th>
               </tr>
@@ -145,8 +150,10 @@ function Orders({
                 (data, i) =>
                   data.status === orderSection && (
                     <tr>
+                      <td>{i + 1}</td>
                       <td>{data.Name}</td>
                       <td>{data.email}</td>
+                      <td>{data.date}</td>
                       <td>
                         <button
                           onClick={() => setOrders(data)}

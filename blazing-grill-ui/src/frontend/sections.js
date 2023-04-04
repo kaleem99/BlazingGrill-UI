@@ -42,10 +42,16 @@ function Sections({
   }
   switch (state) {
     case "Home":
+      console.log(state);
+
       return <MenuItems />;
     case "Add Menu Item":
+      console.log(state);
+
       return <AddMenuItems />;
     case "Orders":
+      console.log(state);
+      console.log(store);
       if (store[0]) {
         let storeName = Object.keys(store[0]);
         const detailsOfStore = store[0][storeName[0]] || {

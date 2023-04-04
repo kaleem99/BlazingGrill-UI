@@ -35,6 +35,8 @@ function App() {
           ...doc.data(),
           id: doc.id,
         }));
+        console.log(newData);
+        console.log(email);
         setStoreDetails(newData);
       });
       if (user && user.emailVerified) {
@@ -44,8 +46,7 @@ function App() {
         const initialStore = storeDetails.map((stores) =>
           stores.email === user.email ? setCurrentStore(stores) : stores
         );
-      } 
-      else {
+      } else {
         setIsLoggedIn(false);
         console.log("user is logged out", isLoggedIn);
         if (state !== "Register") {
@@ -64,11 +65,12 @@ function App() {
       }
     );
   }, []);
-  const store = storeDetails.map((stores, i) => {
+  const store = storeDetails.filter((stores, i) => {
     if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
       return stores;
     }
   });
+  console.log(store);
   const loginRegister = () => {
     switch (state) {
       case "Register":
