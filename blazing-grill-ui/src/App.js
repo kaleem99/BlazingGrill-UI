@@ -27,7 +27,7 @@ function App() {
   const [storeStatus, setstoreStatus] = useState(false);
   const [currentStore, setCurrentStore] = useState("");
   const [email, setEmail] = useState("");
-
+  console.log(currentStore);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
@@ -35,17 +35,13 @@ function App() {
           ...doc.data(),
           id: doc.id,
         }));
-        console.log(newData);
-        console.log(email);
+
+        // console.log(newData);
         setStoreDetails(newData);
       });
       if (user && user.emailVerified) {
-        const uid = user.uid;
         setIsLoggedIn(true);
         setEmail(user.email);
-        const initialStore = storeDetails.map((stores) =>
-          stores.email === user.email ? setCurrentStore(stores) : stores
-        );
       } else {
         setIsLoggedIn(false);
         console.log("user is logged out", isLoggedIn);
@@ -54,16 +50,20 @@ function App() {
         }
       }
     });
-    const data = getDocs(collection(db, "BlazingStores")).then(
-      (querySnapshot) => {
-        const newData = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        let Name = Object.keys(newData[0])[0];
-        setstoreStatus(newData[0][Name].storeStatus);
-      }
-    );
+    // const data = getDocs(collection(db, "BlazingStores")).then(
+    //   (querySnapshot) => {
+    //     const newData = querySnapshot.docs.map((doc) => ({
+    //       ...doc.data(),
+    //       id: doc.id,
+    //     }));
+    //     let Name = auth.currentUser.displayName;
+    //     const newFilteredData = newData.filter(
+    //       (data) => data[Name] !== undefined && data
+    //     );
+
+    //     setstoreStatus(newFilteredData[0][Name].storeStatus);
+    //   }
+    // );
   }, []);
   const store = storeDetails.filter((stores, i) => {
     if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
@@ -124,6 +124,7 @@ function App() {
                 store={store}
                 storeStatus={storeStatus}
                 setstoreStatus={setstoreStatus}
+                auth={auth}
               />
             </div>
           </>

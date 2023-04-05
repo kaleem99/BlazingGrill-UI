@@ -29,6 +29,7 @@ function Register({ setState }) {
     isLoggedIn: false,
     longitude: "",
     latitude: "",
+    storeStatus: false,
   });
   const [credentials, setCredentials] = useState("");
   const [address, setAddress] = useState("");

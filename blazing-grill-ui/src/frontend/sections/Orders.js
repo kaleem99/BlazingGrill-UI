@@ -57,6 +57,8 @@ function Orders({
         address: detailsOfStore.address,
         store: detailsOfStore.store,
         storeStatus: status,
+        latitude: detailsOfStore.latitude,
+        longitude: detailsOfStore.longitude,
       },
     })
       .then((response) => {
@@ -75,7 +77,7 @@ function Orders({
       const docRef = doc(db, "Orders", PendingOrders[0].id);
       if (window.confirm("New Incoming Order")) {
         const newOrderData = PendingOrders[0];
-        newOrderData.status = "Accepted";
+        newOrderData.status = "In Progress";
         updateDoc(docRef, newOrderData);
         alert("Order has been accepted");
         let newPendingOrder = PendingOrders.shift();
@@ -104,6 +106,7 @@ function Orders({
     newData.status = x.value;
     updateDoc(userRef, newData);
   };
+  console.log(storeStatus)
   return (
     <div className="Home">
       {incomingOrder()}

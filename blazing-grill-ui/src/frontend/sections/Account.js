@@ -63,19 +63,22 @@ function AccountDetails({
         break;
     }
   };
-  console.log(storeName);
+  console.log(detailsOfStore);
   const SaveStoreInfor = () => {
     const examcollref = doc(db, "BlazingStores", store[0].id);
     try {
       updateProfile(auth.currentUser, {
         email: email,
+        displayName: storeN,
       });
       updateDoc(examcollref, {
-        [storeName[0]]: {
+        [storeN]: {
           adminUsername: email,
           address: address,
           store: storeN,
           storeStatus: storeStatus,
+          latitude: detailsOfStore.latitude,
+          longitude: detailsOfStore.longitude,
         },
       });
       alert("updated");

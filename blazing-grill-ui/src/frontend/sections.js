@@ -25,6 +25,7 @@ function Sections({
   setstoreStatus,
   storeStatus,
   store,
+  auth,
 }) {
   const [hasbeenClicked, setHasBeenClicked] = useState(false);
   const loginDetails = async () => {
@@ -35,6 +36,24 @@ function Sections({
     //   }));
     //   setStore(newData);
     // });
+  };
+
+  const checkStoreStatus = () => {
+    const data = getDocs(collection(db, "BlazingStores")).then(
+      (querySnapshot) => {
+        const newData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        let Name = auth.currentUser.displayName;
+        const newFilteredData = newData.filter(
+          (data) => data[Name] !== undefined && data
+        );
+
+        setstoreStatus(newFilteredData[0][Name].storeStatus);
+        // console.log(1);
+      }
+    );
   };
   if (state === "Login" && !hasbeenClicked) {
     loginDetails();
@@ -50,8 +69,7 @@ function Sections({
 
       return <AddMenuItems />;
     case "Orders":
-      console.log(state);
-      console.log(store);
+      checkStoreStatus();
       if (store[0]) {
         let storeName = Object.keys(store[0]);
         const detailsOfStore = store[0][storeName[0]] || {
