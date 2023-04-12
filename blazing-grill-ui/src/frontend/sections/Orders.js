@@ -7,6 +7,7 @@ import {
   updateDoc,
   doc,
   deleteDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../../database/config";
 import SendEmailOrder from "../../components/sendEmailOrder";
@@ -25,24 +26,59 @@ function Orders({
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
   useEffect(() => {
-    getDocs(collection(db, "Orders")).then((querySnapshot) => {
-      const newData = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      const filteredData = newData.filter(
-        (data) =>
-          data.storeName === storeName[0] && data.status === "Pending" && data
-      );
-      const filteredInProgressData = newData.filter(
-        (data) => data.storeName === storeName[0] && data
-      );
-      console.log(filteredData);
-      setInProgress(filteredInProgressData);
-      setPendingOrders(filteredData);
-      console.log(filteredInProgressData);
-      console.log(PendingOrders);
-    });
+    // const fetchData = async () => {
+    //   getDocs(collection(db, "Orders")).then((querySnapshot) => {
+    //     const newData = querySnapshot.docs.map((doc) => ({
+    //       ...doc.data(),
+    //       id: doc.id,
+    //     }));
+    //     const filteredData = newData.filter(
+    //       (data) =>
+    //         data.storeName === storeName[0] && data.status === "Pending" && data
+    //     );
+    //     const filteredInProgressData = newData.filter(
+    //       (data) => data.storeName === storeName[0] && data
+    //     );
+    //     setInProgress(filteredInProgressData);
+    //     setPendingOrders(filteredData);
+    //     console.log("*".repeat(50));
+    //   });
+    // };
+    // fetchData();
+    const unsubscribe = onSnapshot(
+      collection(db, "Orders"),
+      (querySnapshot) => {
+        // Callback function triggered when the collection data changes
+        if (!querySnapshot.empty) {
+          // Check if the collection contains data
+          const items = [];
+          const inProgress = [];
+          querySnapshot.forEach((doc) => {
+            // Add each document's data to the 'items' array
+            console.log(doc.data());
+            if (
+              doc.data().status === "Pending" &&
+              doc.data().storeName === storeName[0]
+            ) {
+              items.push({ id: doc.id, ...doc.data() });
+            }
+
+            // if (doc.data().status === "In Progress") {
+            inProgress.push(doc.data());
+            // }
+          });
+          setPendingOrders(items);
+          setInProgress(inProgress);
+        } else {
+          console.log("No data in the collection");
+        }
+      }
+    );
+
+    return () => {
+      // Cleanup function to unsubscribe from snapshot listener
+      unsubscribe();
+    };
   }, []);
   const handleChange = () => {
     let status = "";
@@ -84,12 +120,17 @@ function Orders({
           "\n" +
           foodOrder[i].productQuantity +
           " x " +
-          foodOrder[i].productName +
-          "\n";
+          foodOrder[i].productName;
+        // "\n";
       }
       if (window.confirm("New Incoming Order " + foodStringData)) {
         const newOrderData = PendingOrders[0];
         newOrderData.status = "In Progress";
+        SendEmailOrder(
+          newOrderData.Name,
+          newOrderData.food,
+          newOrderData.total
+        );
         updateDoc(docRef, newOrderData);
         alert("Order has been accepted");
         let newPendingOrder = PendingOrders.shift();
@@ -97,10 +138,11 @@ function Orders({
       } else {
         const newOrderData = PendingOrders[0];
         // newOrderData.status = "Declined";
-        updateDoc(docRef, newOrderData);
+        // updateDoc(docRef, newOrderData);
         // setTimeout(() => {
         deleteDoc(docRef);
         // }, 1000);
+        const deletedOrder = PendingOrders.shift();
         alert("Order has been declined.");
       }
     }
@@ -122,7 +164,30 @@ function Orders({
   return (
     <div className="Home">
       {incomingOrder()}
-      <button onClick={() => SendEmailOrder()}>Send Order</button>
+      {/* <button
+        onClick={() =>
+          SendEmailOrder(
+            "Kaleem",
+            [
+              {
+                productQuantity: 1,
+                productPrice: 30,
+                productName: "MEDIUM FRIES",
+                productType: "Fries",
+              },
+              {
+                productName: "6 BBQ WINGS",
+                productPrice: 59,
+                productQuantity: 1,
+                productType: "Chicken Wings",
+              },
+            ],
+            89
+          )
+        }
+      >
+        Send Order
+      </button> */}
       <Switch
         onChange={() => setstoreStatus(handleChange())}
         checked={storeStatus}
@@ -179,7 +244,8 @@ function Orders({
                         </button>
                       </td>
                       <td>
-                        <select id="SelectValue">
+                        <select id="SelectValue" defaultValue={data.status}>
+                          <option value="In Progress">In Progress</option>
                           <option value="Collection">Collection</option>
                           <option value="Complete">Complete</option>
                           <option value="Delivery">Delivery</option>

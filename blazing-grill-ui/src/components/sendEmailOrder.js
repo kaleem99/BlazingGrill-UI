@@ -1,6 +1,6 @@
 import emailjs from "emailjs-com";
 
-const SendEmailOrder = () => {
+const SendEmailOrder = (name, orderDetails, total) => {
   //   sgMail.setApiKey(
   //     "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"
   //   );
@@ -19,52 +19,30 @@ const SendEmailOrder = () => {
   //     .catch((error) => {
   //       console.error(error);
   //     });
-  const form = () => {
-    return (
-      <form id="form">
-        <div class="field">
-          <label for="from_name">from_name</label>
-          <input
-            type="text"
-            value={"Kaleem"}
-            name="from_name"
-            id="from_name"
-            style='background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg=="); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;'
-          />
-        </div>
-        <div class="field">
-          <label for="to_name">to_name</label>
-          <input type="text" name="to_name" value={"Mo"} id="to_name" />
-        </div>
-        <div class="field">
-          <label for="message">message</label>
-          <input type="text" name="message" value={"Hello"} id="message" />
-        </div>
-        <div class="field">
-          <label for="reply_to">reply_to</label>
-          <input type="text" name="reply_to" value={""} id="reply_to" />
-        </div>
-        <div class="field">
-          <label for="to_email">to_email</label>
-          <input
-            type="text"
-            name="to_email"
-            value={"kmohammad@2u.com"}
-            id="to_email"
-          />
-        </div>
-
-        <input type="submit" id="button" value="Send Email" />
-      </form>
-    );
-  };
+  let orderDetailsString = "";
+  // foodStringData +=
+  // "\n" +
+  // foodOrder[i].productQuantity +
+  // " x " +
+  // foodOrder[i].productName +
+  // "\n";
+  for (let i = 0; i < orderDetails.length; i++) {
+    orderDetailsString +=
+      "\n" +
+      orderDetails[i].productQuantity +
+      " x " +
+      orderDetails[i].productName +
+      ": R" +
+      orderDetails[i].productPrice;
+  }
   const templateParams = {
-    name: "John",
-    from_name: "Jane",
+    name: name,
+    from_name: "The Blazing Grill",
     subject: "Hello from React App",
-    message:
-      "Thank you, your order will be ready in about 20 minutes.",
-    to_email: "kmohammad@2u.com", // Replace with the recipient email address
+    message: "Your order will be ready in about 20 minutes.",
+    Order_Details: orderDetailsString,
+    Total: total,
+    to_email: ["kmohammad@2u.com", "kaleemnike1@gmail.com"], // Replace with the recipient email address
   };
   emailjs
     .send(
