@@ -45,6 +45,7 @@ function Orders({
     //   });
     // };
     // fetchData();
+    setstoreStatus(detailsOfStore.storeStatus);
     const unsubscribe = onSnapshot(
       collection(db, "Orders"),
       (querySnapshot) => {
@@ -160,7 +161,6 @@ function Orders({
     newData.status = x.value;
     updateDoc(userRef, newData);
   };
-  console.log(storeStatus);
   return (
     <div className="Home">
       {incomingOrder()}
