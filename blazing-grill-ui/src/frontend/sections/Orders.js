@@ -9,6 +9,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../database/config";
+import SendEmailOrder from "../../components/sendEmailOrder";
 
 function Orders({
   storeStatus,
@@ -75,7 +76,18 @@ function Orders({
   const incomingOrder = () => {
     if (PendingOrders.length > 0) {
       const docRef = doc(db, "Orders", PendingOrders[0].id);
-      if (window.confirm("New Incoming Order")) {
+      console.log(PendingOrders[0]);
+      const foodOrder = PendingOrders[0].food;
+      let foodStringData = "";
+      for (let i = 0; i < foodOrder.length; i++) {
+        foodStringData +=
+          "\n" +
+          foodOrder[i].productQuantity +
+          " x " +
+          foodOrder[i].productName +
+          "\n";
+      }
+      if (window.confirm("New Incoming Order " + foodStringData)) {
         const newOrderData = PendingOrders[0];
         newOrderData.status = "In Progress";
         updateDoc(docRef, newOrderData);
@@ -84,11 +96,11 @@ function Orders({
         setPendingOrders(PendingOrders);
       } else {
         const newOrderData = PendingOrders[0];
-        newOrderData.status = "Declined";
+        // newOrderData.status = "Declined";
         updateDoc(docRef, newOrderData);
-        setTimeout(() => {
-          deleteDoc(docRef);
-        }, 1000);
+        // setTimeout(() => {
+        deleteDoc(docRef);
+        // }, 1000);
         alert("Order has been declined.");
       }
     }
@@ -106,10 +118,11 @@ function Orders({
     newData.status = x.value;
     updateDoc(userRef, newData);
   };
-  console.log(storeStatus)
+  console.log(storeStatus);
   return (
     <div className="Home">
       {incomingOrder()}
+      <button onClick={() => SendEmailOrder()}>Send Order</button>
       <Switch
         onChange={() => setstoreStatus(handleChange())}
         checked={storeStatus}
