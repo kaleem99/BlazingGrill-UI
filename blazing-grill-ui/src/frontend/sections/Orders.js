@@ -25,6 +25,9 @@ function Orders({
   const [customersOrders, setCustomersOrders] = useState([]);
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
+  const audio = new Audio(
+    "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
+  );
   useEffect(() => {
     // const fetchData = async () => {
     //   getDocs(collection(db, "Orders")).then((querySnapshot) => {
@@ -61,6 +64,7 @@ function Orders({
               doc.data().status === "Pending" &&
               doc.data().storeName === storeName[0]
             ) {
+              audio.play();
               items.push({ id: doc.id, ...doc.data() });
             }
 

@@ -1,31 +1,9 @@
 import emailjs from "emailjs-com";
 
 const SendEmailOrder = (name, orderDetails, total) => {
-  //   sgMail.setApiKey(
-  //     "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"
-  //   );
-  //   const msg = {
-  //     to: "kmohammad@2u.com", // recipient's email address
-  //     from: "Kaleemnike1@gmail.com", // sender's email address
-  //     subject: "Testing Email Subject", // email subject
-  //     text: "Example plain text content", // plain text content of the email
-  //     html: emailTemplate, // HTML content of the email
-  //   };
-  //   sgMail
-  //     .send(msg)
-  //     .then(() => {
-  //       console.log("Email sent successfully");
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
+
   let orderDetailsString = "";
-  // foodStringData +=
-  // "\n" +
-  // foodOrder[i].productQuantity +
-  // " x " +
-  // foodOrder[i].productName +
-  // "\n";
+
   for (let i = 0; i < orderDetails.length; i++) {
     orderDetailsString +=
       "\n" +
