@@ -117,7 +117,8 @@ function Orders({
           newOrderData.food,
           newOrderData.total,
           newOrderData.email,
-          detailsOfStore.adminUsername
+          detailsOfStore.adminUsername,
+          newOrderData.orderNumber
         );
         updateDoc(docRef, newOrderData);
 

@@ -1,6 +1,13 @@
 import emailjs from "emailjs-com";
 
-const SendEmailOrder = (name, orderDetails, total, userEmail, storeEmail) => {
+const SendEmailOrder = (
+  name,
+  orderDetails,
+  total,
+  userEmail,
+  storeEmail,
+  uniqueOrderNum
+) => {
   let orderDetailsString = "";
 
   for (let i = 0; i < orderDetails.length; i++) {
@@ -17,11 +24,12 @@ const SendEmailOrder = (name, orderDetails, total, userEmail, storeEmail) => {
     from_name: "The Blazing Grill",
     subject: "Hello from React App",
     message: "Your order will be ready in about 20 minutes.",
+    uniqueOrderNum: uniqueOrderNum,
     Order_Details: orderDetailsString,
     Total: total,
     to_email: [userEmail, storeEmail], // Replace with the recipient email address
   };
-  console.log(storeEmail)
+  console.log(storeEmail);
   emailjs
     .send(
       "service_uxvc1ba",
