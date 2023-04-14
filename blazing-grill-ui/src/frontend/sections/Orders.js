@@ -29,25 +29,6 @@ function Orders({
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
   useEffect(() => {
-    // const fetchData = async () => {
-    //   getDocs(collection(db, "Orders")).then((querySnapshot) => {
-    //     const newData = querySnapshot.docs.map((doc) => ({
-    //       ...doc.data(),
-    //       id: doc.id,
-    //     }));
-    //     const filteredData = newData.filter(
-    //       (data) =>
-    //         data.storeName === storeName[0] && data.status === "Pending" && data
-    //     );
-    //     const filteredInProgressData = newData.filter(
-    //       (data) => data.storeName === storeName[0] && data
-    //     );
-    //     setInProgress(filteredInProgressData);
-    //     setPendingOrders(filteredData);
-    //     console.log("*".repeat(50));
-    //   });
-    // };
-    // fetchData();
     setstoreStatus(detailsOfStore.storeStatus);
     const unsubscribe = onSnapshot(
       collection(db, "Orders"),
@@ -142,11 +123,9 @@ function Orders({
         setPendingOrders(PendingOrders);
       } else {
         const newOrderData = PendingOrders[0];
-        // newOrderData.status = "Declined";
-        // updateDoc(docRef, newOrderData);
-        // setTimeout(() => {
+        newOrderData.status = "Declined";
+        updateDoc(docRef, newOrderData);
         deleteDoc(docRef);
-        // }, 1000);
         const deletedOrder = PendingOrders.shift();
         alert("Order has been declined.");
       }
@@ -168,30 +147,6 @@ function Orders({
   return (
     <div className="Home">
       {incomingOrder()}
-      {/* <button
-        onClick={() =>
-          SendEmailOrder(
-            "Kaleem",
-            [
-              {
-                productQuantity: 1,
-                productPrice: 30,
-                productName: "MEDIUM FRIES",
-                productType: "Fries",
-              },
-              {
-                productName: "6 BBQ WINGS",
-                productPrice: 59,
-                productQuantity: 1,
-                productType: "Chicken Wings",
-              },
-            ],
-            89
-          )
-        }
-      >
-        Send Order
-      </button> */}
       <Switch
         onChange={() => setstoreStatus(handleChange())}
         checked={storeStatus}
