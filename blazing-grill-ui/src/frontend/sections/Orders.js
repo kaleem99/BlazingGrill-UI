@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../database/config";
 import SendEmailOrder from "../../components/sendEmailOrder";
+import { clearCart } from "../../helpers/ClearCart";
 
 function Orders({
   storeStatus,
@@ -119,6 +120,8 @@ function Orders({
         );
         updateDoc(docRef, newOrderData);
         alert("Order has been accepted");
+        //
+        clearCart(newOrderData.userId);
         let newPendingOrder = PendingOrders.shift();
         setPendingOrders(PendingOrders);
       } else {
