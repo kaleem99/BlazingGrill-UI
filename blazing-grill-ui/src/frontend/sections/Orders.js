@@ -41,7 +41,6 @@ function Orders({
           const inProgress = [];
           querySnapshot.forEach((doc) => {
             // Add each document's data to the 'items' array
-            console.log(doc.data());
             if (
               doc.data().status === "Pending" &&
               doc.data().storeName === storeName[0]
@@ -110,15 +109,19 @@ function Orders({
           foodOrder[i].productName;
         // "\n";
       }
+      console.log(detailsOfStore);
       if (window.confirm("New Incoming Order " + foodStringData)) {
         const newOrderData = PendingOrders[0];
         newOrderData.status = "In Progress";
         SendEmailOrder(
           newOrderData.Name,
           newOrderData.food,
-          newOrderData.total
+          newOrderData.total,
+          newOrderData.email,
+          detailsOfStore.adminUsername
         );
         updateDoc(docRef, newOrderData);
+
         alert("Order has been accepted");
         //
         clearCart(newOrderData.userId);

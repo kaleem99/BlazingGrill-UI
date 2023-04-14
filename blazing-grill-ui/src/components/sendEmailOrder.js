@@ -1,7 +1,6 @@
 import emailjs from "emailjs-com";
 
-const SendEmailOrder = (name, orderDetails, total) => {
-
+const SendEmailOrder = (name, orderDetails, total, userEmail, storeEmail) => {
   let orderDetailsString = "";
 
   for (let i = 0; i < orderDetails.length; i++) {
@@ -20,8 +19,9 @@ const SendEmailOrder = (name, orderDetails, total) => {
     message: "Your order will be ready in about 20 minutes.",
     Order_Details: orderDetailsString,
     Total: total,
-    to_email: ["kmohammad@2u.com", "kaleemnike1@gmail.com"], // Replace with the recipient email address
+    to_email: [userEmail, storeEmail], // Replace with the recipient email address
   };
+  console.log(storeEmail)
   emailjs
     .send(
       "service_uxvc1ba",
