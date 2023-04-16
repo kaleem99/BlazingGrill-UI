@@ -26,6 +26,7 @@ function Orders({
   const [customersOrders, setCustomersOrders] = useState([]);
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
+  const [changeState, setChangeState] = useState("");
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
@@ -34,13 +35,10 @@ function Orders({
     const unsubscribe = onSnapshot(
       collection(db, "Orders"),
       (querySnapshot) => {
-        // Callback function triggered when the collection data changes
         if (!querySnapshot.empty) {
-          // Check if the collection contains data
           const items = [];
           const inProgress = [];
           querySnapshot.forEach((doc) => {
-            // Add each document's data to the 'items' array
             if (
               doc.data().status === "Pending" &&
               doc.data().storeName === storeName[0]
@@ -48,10 +46,7 @@ function Orders({
               audio.play();
               items.push({ id: doc.id, ...doc.data() });
             }
-
-            // if (doc.data().status === "In Progress") {
             inProgress.push(doc.data());
-            // }
           });
           setPendingOrders(items);
           setInProgress(inProgress);
@@ -144,11 +139,10 @@ function Orders({
   };
   const changeOrderStatus = (userId, data) => {
     const userRef = doc(db, "Orders", userId);
-
-    let x = document.getElementById("SelectValue");
-    console.log(x.value);
+    // console.log(userRef);
+    // let x = document.getElementById("SelectValue");
     const newData = data;
-    newData.status = x.value;
+    newData.status = changeState;
     updateDoc(userRef, newData);
   };
   return (
@@ -188,7 +182,7 @@ function Orders({
                 <th>Order Number</th>
                 <th>Customer Name</th>
                 <th>Customer Email</th>
-                <th>Test</th>
+                <th>Date</th>
                 <th>View Orders</th>
                 <th>Change Status</th>
               </tr>
@@ -204,13 +198,21 @@ function Orders({
                       <td>
                         <button
                           onClick={() => setOrders(data)}
-                          style={{ height: "35px", borderRadius: "10px" }}
+                          style={{
+                            height: "35px",
+                            borderRadius: "10px",
+                            border: "2px solid #f7941d",
+                          }}
                         >
                           View Customers Orders
                         </button>
                       </td>
                       <td>
-                        <select id="SelectValue" defaultValue={data.status}>
+                        <select
+                          id="SelectValue"
+                          onChange={(e) => setChangeState(e.target.value)}
+                          defaultValue={data.status}
+                        >
                           <option value="In Progress">In Progress</option>
                           <option value="Collection">Collection</option>
                           <option value="Complete">Complete</option>

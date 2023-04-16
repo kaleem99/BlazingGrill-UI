@@ -1,35 +1,35 @@
 const MenuItemsSection = [
   {
     name: "Burgers",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/front-view-burger-stand-removebg-preview-1.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Burgers.png",
   },
   {
     name: "Grilled Chicken",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/08/chicken-pic-edited-2.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Grilled%20Chicken.png",
   },
   {
     name: "Fries",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2022/09/image-removebg-preview-43.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Fries.png",
   },
   {
     name: "Chicken Wings",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/08/chicken-pic-edited.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/6SpicyWings.png",
   },
   {
     name: "On A Roll",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2022/09/Blazing-Doggs.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Street%20Dog.jpg",
   },
   {
     name: "Pizzas",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/Blazing-Grill-Pizza.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Pizza.png",
   },
   {
     name: "Specials",
-    img: "https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/burger-web-banner.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/specials%20copy.jpg",
   },
   {
     name: "sources",
-    img: "https://firebasestorage.googleapis.com/v0/b/blazing-grills.appspot.com/o/files%2FWhatsApp%20Image%202023-02-06%20at%2021.57.06%20(1).jpeg?alt=media&token=7a7902b3-3d71-4ab5-a07b-919faf364ee2",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/sources.jpg",
   },
   {
     name: "Drinks",
