@@ -104,7 +104,7 @@ function Orders({
           foodOrder[i].productName;
         // "\n";
       }
-      console.log(detailsOfStore);
+      console.log(PendingOrders[0]);
       if (window.confirm("New Incoming Order " + foodStringData)) {
         const newOrderData = PendingOrders[0];
         newOrderData.status = "In Progress";
@@ -127,7 +127,7 @@ function Orders({
         const newOrderData = PendingOrders[0];
         newOrderData.status = "Declined";
         updateDoc(docRef, newOrderData);
-        deleteDoc(docRef);
+        // deleteDoc(docRef);
         const deletedOrder = PendingOrders.shift();
         alert("Order has been declined.");
       }
