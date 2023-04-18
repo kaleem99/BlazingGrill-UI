@@ -33,6 +33,7 @@ function AccountDetails({
   const [email, setEmail] = useState(detailsOfStore.adminUsername);
   const [storeN, setStoreName] = useState(detailsOfStore.store);
   const [address, setAddress] = useState(detailsOfStore.address);
+  const [password, setPassword] = useState("");
   const Logout = async (e) => {
     if (window.confirm("Are you sure you want to logout!")) {
     } else {
@@ -58,13 +59,18 @@ function AccountDetails({
       case "storeName":
         setStoreName(e.target.value);
         break;
+      case "password":
+        setPassword(e.target.value);
+        break;
       default:
         setAddress(e.target.value);
         break;
     }
   };
-  console.log(detailsOfStore);
   const SaveStoreInfor = () => {
+    if (password !== "P@ssw0rd786") {
+      return alert("admin password is incorrect");
+    }
     const examcollref = doc(db, "BlazingStores", store[0].id);
     try {
       updateProfile(auth.currentUser, {
@@ -108,6 +114,13 @@ function AccountDetails({
           name={"address"}
           // defaultValue={storeInformation.address}
           value={address}
+        />
+        <input
+          onChange={upDateStoreInformation}
+          name={"password"}
+          placeholder={"Please enter admin password to save details."}
+          value={password}
+          type="password"
         />
       </form>
       <div

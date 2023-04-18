@@ -61,13 +61,13 @@ function Sections({
   }
   switch (state) {
     case "Home":
-      console.log(state);
+      console.log(auth.currentUser.email);
 
-      return <MenuItems />;
+      return <MenuItems adminUserEmail={auth.currentUser.email} />;
     case "Add Menu Item":
       console.log(state);
 
-      return <AddMenuItems />;
+      return <AddMenuItems adminUserEmail={auth.currentUser.email} />;
     case "Orders":
       checkStoreStatus();
       if (store[0]) {

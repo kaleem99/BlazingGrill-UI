@@ -10,7 +10,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-function MenuItems() {
+function MenuItems({ adminUserEmail }) {
   const [itemSection, setItemSection] = useState("");
   const [items, setItems] = useState([]);
   const [image, setImage] = useState("");
@@ -258,10 +258,14 @@ function MenuItems() {
               return (
                 <div
                   className="menuNameImage"
-                  onClick={() => itemClick(item.name)}
+                  onClick={() =>
+                    adminUserEmail === "kaleem1999@outlook.com"
+                      ? itemClick(item.name)
+                      : alert("Only admin  user has full access.")
+                  }
                 >
                   <img alt="" className="MenuImage" src={item.img}></img>
-                  <h1 className="itemName">{item.name}</h1>
+                  <text className="itemName">{item.name}</text>
                 </div>
               );
             })}

@@ -25,7 +25,7 @@ const MenuItemsSection = [
   },
   {
     name: "Specials",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/specials%20copy.jpg",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/special%20front.png",
   },
   {
     name: "sources",

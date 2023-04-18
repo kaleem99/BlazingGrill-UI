@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=IM Fell DW Pica");
 .App {
   text-align: center;
   width: 100%;
@@ -5,7 +6,7 @@
   background-image: url("./assets/smokeyBackground1024_1.png");
   /* background-color: black; */
   background-repeat: no-repeat;
-  font-family: "Libre Caslon Text", Sans-serif;
+  font-family: "IM Fell";
   background-position: center;
   background-size: cover;
   display: grid;
@@ -68,7 +69,7 @@ button:hover {
   border-radius: 5px;
   width: 80.5%;
   height: 40px;
-  font-family: "Libre Caslon Text", Sans-serif;
+  /* font-family: "Libre Caslon Text", Sans-serif; */
   font-weight: 400;
   font-size: 20px;
   color: white;
@@ -146,7 +147,6 @@ li a:hover {
 }
 .itemName {
   color: #ffffff;
-  font-family: "Libre Caslon Text", Sans-serif;
   font-size: 40px;
   font-weight: 500;
 }
@@ -366,7 +366,7 @@ label {
   border-radius: 10px;
 }
 table {
-  font-family: arial, sans-serif;
+  /* font-family: arial, sans-serif; */
   border-collapse: collapse;
   width: 100%;
 }

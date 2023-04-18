@@ -4,7 +4,7 @@ import { db, storage } from "../../database/config";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 import MenuItemsSection from "../data/menuSections";
-function AddMenuItems() {
+function AddMenuItems({ adminUserEmail }) {
   const [formData, setFormData] = useState({
     category: "",
     name: "",
@@ -20,7 +20,7 @@ function AddMenuItems() {
   };
   const handleChange2 = async (e) => {
     e.preventDefault();
-  
+
     const file = e.target.files[0];
     if (!file) return null;
     const storageRef = ref(storage, `files/${formData.name || "image"}`);
@@ -48,7 +48,7 @@ function AddMenuItems() {
     if (
       formData.name === "" ||
       formData.price === "" ||
-      formData.Information === "" 
+      formData.Information === ""
       // || formData.fileURL === ""
     ) {
       return alert("Please enter input");
@@ -57,8 +57,7 @@ function AddMenuItems() {
     try {
       const docRef = await addDoc(collection(db, formData.category), formData);
       alert("Food Item has been added successfully.");
-    } catch (e) {
-    }
+    } catch (e) {}
   };
   return (
     <div className="AddMenu">
@@ -115,7 +114,17 @@ function AddMenuItems() {
         />
         <br />
         <br></br>
-        <button onClick={(e) => addTodo(e)}>Add Menu Item</button>
+        <button
+          onClick={(e) =>
+            adminUserEmail === "kaleem1999@outlook.com"
+              ? addTodo(e)
+              : alert(
+                  "Only the administrator user has full access, and can add, edit and delete menu items"
+                )
+          }
+        >
+          Add Menu Item
+        </button>
       </form>
     </div>
   );

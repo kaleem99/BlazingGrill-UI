@@ -30,6 +30,7 @@ function Orders({
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
+  console.log(detailsOfStore)
   useEffect(() => {
     setstoreStatus(detailsOfStore.storeStatus);
     const unsubscribe = onSnapshot(
@@ -186,10 +187,10 @@ function Orders({
                 <th>View Orders</th>
                 <th>Change Status</th>
               </tr>
-
               {inProgress.map(
                 (data, i) =>
-                  data.status === orderSection && (
+                  data.status === orderSection &&
+                  data.storeName === storeName[0] && (
                     <tr>
                       <td>{i + 1}</td>
                       <td>{data.Name}</td>
