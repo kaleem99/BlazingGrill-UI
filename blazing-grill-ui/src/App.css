@@ -363,12 +363,14 @@ label {
   padding: 10px;
   font-size: large;
   height: 50px;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: none;
 }
 table {
   /* font-family: arial, sans-serif; */
   border-collapse: collapse;
   width: 100%;
+  font-weight: bold;
 }
 
 td,
@@ -379,6 +381,14 @@ th {
   font-size: large;
 }
 
+#save {
+  float: right;
+  min-width: 60px;
+  border-radius: 5px;
+  border: 2px solid #f7941d;
+  height: 25px;
+  font-weight: 600;
+}
 tr:nth-child(even) {
   background-color: #dddddd;
   color: black;
@@ -390,4 +400,17 @@ tr:nth-child(odd) {
 
 .btnActiveOrders {
   background-color: #f7941d;
+}
+
+#SelectValue {
+  border-radius: 5px;
+  /* color: red; */
+  height: 25px;
+  font-weight: 600;
+}
+.BackButton {
+  font-size: 40px;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  color: black;
 }

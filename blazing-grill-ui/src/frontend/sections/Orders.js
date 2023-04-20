@@ -12,6 +12,7 @@ import {
 import { db } from "../../database/config";
 import SendEmailOrder from "../../components/sendEmailOrder";
 import { clearCart } from "../../helpers/ClearCart";
+import { MdOutlineArrowCircleLeft } from "react-icons/md";
 
 function Orders({
   storeStatus,
@@ -30,7 +31,7 @@ function Orders({
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
-  console.log(detailsOfStore)
+  console.log(detailsOfStore);
   useEffect(() => {
     setstoreStatus(detailsOfStore.storeStatus);
     const unsubscribe = onSnapshot(
@@ -146,6 +147,10 @@ function Orders({
     newData.status = changeState;
     updateDoc(userRef, newData);
   };
+  const handleStateChange = (value) => {
+    setCustomersOrders([]);
+    setOrderSection(value);
+  };
   return (
     <div className="Home">
       {incomingOrder()}
@@ -170,7 +175,7 @@ function Orders({
               className={
                 orderSection === value ? "column btnActiveOrders" : "column"
               }
-              onClick={() => setOrderSection(value)}
+              onClick={() => handleStateChange(value)}
             >
               {value}
             </button>
@@ -180,6 +185,7 @@ function Orders({
           {customersOrders.length === 0 ? (
             <table>
               <tr>
+                <th></th>
                 <th>Order Number</th>
                 <th>Customer Name</th>
                 <th>Customer Email</th>
@@ -193,6 +199,7 @@ function Orders({
                   data.storeName === storeName[0] && (
                     <tr>
                       <td>{i + 1}</td>
+                      <td>{data.orderNumber}</td>
                       <td>{data.Name}</td>
                       <td>{data.email}</td>
                       <td>{data.date}</td>
@@ -221,6 +228,7 @@ function Orders({
                         </select>
                         <button
                           onClick={() => changeOrderStatus(data.id, data)}
+                          id="save"
                         >
                           Save
                         </button>
@@ -232,21 +240,28 @@ function Orders({
           ) : (
             <table>
               <tr>
+                <th>Back</th>
                 <th>Product Type</th>
                 <th>Product Name</th>
                 <th>Quantity</th>
+                <th>Price</th>
               </tr>
               {customersOrders.food.map((items) => (
                 <tr>
+                  <td>
+                    <p
+                      className="BackButton"
+                      onClick={() => setCustomersOrders([])}
+                    >
+                      <MdOutlineArrowCircleLeft />
+                    </p>
+                  </td>
                   <td>{items.productType}</td>
                   <td>{items.productName}</td>
                   <td>{items.productQuantity}</td>
+                  <td>R{items.productPrice.toFixed(2)}</td>
                 </tr>
               ))}
-              <button onClick={() => setCustomersOrders([])}>
-                Back To Customer Details
-              </button>
-              ;
             </table>
           )}
         </div>
