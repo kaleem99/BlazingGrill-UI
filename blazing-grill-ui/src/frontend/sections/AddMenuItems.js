@@ -81,6 +81,7 @@ function AddMenuItems({ adminUserEmail }) {
         <input
           type="name"
           name="name"
+          className="addMenuItems"
           value={formData.name}
           placeholder="Name"
           onChange={handleChange}
@@ -91,6 +92,7 @@ function AddMenuItems({ adminUserEmail }) {
         <input
           type="number"
           name="price"
+          className="addMenuItems"
           placeholder="Price"
           value={formData.price}
           onChange={handleChange}
@@ -100,6 +102,7 @@ function AddMenuItems({ adminUserEmail }) {
         <input
           type="text"
           name="Information"
+          className="addMenuItems"
           placeholder="Information"
           value={formData.Information}
           onChange={handleChange}
@@ -109,6 +112,7 @@ function AddMenuItems({ adminUserEmail }) {
         <input
           type="file"
           name="fileURL"
+          className="addMenuItems"
           placeholder="upload image"
           onChange={handleChange2}
         />
@@ -116,7 +120,7 @@ function AddMenuItems({ adminUserEmail }) {
         <br></br>
         <button
           onClick={(e) =>
-            adminUserEmail === "kaleem1999@outlook.com"
+            adminUserEmail === "yushaa@theblazinggrill.co.za"
               ? addTodo(e)
               : alert(
                   "Only the administrator user has full access, and can add, edit and delete menu items"

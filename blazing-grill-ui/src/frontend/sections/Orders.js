@@ -154,15 +154,19 @@ function Orders({
   return (
     <div className="Home">
       {incomingOrder()}
-      <Switch
-        onChange={() => setstoreStatus(handleChange())}
-        checked={storeStatus}
-      />
-      <br></br>
-      <p style={{ color: "white", fontSize: "30px" }}>
-        store status:{" "}
-        {storeStatus ? "Accepting Orders" : "Not Accepting Orders"}
-      </p>
+      {storeName[0] !== "admin" && (
+        <>
+          <Switch
+            onChange={() => setstoreStatus(handleChange())}
+            checked={storeStatus}
+          />
+          <br></br>
+          <p style={{ color: "white", fontSize: "30px" }}>
+            store status:{" "}
+            {storeStatus ? "Accepting Orders" : "Not Accepting Orders"}
+          </p>
+        </>
+      )}
       <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
       <br></br>
       <div className="ItemsSections">

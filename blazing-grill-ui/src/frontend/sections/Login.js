@@ -89,6 +89,7 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
           value={formData.adminUsername}
           placeholder="admin Username"
           onChange={handleChange}
+          className="addMenuItems"
         />
         <br />
         {/* <label>Price:</label> */}
@@ -99,6 +100,7 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
           placeholder="password"
           value={formData.password}
           onChange={handleChange}
+          className="addMenuItems"
         />
         <br />
         <br></br>

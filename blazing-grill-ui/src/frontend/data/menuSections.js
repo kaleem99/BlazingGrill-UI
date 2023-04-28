@@ -35,5 +35,9 @@ const MenuItemsSection = [
     name: "Drinks",
     img: "https://firebasestorage.googleapis.com/v0/b/blazing-grills.appspot.com/o/files%2Fdrinks.jpeg?alt=media&token=e607f302-4178-41e1-a28f-d1550888ee2b",
   },
+  {
+    name: "Frozen Pizza",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Frozen%20Air%20Fryer%20Pizza.jpeg",
+  },
 ];
 export default MenuItemsSection;

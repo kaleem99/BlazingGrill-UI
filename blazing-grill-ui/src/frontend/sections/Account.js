@@ -96,6 +96,7 @@ function AccountDetails({
     <div className="AddMenu">
       <h1 style={{ color: "white" }}>Store Account Details</h1>
       <form className="form">
+        <label>Store Email</label>
         <input
           onChange={(e) => upDateStoreInformation(e)}
           name={"email"}
@@ -103,18 +104,26 @@ function AccountDetails({
           // defaultValue={storeInformation.email}
           value={email}
         />
+        <br></br>
+        <label>Store Name</label>
+
         <input
           onChange={upDateStoreInformation}
           name={"storeName"}
           // defaultValue={storeInformation.storeName}
           value={storeN}
         />
+        <br></br>
+        <label>Store Address</label>
+
         <input
           onChange={upDateStoreInformation}
           name={"address"}
           // defaultValue={storeInformation.address}
           value={address}
         />
+        <label>Admin Password</label>
+
         <input
           onChange={upDateStoreInformation}
           name={"password"}

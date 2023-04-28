@@ -73,6 +73,7 @@ button:hover {
   font-weight: 400;
   font-size: 20px;
   color: white;
+  margin-left: 75px;
 }
 .form > select {
   /* background-color: #000000; */
@@ -242,11 +243,14 @@ li a:hover {
   color: white;
   cursor: pointer;
 }
+.addMenuItems{
+  margin-left: 0px !important;
+}
 label {
-  color: white;
-  float: left;
-  text-align: left;
-  font-size: 30px;
+  color: #f7941d;
+  /* float: left;
+  text-align: left; */
+  font-size: 25px;
 }
 .input01 {
   border: none;
