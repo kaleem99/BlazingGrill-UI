@@ -31,7 +31,6 @@ function MenuItems({ adminUserEmail }) {
     });
   };
   const handleChange = (event) => {
-    console.log(event.target);
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
@@ -43,23 +42,26 @@ function MenuItems({ adminUserEmail }) {
       return (
         <div className="ItemsSections">
           <div>
-            {items.map((food, i) => {
-              return (
-                <div className="HomeFoodItemName">
-                  <div className="inputDetails">
-                    <div
-                      id="input0"
-                      className={food.id}
-                      name={"name"}
-                      onClick={() => setItemsData(food)}
-                      // defaultValue={food.name}
-                    >
-                      {food.name}
+            {items
+              .sort((a, b) => (a.name > b.name ? 1 : -1))
+              .map((food, i) => {
+                return (
+                  <div className="HomeFoodItemName">
+                    <div className="inputDetails">
+                      <div
+                        id="input0"
+                        className={food.id}
+                        name={"name"}
+                        onClick={() => setItemsData(food)}
+                        // defaultValue={food.name}
+                      >
+                        {i + 1}
+                        {")"}. {food.name}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       );
@@ -70,9 +72,9 @@ function MenuItems({ adminUserEmail }) {
             return (
               <div style={{ display: "grid", gridTemplateColumns: "15% auto" }}>
                 {i < itemsFields.length - 1 ? (
-                  <label>{item}:</label>
+                  <label className="MenuItemsLabels">{item}:</label>
                 ) : (
-                  <label>Update Image:</label>
+                  <label className="MenuItemsLabels">Update Image:</label>
                 )}
                 {i < itemsFields.length - 1 ? (
                   <input
@@ -97,7 +99,7 @@ function MenuItems({ adminUserEmail }) {
           })}
           <img
             style={{
-              width: "300px",
+              width: "350px",
               height: "280px",
               marginLeft: "0px",
               marginRight: "auto",
@@ -164,7 +166,6 @@ function MenuItems({ adminUserEmail }) {
         id: doc.id,
       }));
       setItems(newData);
-      console.log(newData);
     });
   };
   const updateData = async (e, name) => {

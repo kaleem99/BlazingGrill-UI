@@ -31,7 +31,6 @@ function Orders({
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
-  console.log(detailsOfStore);
   useEffect(() => {
     setstoreStatus(detailsOfStore.storeStatus);
     const unsubscribe = onSnapshot(
@@ -247,6 +246,7 @@ function Orders({
                 <th>Back</th>
                 <th>Product Type</th>
                 <th>Product Name</th>
+                <th>Extras</th>
                 <th>Quantity</th>
                 <th>Price</th>
               </tr>
@@ -262,6 +262,7 @@ function Orders({
                   </td>
                   <td>{items.productType}</td>
                   <td>{items.productName}</td>
+                  <td>{items.extras ? items.extras.join(", ") : "None"}</td>
                   <td>{items.productQuantity}</td>
                   <td>R{items.productPrice.toFixed(2)}</td>
                 </tr>

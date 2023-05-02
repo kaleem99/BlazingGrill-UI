@@ -243,7 +243,7 @@ li a:hover {
   color: white;
   cursor: pointer;
 }
-.addMenuItems{
+.addMenuItems {
   margin-left: 0px !important;
 }
 label {
@@ -251,6 +251,9 @@ label {
   /* float: left;
   text-align: left; */
   font-size: 25px;
+}
+.MenuItemsLabels {
+  text-align: left;
 }
 .input01 {
   border: none;
