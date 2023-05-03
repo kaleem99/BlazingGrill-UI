@@ -47,10 +47,13 @@ function Orders({
               audio.play();
               items.push({ id: doc.id, ...doc.data() });
             }
-            inProgress.push(doc.data());
+            if (doc.data().storeName === storeName[0]) {
+              inProgress.push(doc.data());
+            }
           });
           setPendingOrders(items);
           setInProgress(inProgress);
+          console.log(inProgress);
         } else {
           console.log("No data in the collection");
         }
@@ -94,7 +97,6 @@ function Orders({
   const incomingOrder = () => {
     if (PendingOrders.length > 0) {
       const docRef = doc(db, "Orders", PendingOrders[0].id);
-      console.log(PendingOrders[0]);
       const foodOrder = PendingOrders[0].food;
       let foodStringData = "";
       for (let i = 0; i < foodOrder.length; i++) {
@@ -105,7 +107,6 @@ function Orders({
           foodOrder[i].productName;
         // "\n";
       }
-      console.log(PendingOrders[0]);
       if (window.confirm("New Incoming Order " + foodStringData)) {
         const newOrderData = PendingOrders[0];
         newOrderData.status = "In Progress";
@@ -196,49 +197,50 @@ function Orders({
                 <th>View Orders</th>
                 <th>Change Status</th>
               </tr>
-              {inProgress.map(
-                (data, i) =>
-                  data.status === orderSection &&
-                  data.storeName === storeName[0] && (
-                    <tr>
-                      <td>{i + 1}</td>
-                      <td>{data.orderNumber}</td>
-                      <td>{data.Name}</td>
-                      <td>{data.email}</td>
-                      <td>{data.date}</td>
-                      <td>
-                        <button
-                          onClick={() => setOrders(data)}
-                          style={{
-                            height: "35px",
-                            borderRadius: "10px",
-                            border: "2px solid #f7941d",
-                          }}
-                        >
-                          View Customers Orders
-                        </button>
-                      </td>
-                      <td>
-                        <select
-                          id="SelectValue"
-                          onChange={(e) => setChangeState(e.target.value)}
-                          defaultValue={data.status}
-                        >
-                          <option value="In Progress">In Progress</option>
-                          <option value="Collection">Collection</option>
-                          <option value="Complete">Complete</option>
-                          <option value="Delivery">Delivery</option>
-                        </select>
-                        <button
-                          onClick={() => changeOrderStatus(data.id, data)}
-                          id="save"
-                        >
-                          Save
-                        </button>
-                      </td>
-                    </tr>
-                  )
-              )}
+              {inProgress
+                .sort((a, b) => (a.date > b.date ? 1 : -1))
+                .map(
+                  (data, i) =>
+                    data.status === orderSection && (
+                      <tr>
+                        <td>{i + 1}</td>
+                        <td>{data.orderNumber}</td>
+                        <td>{data.Name}</td>
+                        <td>{data.email}</td>
+                        <td>{data.date}</td>
+                        <td>
+                          <button
+                            onClick={() => setOrders(data)}
+                            style={{
+                              height: "35px",
+                              borderRadius: "10px",
+                              border: "2px solid #f7941d",
+                            }}
+                          >
+                            View Customers Orders
+                          </button>
+                        </td>
+                        <td>
+                          <select
+                            id="SelectValue"
+                            onChange={(e) => setChangeState(e.target.value)}
+                            defaultValue={data.status}
+                          >
+                            <option value="In Progress">In Progress</option>
+                            <option value="Collection">Collection</option>
+                            <option value="Complete">Complete</option>
+                            <option value="Delivery">Delivery</option>
+                          </select>
+                          <button
+                            onClick={() => changeOrderStatus(data.id, data)}
+                            id="save"
+                          >
+                            Save
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )}
             </table>
           ) : (
             <table>
@@ -246,6 +248,7 @@ function Orders({
                 <th>Back</th>
                 <th>Product Type</th>
                 <th>Product Name</th>
+                <th>Special Instructions</th>
                 <th>Extras</th>
                 <th>Quantity</th>
                 <th>Price</th>
@@ -262,6 +265,7 @@ function Orders({
                   </td>
                   <td>{items.productType}</td>
                   <td>{items.productName}</td>
+                  <td>{items.specialInstruction}</td>
                   <td>{items.extras ? items.extras.join(", ") : "None"}</td>
                   <td>{items.productQuantity}</td>
                   <td>R{items.productPrice.toFixed(2)}</td>
