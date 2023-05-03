@@ -265,7 +265,11 @@ function Orders({
                   </td>
                   <td>{items.productType}</td>
                   <td>{items.productName}</td>
-                  <td>{items.specialInstruction}</td>
+                  <td>
+                    {items.specialInstructions
+                      ? items.specialInstructions
+                      : "None"}
+                  </td>
                   <td>{items.extras ? items.extras.join(", ") : "None"}</td>
                   <td>{items.productQuantity}</td>
                   <td>R{items.productPrice.toFixed(2)}</td>
