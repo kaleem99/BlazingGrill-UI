@@ -13,7 +13,7 @@ import { db } from "../../database/config";
 import SendEmailOrder from "../../components/sendEmailOrder";
 import { clearCart } from "../../helpers/ClearCart";
 import { MdOutlineArrowCircleLeft } from "react-icons/md";
-
+import OrderConfirmationModal from "../../components/PopupModal";
 function Orders({
   storeStatus,
   setstoreStatus,
@@ -24,6 +24,8 @@ function Orders({
   const [PendingOrders, setPendingOrders] = useState([]);
   const [inProgress, setInProgress] = useState([]);
   const examcollref = doc(db, "BlazingStores", store[0].id);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
   const [customersOrders, setCustomersOrders] = useState([]);
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
@@ -94,46 +96,78 @@ function Orders({
     return status;
   };
 
-  const incomingOrder = () => {
-    if (PendingOrders.length > 0) {
-      const docRef = doc(db, "Orders", PendingOrders[0].id);
-      const foodOrder = PendingOrders[0].food;
-      let foodStringData = "";
-      for (let i = 0; i < foodOrder.length; i++) {
-        foodStringData +=
-          "\n" +
-          foodOrder[i].productQuantity +
-          " x " +
-          foodOrder[i].productName;
-        // "\n";
-      }
-      if (window.confirm("New Incoming Order " + foodStringData)) {
-        const newOrderData = PendingOrders[0];
-        newOrderData.status = "In Progress";
-        SendEmailOrder(
-          newOrderData.Name,
-          newOrderData.food,
-          newOrderData.total,
-          newOrderData.email,
-          detailsOfStore.adminUsername,
-          newOrderData.orderNumber
-        );
-        updateDoc(docRef, newOrderData);
+  // const incomingOrder = () => {
+  //   if (PendingOrders.length > 0) {
+  //     const docRef = doc(db, "Orders", PendingOrders[0].id);
+  //     const foodOrder = PendingOrders[0].food;
+  //     let foodStringData = "";
+  //     for (let i = 0; i < foodOrder.length; i++) {
+  //       foodStringData +=
+  //         "\n" +
+  //         foodOrder[i].productQuantity +
+  //         " x " +
+  //         foodOrder[i].productName;
+  //       // "\n";
+  //     }
+  //     if (window.confirm("New Incoming Order " + foodStringData)) {
+  //       const newOrderData = PendingOrders[0];
+  //       newOrderData.status = "In Progress";
+  //       SendEmailOrder(
+  //         newOrderData.Name,
+  //         newOrderData.food,
+  //         newOrderData.total,
+  //         newOrderData.email,
+  //         detailsOfStore.adminUsername,
+  //         newOrderData.orderNumber
+  //       );
+  //       updateDoc(docRef, newOrderData);
 
-        alert("Order has been accepted");
-        //
-        clearCart(newOrderData.userId);
-        let newPendingOrder = PendingOrders.shift();
-        setPendingOrders(PendingOrders);
-      } else {
-        const newOrderData = PendingOrders[0];
-        newOrderData.status = "Declined";
-        updateDoc(docRef, newOrderData);
-        // deleteDoc(docRef);
-        const deletedOrder = PendingOrders.shift();
-        alert("Order has been declined.");
-      }
-    }
+  //       alert("Order has been accepted");
+  //       //
+  //       clearCart(newOrderData.userId);
+  //       let newPendingOrder = PendingOrders.shift();
+  //       setPendingOrders(PendingOrders);
+  //     } else {
+  //       const newOrderData = PendingOrders[0];
+  //       newOrderData.status = "Declined";
+  //       updateDoc(docRef, newOrderData);
+  //       // deleteDoc(docRef);
+  //       const deletedOrder = PendingOrders.shift();
+  //       alert("Order has been declined.");
+  //     }
+  //   }
+  // };
+  const handleAcceptOrder = () => {
+    const docRef = doc(db, "Orders", PendingOrders[0].id);
+    const foodOrder = PendingOrders[0].food;
+    const newOrderData = PendingOrders[0];
+    newOrderData.status = "In Progress";
+    SendEmailOrder(
+      newOrderData.Name,
+      newOrderData.food,
+      newOrderData.total,
+      newOrderData.email,
+      detailsOfStore.adminUsername,
+      newOrderData.orderNumber
+    );
+    updateDoc(docRef, newOrderData);
+
+    alert("Order has been accepted");
+    //
+    clearCart(newOrderData.userId);
+    let newPendingOrder = PendingOrders.shift();
+    setPendingOrders(PendingOrders);
+  };
+
+  const handleDeclineOrder = () => {
+    const docRef = doc(db, "Orders", PendingOrders[0].id);
+    const foodOrder = PendingOrders[0].food;
+    const newOrderData = PendingOrders[0];
+    newOrderData.status = "Declined";
+    updateDoc(docRef, newOrderData);
+    // deleteDoc(docRef);
+    const deletedOrder = PendingOrders.shift();
+    alert("Order has been declined.");
   };
   // console.log(PendingOrders);
   const setOrders = (data) => {
@@ -153,7 +187,13 @@ function Orders({
   };
   return (
     <div className="Home">
-      {incomingOrder()}
+      {PendingOrders.length > 0 && (
+        <OrderConfirmationModal
+          food={PendingOrders[0].food}
+          onAccept={handleAcceptOrder}
+          onDecline={handleDeclineOrder}
+        />
+      )}
       {storeName[0] !== "admin" && (
         <>
           <Switch
