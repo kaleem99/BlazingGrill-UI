@@ -229,10 +229,11 @@ function Orders({
           {customersOrders.length === 0 ? (
             <table>
               <tr>
-                <th></th>
                 <th>Order Number</th>
+                <th>Order Type</th>
                 <th>Customer Name</th>
                 <th>Customer Email</th>
+                <th>Customer Cell Number</th>
                 <th>Date</th>
                 <th>View Orders</th>
                 <th>Change Status</th>
@@ -243,10 +244,11 @@ function Orders({
                   (data, i) =>
                     data.status === orderSection && (
                       <tr>
-                        <td>{i + 1}</td>
                         <td>{data.orderNumber}</td>
+                        <td>{data.orderType}</td>
                         <td>{data.Name}</td>
                         <td>{data.email}</td>
+                        <td>{data.phoneNumber}</td>
                         <td>{data.date}</td>
                         <td>
                           <button
@@ -267,9 +269,12 @@ function Orders({
                             defaultValue={data.status}
                           >
                             <option value="In Progress">In Progress</option>
-                            <option value="Collection">Collection</option>
+                            {/* <option value="Collection">Collection</option> */}
                             <option value="Complete">Complete</option>
-                            <option value="Delivery">Delivery</option>
+                            <option value={data.orderType}>
+                              {data.orderType}
+                            </option>
+                            {/* <option value="Delivery">Delivery</option> */}
                           </select>
                           <button
                             onClick={() => changeOrderStatus(data.id, data)}
