@@ -6,7 +6,9 @@ const SendEmailOrder = (
   total,
   userEmail,
   storeEmail,
-  uniqueOrderNum
+  uniqueOrderNum,
+  address,
+  time
 ) => {
   let orderDetailsString = "";
 
@@ -23,10 +25,11 @@ const SendEmailOrder = (
     name: name,
     from_name: "The Blazing Grill",
     subject: "Hello from React App",
-    message: "Your order will be ready in about 20 minutes.",
+    message: `Your order will be ready in about ${time} minutes.`,
     uniqueOrderNum: uniqueOrderNum,
     Order_Details: orderDetailsString,
     Total: total,
+    Address: address.split(" ").join("\n"),
     to_email: [userEmail, storeEmail], // Replace with the recipient email address
   };
   console.log(storeEmail);

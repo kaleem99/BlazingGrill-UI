@@ -25,7 +25,7 @@ function Orders({
   const [inProgress, setInProgress] = useState([]);
   const examcollref = doc(db, "BlazingStores", store[0].id);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-
+  const [time, setTime] = useState("");
   const [customersOrders, setCustomersOrders] = useState([]);
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
@@ -148,7 +148,9 @@ function Orders({
       newOrderData.total,
       newOrderData.email,
       detailsOfStore.adminUsername,
-      newOrderData.orderNumber
+      newOrderData.orderNumber,
+      detailsOfStore.address,
+      time
     );
     updateDoc(docRef, newOrderData);
 
@@ -192,6 +194,8 @@ function Orders({
           food={PendingOrders[0].food}
           onAccept={handleAcceptOrder}
           onDecline={handleDeclineOrder}
+          setTime={setTime}
+          time={time}
         />
       )}
       {storeName[0] !== "admin" && (
@@ -269,12 +273,13 @@ function Orders({
                             defaultValue={data.status}
                           >
                             <option value="In Progress">In Progress</option>
-                            {/* <option value="Collection">Collection</option> */}
-                            <option value="Complete">Complete</option>
+                            {orderSection === "Delivery" ||
+                              (orderSection === "Collection" && (
+                                <option value="Complete">Complete</option>
+                              ))}
                             <option value={data.orderType}>
                               {data.orderType}
                             </option>
-                            {/* <option value="Delivery">Delivery</option> */}
                           </select>
                           <button
                             onClick={() => changeOrderStatus(data.id, data)}
