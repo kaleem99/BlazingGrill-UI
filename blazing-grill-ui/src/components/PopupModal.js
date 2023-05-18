@@ -38,12 +38,16 @@ function OrderConfirmationModal({ food, onAccept, onDecline, setTime, time }) {
       <h2>
         New Incoming Order {"\n"} {foodStringData}
       </h2>
+      <h2>
+        {"\n"}
+        Please select an order estimate time.
+      </h2>
       <select
         name="time"
         id="SelectValue"
         onChange={(e) => setTime(e.target.value)}
       >
-        <option selected disabled> 
+        <option selected disabled>
           None
         </option>
         <option value="10">10 minutes</option>
