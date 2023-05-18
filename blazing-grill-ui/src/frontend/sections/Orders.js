@@ -149,6 +149,7 @@ function Orders({
     const foodOrder = PendingOrders[0].food;
     const newOrderData = PendingOrders[0];
     newOrderData.status = "In Progress";
+    newOrderData.estimate = time;
     SendEmailOrder(
       newOrderData.Name,
       newOrderData.food,
@@ -203,7 +204,13 @@ function Orders({
     setCurrentPage((prevPage) => prevPage - 1);
   };
   const displayedItems = inProgress.slice(startIndex, endIndex);
-
+  const checkConditionFunction = (type) => {
+    if (type === "Complete") {
+      return displayedItems;
+    } else {
+      return inProgress;
+    }
+  };
   return (
     <div className="Home">
       {PendingOrders.length > 0 && (
@@ -282,7 +289,7 @@ function Orders({
                 <th>View Orders</th>
                 <th>Change Status</th>
               </tr>
-              {displayedItems
+              {checkConditionFunction(orderSection)
                 .sort((a, b) => (b.date > a.date ? 1 : -1))
                 .map(
                   (data, i) =>
