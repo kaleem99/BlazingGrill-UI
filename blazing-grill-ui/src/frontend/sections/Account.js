@@ -97,6 +97,7 @@ function AccountDetails({
       <h1 style={{ color: "white" }}>Store Account Details</h1>
       <form className="form">
         <label>Store Email</label>
+        <br></br>
         <input
           onChange={(e) => upDateStoreInformation(e)}
           name={"email"}
@@ -106,6 +107,7 @@ function AccountDetails({
         />
         <br></br>
         <label>Store Name</label>
+        <br></br>
 
         <input
           onChange={upDateStoreInformation}
@@ -115,6 +117,7 @@ function AccountDetails({
         />
         <br></br>
         <label>Store Address</label>
+        <br></br>
 
         <input
           onChange={upDateStoreInformation}
@@ -122,7 +125,10 @@ function AccountDetails({
           // defaultValue={storeInformation.address}
           value={address}
         />
+        <br></br>
+
         <label>Admin Password</label>
+        <br></br>
 
         <input
           onChange={upDateStoreInformation}
@@ -143,10 +149,11 @@ function AccountDetails({
         style={{
           width: "180px",
           height: "40px",
-          backgroundColor: "#f7941d",
+          background: "none",
           borderRadius: "7px",
           color: "white",
           fontSize: "20px",
+          border: "1px solid white",
         }}
       >
         Save
@@ -156,10 +163,12 @@ function AccountDetails({
         style={{
           width: "180px",
           height: "40px",
-          backgroundColor: "#f7941d",
+          background: "none",
           borderRadius: "7px",
           color: "white",
           fontSize: "20px",
+          border: "1px solid white",
+          marginLeft: "30px",
         }}
       >
         Logout of store

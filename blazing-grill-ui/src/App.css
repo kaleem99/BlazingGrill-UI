@@ -429,7 +429,7 @@ tr:nth-child(odd) {
   border-radius: 30px;
   text-align: center;
 }
-.btnOrder{
+.btnOrder {
   width: 200px;
   height: 40px;
   border-radius: 10px;
@@ -439,4 +439,40 @@ tr:nth-child(odd) {
   margin-left: 10px;
   margin-top: 30px;
   font-size: large;
+}
+
+.searchInputBox {
+  position: relative;
+  float: left;
+  top: 20px;
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
+.NextAndBackButton1 {
+  float: left;
+  width: 130px;
+  height: 35px;
+  position: relative;
+  top: 30px;
+  left: 10px;
+  border-radius: 5px;
+  border: 1px solid white;
+  color: white;
+  font-size: large;
+  background: transparent;
+}
+
+.NextAndBackButton2 {
+  float: right;
+  width: 130px;
+  height: 35px;
+  font-size: large;
+  border-radius: 5px;
+  position: relative;
+  top: 30px;
+  right: 10px;
+  color: white;
+  border: 1px solid white;
+  background: transparent;
 }

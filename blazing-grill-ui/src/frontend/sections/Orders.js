@@ -30,9 +30,16 @@ function Orders({
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
   const [changeState, setChangeState] = useState("");
+  const [currentPage, setCurrentPage] = useState(0); // State to track the current page or index
+
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
+  // Calculate the starting and ending indexes for the current page
+  const startIndex = currentPage * 10;
+  const endIndex = startIndex + 10;
+
+  // Get the items to display for the current page
   useEffect(() => {
     setstoreStatus(detailsOfStore.storeStatus);
     const unsubscribe = onSnapshot(
@@ -187,6 +194,16 @@ function Orders({
     setCustomersOrders([]);
     setOrderSection(value);
   };
+  const handleNext = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // Function to handle the "back" button click
+  const handleBack = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+  const displayedItems = inProgress.slice(startIndex, endIndex);
+
   return (
     <div className="Home">
       {PendingOrders.length > 0 && (
@@ -214,9 +231,32 @@ function Orders({
       <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
       <br></br>
       <div className="ItemsSections">
-        <h2 style={{ color: "white", fontSize: "15px" }}>
-          Currently no orders
+        {/* <input type="text" className="searchInputBox" /> */}
+        <button
+          className="NextAndBackButton1"
+          onClick={handleBack}
+          disabled={currentPage === 0}
+        >
+          Back
+        </button>
+        <button
+          className="NextAndBackButton2"
+          onClick={handleNext}
+          disabled={endIndex >= inProgress.length}
+        >
+          Next
+        </button>
+        <h2
+          style={{
+            color: "white",
+            fontSize: "22px",
+            fontWeight: "bolder",
+            fontFamily: "sans-serif",
+          }}
+        >
+          Page: {currentPage + 1}
         </h2>
+
         <div className="container">
           {ButtonStatus.map((value) => (
             <button
@@ -242,8 +282,8 @@ function Orders({
                 <th>View Orders</th>
                 <th>Change Status</th>
               </tr>
-              {inProgress
-                .sort((a, b) => (a.date > b.date ? 1 : -1))
+              {displayedItems
+                .sort((a, b) => (b.date > a.date ? 1 : -1))
                 .map(
                   (data, i) =>
                     data.status === orderSection && (
