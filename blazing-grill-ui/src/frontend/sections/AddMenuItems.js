@@ -120,7 +120,7 @@ function AddMenuItems({ adminUserEmail }) {
         <br></br>
         <button
           onClick={(e) =>
-            adminUserEmail === "yushaa@theblazinggrill.co.za"
+            adminUserEmail === "kaleem1999@outlook.com"
               ? addTodo(e)
               : alert(
                   "Only the administrator user has full access, and can add, edit and delete menu items"
@@ -133,5 +133,5 @@ function AddMenuItems({ adminUserEmail }) {
     </div>
   );
 }
-
+// yushaa@theblazinggrill.co.za
 export default AddMenuItems;

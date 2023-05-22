@@ -4,6 +4,10 @@ const MenuItemsSection = [
     img: "https://kaleem99.github.io/The-Blazing-Grill-Images/BurgersMenu.jpg",
   },
   {
+    name: "Gourmet Burgers",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/BurgersMenu.jpg",
+  },
+  {
     name: "Grilled Chicken",
     img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Grilled%20Chicken.png",
   },

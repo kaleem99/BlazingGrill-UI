@@ -260,7 +260,7 @@ function MenuItems({ adminUserEmail }) {
                 <div
                   className="menuNameImage"
                   onClick={() =>
-                    adminUserEmail === "yushaa@theblazinggrill.co.za"
+                    adminUserEmail === "kaleem1999@outlook.com"
                       ? itemClick(item.name)
                       : alert("Only admin  user has full access.")
                   }
