@@ -17,5 +17,19 @@
 
 // const uniqueNumber = generateUnique4DigitNumber("Kaleem");
 
-console.log(new Date().toLocaleDateString())
-console.log(new Date().toLocaleTimeString())
+console.log(new Date().toLocaleDateString());
+console.log(new Date().toLocaleTimeString());
+
+
+
+// Information
+// "Insanity"
+// (string)
+// category
+// "sources"
+// fileURL
+// "https://firebasestorage.googleapis.com/v0/b/blazing-grills.appspot.com/o/files%2FInsanity?alt=media&token=4967ba22-7609-46a7-9548-b4ebbde0aa05"
+// name
+// "Insanity"
+// price
+// "49.90"

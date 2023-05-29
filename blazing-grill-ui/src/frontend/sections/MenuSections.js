@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
 const MenuSection = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
+  console.log(apiKey);
   const [image, setImage] = useState(null);
   const [section, setSection] = useState("");
   const uploadImage = async (data) => {
-    let newName = section + ".png";
     console.log(data.name);
     try {
       const response = await fetch(
@@ -13,7 +14,7 @@ const MenuSection = () => {
           method: "PUT",
           headers: {
             Accept: "application/vnd.github+json",
-            Authorization: "Bearer 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",
+            Authorization: `Bearer ${apiKey}`,
           },
           body: JSON.stringify({
             message: "upload image from api",
