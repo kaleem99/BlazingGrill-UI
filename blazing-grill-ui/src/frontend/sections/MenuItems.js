@@ -1,6 +1,7 @@
 import { useState } from "react";
 import MenuItemsSection from "../data/menuSections";
 import { db, storage } from "../../database/config";
+
 import {
   collection,
   addDoc,
@@ -10,7 +11,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-function MenuItems({ adminUserEmail }) {
+function MenuItems({ adminUserEmail, setState }) {
   const [itemSection, setItemSection] = useState("");
   const [items, setItems] = useState([]);
   const [image, setImage] = useState("");
@@ -239,7 +240,7 @@ function MenuItems({ adminUserEmail }) {
           updateDoc(taskDocRef, {
             fileURL: downloadURL,
           });
-          alert("Table row has been succesfully updated.");
+          alert("Table row has been successfully updated.");
           fetchPost(itemSection);
           setItemName(itemName);
           itemsSectionComp(itemSection);
@@ -270,6 +271,21 @@ function MenuItems({ adminUserEmail }) {
                 </div>
               );
             })}
+            <div
+              className="menuNameImage"
+              onClick={() =>
+                adminUserEmail === "yushaa@theblazinggrill.co.za"
+                  ? setState("MenuSection")
+                  : alert("Only admin  user has full access.")
+              }
+            >
+              <img
+                alt=""
+                className="MenuImage"
+                src="https://kaleem99.github.io/The-Blazing-Grill-Images/sectionsImages.png"
+              ></img>
+              <text className="itemName">Sections</text>
+            </div>
           </div>
         </div>
       ) : (

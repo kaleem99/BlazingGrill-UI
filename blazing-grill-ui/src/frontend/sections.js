@@ -16,6 +16,7 @@ import {
 import { db } from "../database/config";
 import Logout from "./sections/Logout";
 import AccountDetails from "./sections/Account";
+import MenuSection from "./sections/MenuSections";
 function Sections({
   state,
   setState,
@@ -63,7 +64,12 @@ function Sections({
     case "Home":
       console.log(auth.currentUser.email);
 
-      return <MenuItems adminUserEmail={auth.currentUser.email} />;
+      return (
+        <MenuItems
+          setState={setState}
+          adminUserEmail={auth.currentUser.email}
+        />
+      );
     case "Add Menu Item":
       console.log(state);
 
@@ -126,6 +132,8 @@ function Sections({
         );
       }
       break;
+    case "MenuSection":
+      return <MenuSection adminUserEmail={auth.currentUser.email} />;
     default:
       return <MenuItems />;
   }

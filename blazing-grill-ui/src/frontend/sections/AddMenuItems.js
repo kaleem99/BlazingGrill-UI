@@ -61,6 +61,7 @@ function AddMenuItems({ adminUserEmail }) {
   };
   return (
     <div className="AddMenu">
+    
       {/* <img
         className="BlazingImage"
         src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"

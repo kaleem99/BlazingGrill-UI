@@ -1,11 +1,11 @@
 const MenuItemsSection = [
   {
     name: "Burgers",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/BurgersMenu.jpg",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Burgers.png",
   },
   {
     name: "Gourmet Burgers",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/BurgersMenu.jpg",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Burgers.png",
   },
   {
     name: "Grilled Chicken",
@@ -17,11 +17,11 @@ const MenuItemsSection = [
   },
   {
     name: "Chicken Wings",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/6SpicyWings.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Wings.png",
   },
   {
     name: "On A Roll",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Street%20Dog.jpg",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/On%20A%20Roll.png",
   },
   {
     name: "Pizzas",
@@ -29,15 +29,15 @@ const MenuItemsSection = [
   },
   {
     name: "Specials",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/special%20front.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Specials.png",
   },
   {
     name: "Sauces",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/sources.jpg",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Sauces.png",
   },
   {
     name: "Drinks",
-    img: "https://firebasestorage.googleapis.com/v0/b/blazing-grills.appspot.com/o/files%2Fdrinks.jpeg?alt=media&token=e607f302-4178-41e1-a28f-d1550888ee2b",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Drinks.png",
   },
   {
     name: "Air Fryer Pizza",
