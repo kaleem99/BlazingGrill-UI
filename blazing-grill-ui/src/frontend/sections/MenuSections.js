@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 const MenuSection = () => {
   const apiKey = process.env.REACT_APP_API_KEY;
-  console.log(apiKey);
   const [image, setImage] = useState(null);
   const [section, setSection] = useState("");
   const uploadImage = async (data) => {
