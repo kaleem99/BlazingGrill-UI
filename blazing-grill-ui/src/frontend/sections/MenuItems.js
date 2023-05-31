@@ -274,7 +274,8 @@ function MenuItems({ adminUserEmail, setState }) {
             <div
               className="menuNameImage"
               onClick={() =>
-                adminUserEmail === "yushaa@theblazinggrill.co.za"
+                adminUserEmail === "yushaa@theblazinggrill.co.za" ||
+                adminUserEmail === "kaleem1999@outlook.com"
                   ? setState("MenuSection")
                   : alert("Only admin  user has full access.")
               }

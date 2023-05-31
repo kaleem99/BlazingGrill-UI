@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 
-const MenuSection = () => {
-  const apiKey = process.env.REACT_APP_API_KEY;
+const MenuSection = ({ storeDetails }) => {
   const [image, setImage] = useState(null);
   const [section, setSection] = useState("");
   const uploadImage = async (data) => {
-    console.log(data.name);
     try {
+      const fetchedResult = await fetch(
+        `https://api.github.com/repos/kaleem99/The-Blazing-Grill-Images/contents/${section}.png`,
+        {
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
+      );
+      const imageSHA = await fetchedResult.json();
       const response = await fetch(
         `https://api.github.com/repos/kaleem99/The-Blazing-Grill-Images/contents/${data.name}`,
         {
           method: "PUT",
           headers: {
             Accept: "application/vnd.github+json",
-            Authorization: `Bearer ${apiKey}`,
+            Authorization: `Bearer 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`,
           },
           body: JSON.stringify({
             message: "upload image from api",
             content: data.content,
+            sha: imageSHA.sha,
           }),
         }
       );

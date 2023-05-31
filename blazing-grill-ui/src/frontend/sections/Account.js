@@ -24,7 +24,7 @@ function AccountDetails({
   detailsOfStore,
   storeStatus,
 }) {
-  console.log(storeName);
+  console.log(detailsOfStore);
   // const [storeInformation, setStoreInformation] = useState({
   //   email: detailsOfStore.adminUsername,
   //   storeName: detailsOfStore.store,

@@ -133,7 +133,21 @@ function Sections({
       }
       break;
     case "MenuSection":
-      return <MenuSection adminUserEmail={auth.currentUser.email} />;
+      if (store[0]) {
+        let storeName = Object.keys(store[0]);
+        const detailsOfStore = store[0][storeName[0]] || {
+          adminUsername: "",
+          storeName: "",
+          address: "",
+        };
+        return (
+          <MenuSection
+            storeDetails={detailsOfStore}
+            adminUserEmail={auth.currentUser.email}
+          />
+        );
+      }
+      break;
     default:
       return <MenuItems />;
   }

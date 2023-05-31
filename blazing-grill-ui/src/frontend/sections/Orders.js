@@ -244,7 +244,7 @@ function Orders({
           onClick={handleBack}
           disabled={currentPage === 0}
         >
-          Back
+          Previous
         </button>
         <button
           className="NextAndBackButton2"
@@ -342,7 +342,32 @@ function Orders({
           ) : (
             <table>
               <tr>
-                <th>Back</th>
+                <th>Go Back</th>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Customer Phone Number</th>
+                <th>Order Type</th>
+                <th></th>
+                <th>Total</th>
+              </tr>
+              <tr>
+                <td>
+                  <p
+                    className="BackButton"
+                    onClick={() => setCustomersOrders([])}
+                  >
+                    <MdOutlineArrowCircleLeft />
+                  </p>
+                </td>
+                <td>{customersOrders.Name}</td>
+                <td>{customersOrders.email}</td>
+                <td>{customersOrders.phoneNumber}</td>
+                <td>{customersOrders.orderType}</td>
+                <td></td>
+                <td>R{customersOrders.total}</td>
+              </tr>
+              <tr>
+                <th></th>
                 <th>Product Type</th>
                 <th>Product Name</th>
                 <th>Special Instructions</th>
@@ -350,16 +375,10 @@ function Orders({
                 <th>Quantity</th>
                 <th>Price</th>
               </tr>
+
               {customersOrders.food.map((items) => (
                 <tr>
-                  <td>
-                    <p
-                      className="BackButton"
-                      onClick={() => setCustomersOrders([])}
-                    >
-                      <MdOutlineArrowCircleLeft />
-                    </p>
-                  </td>
+                  <td></td>
                   <td>{items.productType}</td>
                   <td>{items.productName}</td>
                   <td>

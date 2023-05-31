@@ -386,8 +386,11 @@ th {
   text-align: left;
   padding: 8px;
   font-size: large;
+  height: 50px;
 }
-
+.log {
+  color: white;
+}
 #save {
   float: right;
   min-width: 60px;

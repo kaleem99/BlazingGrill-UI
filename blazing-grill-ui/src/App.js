@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Login from "./frontend/sections/Login";
 import Register from "./frontend/sections/Register";
 import Lottie from "react-lottie";
+import bcrypt from 'bcryptjs'
 const defaultOptions = {
   loop: true,
   autoplay: true,
