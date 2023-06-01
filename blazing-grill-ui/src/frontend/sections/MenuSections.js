@@ -20,7 +20,7 @@ const MenuSection = ({ storeDetails }) => {
           method: "PUT",
           headers: {
             Accept: "application/vnd.github+json",
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer ${storeDetails.KEY}`,
           },
           body: JSON.stringify({
             message: "upload image from api",
