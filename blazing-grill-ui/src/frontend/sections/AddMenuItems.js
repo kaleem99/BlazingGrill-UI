@@ -46,9 +46,10 @@ function AddMenuItems({ adminUserEmail }) {
       return alert("Please select a valid category");
     }
     if (
-      formData.name === "" ||
-      formData.price === "" ||
-      formData.Information === ""
+      formData.category !== "Extras" &&
+      (formData.name === "" ||
+        formData.price === "" ||
+        formData.Information === "")
       // || formData.fileURL === ""
     ) {
       return alert("Please enter input");
@@ -61,7 +62,6 @@ function AddMenuItems({ adminUserEmail }) {
   };
   return (
     <div className="AddMenu">
-    
       {/* <img
         className="BlazingImage"
         src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
@@ -121,7 +121,8 @@ function AddMenuItems({ adminUserEmail }) {
         <br></br>
         <button
           onClick={(e) =>
-            adminUserEmail === "yushaa@theblazinggrill.co.za"
+            adminUserEmail === "yushaa@theblazinggrill.co.za" ||
+            adminUserEmail === "kaleem1999@outlook.com"
               ? addTodo(e)
               : alert(
                   "Only the administrator user has full access, and can add, edit and delete menu items"

@@ -17,6 +17,7 @@ import { db } from "../database/config";
 import Logout from "./sections/Logout";
 import AccountDetails from "./sections/Account";
 import MenuSection from "./sections/MenuSections";
+import StoreMenu from "./StoreMenu/StoreMenu";
 function Sections({
   state,
   setState,
@@ -113,6 +114,8 @@ function Sections({
           setStoreDetails={setStoreDetails}
         />
       );
+    case "Menu":
+      return <StoreMenu />;
     case "Account":
       if (store[0]) {
         let storeName = Object.keys(store[0]);

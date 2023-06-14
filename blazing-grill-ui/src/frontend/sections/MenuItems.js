@@ -179,9 +179,10 @@ function MenuItems({ adminUserEmail, setState }) {
     const taskDocRef = await doc(db, name, e.target.id);
     console.log(taskDocRef, name);
     if (
-      tableRow.value === "" ||
-      tableRowPrice.value === "" ||
-      tableRowInformation.value === ""
+      name !== "Extras" &&
+      (tableRow.value === "" ||
+        tableRowPrice.value === "" ||
+        tableRowInformation.value === "")
     ) {
       tableRow.value = tableRow.defaultValue;
       tableRowPrice.value = tableRowPrice.defaultValue;
@@ -261,7 +262,8 @@ function MenuItems({ adminUserEmail, setState }) {
                 <div
                   className="menuNameImage"
                   onClick={() =>
-                    adminUserEmail === "yushaa@theblazinggrill.co.za"
+                    adminUserEmail === "yushaa@theblazinggrill.co.za" ||
+                    adminUserEmail === "kaleem1999@outlook.com"
                       ? itemClick(item.name)
                       : alert("Only admin  user has full access.")
                   }

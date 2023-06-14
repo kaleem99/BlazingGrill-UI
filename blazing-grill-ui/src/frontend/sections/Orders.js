@@ -320,10 +320,11 @@ function Orders({
                             defaultValue={data.status}
                           >
                             <option value="In Progress">In Progress</option>
-                            {orderSection === "Delivery" ||
-                              (orderSection === "Collection" && (
-                                <option value="Complete">Complete</option>
-                              ))}
+                            {console.log(orderSection)}
+                            {(orderSection === "Delivery" ||
+                              orderSection === "Collection") && (
+                              <option value="Complete">Complete</option>
+                            )}
                             <option value={data.orderType}>
                               {data.orderType}
                             </option>
