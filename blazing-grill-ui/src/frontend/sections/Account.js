@@ -51,6 +51,9 @@ function AccountDetails({
         console.log(errorCode, errorMessage);
       });
   };
+  const changeState = () => {
+    
+  }
   const upDateStoreInformation = (e) => {
     switch (e.target.name) {
       case "email":

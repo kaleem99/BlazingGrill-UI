@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../database/config";
 import SendEmailOrder from "../../components/sendEmailOrder";
+import SendOrderCancellation from "../../components/SendOrderCancellation";
 import { clearCart } from "../../helpers/ClearCart";
 import { MdOutlineArrowCircleLeft } from "react-icons/md";
 import OrderConfirmationModal from "../../components/PopupModal";
@@ -177,6 +178,17 @@ function Orders({
     updateDoc(docRef, newOrderData);
     // deleteDoc(docRef);
     const deletedOrder = PendingOrders.shift();
+    SendOrderCancellation(
+      newOrderData.Name,
+      newOrderData.food,
+      newOrderData.total,
+      newOrderData.email,
+      detailsOfStore.adminUsername,
+      newOrderData.orderNumber,
+      detailsOfStore.address,
+      newOrderData.phoneNumber,
+      newOrderData.orderType
+    );
     alert("Order has been declined.");
   };
   // console.log(PendingOrders);
