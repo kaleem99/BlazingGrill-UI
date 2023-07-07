@@ -146,6 +146,7 @@ const MenuSection = ({ storeDetails }) => {
   const handleChange = () => {};
   const MenuItemsSection = [
     "Burgers",
+    "Gourmet Burgers",
     "Grilled Chicken",
     "Fries",
     "Wings",

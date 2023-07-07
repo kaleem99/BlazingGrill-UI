@@ -1,13 +1,12 @@
 import { useState } from "react";
 
 function NavMenu({ sections, setState, state, isLoggedIn }) {
-  
   const changeStatus = (type) => {
     setState(type);
   };
   return (
     <div className="NavMenu">
-      {sections.map((section, i) => {
+      {sections.slice(0, sections.length - 1).map((section, i) => {
         if (i === 2) {
           return (
             <img

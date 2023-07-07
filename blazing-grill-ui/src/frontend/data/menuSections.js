@@ -5,7 +5,7 @@ const MenuItemsSection = [
   },
   {
     name: "Gourmet Burgers",
-    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Burgers.png",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Gourmet%20Burgers.jpg",
   },
   {
     name: "Grilled Chicken",

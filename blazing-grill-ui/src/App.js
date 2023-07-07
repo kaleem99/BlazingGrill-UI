@@ -10,7 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Login from "./frontend/sections/Login";
 import Register from "./frontend/sections/Register";
 import Lottie from "react-lottie";
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -19,7 +19,14 @@ const defaultOptions = {
     preserveAspectRatio: "xMidYMid slice",
   },
 };
-const sections = ["Home", "Add Menu Item", "image", "Orders", "Account"];
+const sections = [
+  "Home",
+  "Add Menu Item",
+  "image",
+  "Orders",
+  "Account",
+  "Driver",
+];
 function App() {
   const [state, setState] = useState("Home");
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
@@ -38,10 +45,12 @@ function App() {
 
         // console.log(newData);
         setStoreDetails(newData);
+        console.log(newData)
       });
       if (user && user.emailVerified) {
         setIsLoggedIn(true);
         setEmail(user.email);
+        console.log(user)
       } else {
         setIsLoggedIn(false);
         console.log("user is logged out", isLoggedIn);

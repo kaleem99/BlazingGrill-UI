@@ -2,6 +2,8 @@ import { auth } from "../../database/config";
 import { signOut } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
+import axios from "axios";
+
 import {
   collection,
   addDoc,
@@ -24,7 +26,6 @@ function AccountDetails({
   detailsOfStore,
   storeStatus,
 }) {
-  console.log(detailsOfStore);
   // const [storeInformation, setStoreInformation] = useState({
   //   email: detailsOfStore.adminUsername,
   //   storeName: detailsOfStore.store,
@@ -51,9 +52,7 @@ function AccountDetails({
         console.log(errorCode, errorMessage);
       });
   };
-  const changeState = () => {
-    
-  }
+
   const upDateStoreInformation = (e) => {
     switch (e.target.name) {
       case "email":
@@ -95,6 +94,7 @@ function AccountDetails({
       alert(err.message);
     }
   };
+console.log(detailsOfStore)
   return (
     <div className="AddMenu">
       <h1 style={{ color: "white" }}>Store Account Details</h1>
@@ -141,6 +141,7 @@ function AccountDetails({
           type="password"
         />
       </form>
+      {/* <PaymentForm /> */}
       <div
         style={{
           maxWidth: "auto",
@@ -176,8 +177,31 @@ function AccountDetails({
       >
         Logout of store
       </button>
+      <button
+        onClick={() => setState("DeliveryDriver")}
+        style={{
+          width: "180px",
+          height: "40px",
+          background: "none",
+          borderRadius: "7px",
+          color: "white",
+          fontSize: "20px",
+          border: "1px solid white",
+          marginLeft: "30px",
+        }}
+      >
+        Delivery Driver
+      </button>
     </div>
   );
 }
 
 export default AccountDetails;
+// YYY-MM-DDTHH:MM:SS[+HH:MM]
+// curl -X GET \
+//   -H "Content-Type: text/csv" \
+//   -H "merchant-id: 12516198" \
+//   -H "version: v1" \
+//   -H "timestamp: YYY-MM-DDTHH:MM:SS[+HH:MM]" \
+//   -H "signature: 67373adc02c7f07a8725b6c1d22d9a3e" \
+//   "https://api.payfast.co.za/transactions/history?from=2017-01-01&to=2017-02-01"

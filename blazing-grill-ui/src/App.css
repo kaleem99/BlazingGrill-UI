@@ -494,3 +494,12 @@ Store Menu
   height: 100vh;
   margin: auto;
 }
+
+/* Driver Table */
+
+.DriverTable {
+  width: 80%;
+  margin: auto;
+  height: auto;
+  margin-bottom: 40px;
+}

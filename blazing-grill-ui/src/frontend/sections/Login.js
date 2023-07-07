@@ -20,7 +20,6 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
     adminUsername: "",
     password: "",
   });
-  const [items, setItems] = useState([]);
   const handleChange = (event) => {
     setFormData({
       ...formData,
@@ -59,7 +58,6 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
         alert("Welcome");
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         alert(errorMessage);
       });
@@ -113,7 +111,7 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
         }}
       >
         <p style={{ color: "white" }}>
-          Dont Have a store yet. Please contact your admin to Register.
+          Don't Have a store yet. Please contact your admin to Register.
         </p>
         <h2
           onClick={() => setState("Register")}

@@ -18,6 +18,7 @@ import Logout from "./sections/Logout";
 import AccountDetails from "./sections/Account";
 import MenuSection from "./sections/MenuSections";
 import StoreMenu from "./StoreMenu/StoreMenu";
+import DeliveryDriver from "./sections/DeliveryDriver";
 function Sections({
   state,
   setState,
@@ -147,6 +148,25 @@ function Sections({
           <MenuSection
             storeDetails={detailsOfStore}
             adminUserEmail={auth.currentUser.email}
+          />
+        );
+      }
+      break;
+    case "DeliveryDriver":
+      if (store[0]) {
+        let storeName = Object.keys(store[0]);
+        const detailsOfStore = store[0][storeName[0]] || {
+          adminUsername: "",
+          storeName: "",
+          address: "",
+        };
+        return (
+          <DeliveryDriver
+            store={store}
+            setState={setState}
+            storeName={storeName}
+            detailsOfStore={detailsOfStore}
+            storeStatus={storeStatus}
           />
         );
       }
