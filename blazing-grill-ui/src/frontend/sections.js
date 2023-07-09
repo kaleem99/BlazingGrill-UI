@@ -19,6 +19,7 @@ import AccountDetails from "./sections/Account";
 import MenuSection from "./sections/MenuSections";
 import StoreMenu from "./StoreMenu/StoreMenu";
 import DeliveryDriver from "./sections/DeliveryDriver";
+import Account from "./sections/Account";
 function Sections({
   state,
   setState,
@@ -126,7 +127,7 @@ function Sections({
           address: "",
         };
         return (
-          <AccountDetails
+          <Account
             store={store}
             setState={setState}
             storeName={storeName}

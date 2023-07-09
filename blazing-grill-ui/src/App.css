@@ -503,3 +503,12 @@ Store Menu
   height: auto;
   margin-bottom: 40px;
 }
+.AccountHover:hover {
+  color: #f7941d;
+  transform: scale(1, 1);
+}
+
+.AccountHover {
+  cursor: pointer;
+  color: white;
+}
