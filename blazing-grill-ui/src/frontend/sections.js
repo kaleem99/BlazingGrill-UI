@@ -65,8 +65,6 @@ function Sections({
   }
   switch (state) {
     case "Home":
-      console.log(auth.currentUser.email);
-
       return (
         <MenuItems
           setState={setState}
@@ -74,8 +72,6 @@ function Sections({
         />
       );
     case "Add Menu Item":
-      console.log(state);
-
       return <AddMenuItems adminUserEmail={auth.currentUser.email} />;
     case "Orders":
       checkStoreStatus();
@@ -133,6 +129,7 @@ function Sections({
             storeName={storeName}
             detailsOfStore={detailsOfStore}
             storeStatus={storeStatus}
+            storeDetails={storeDetails}
           />
         );
       }

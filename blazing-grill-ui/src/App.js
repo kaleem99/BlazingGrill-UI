@@ -44,7 +44,6 @@ function App() {
 
         // console.log(newData);
         setStoreDetails(newData);
-        console.log(newData)
       });
       if (user && user.emailVerified) {
         setIsLoggedIn(true);
