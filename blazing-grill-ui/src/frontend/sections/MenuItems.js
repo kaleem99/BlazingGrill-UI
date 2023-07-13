@@ -22,7 +22,38 @@ function MenuItems({ adminUserEmail, setState }) {
     price: "",
     Information: "",
   });
+  const [extras, setExtras] = useState([
+    {
+      name: "",
+      price: "",
+    },
+    {
+      name: "",
+      price: "",
+    },
+    {
+      name: "",
+      price: "",
+    },
+    {
+      name: "",
+      price: "",
+    },
+    {
+      name: "",
+      price: "",
+    },
+  ]);
+  const handleExtrasChange = (event, index) => {
+    const { name, value } = event.target;
+    setExtras((prevExtras) => {
+      const newExtras = [...prevExtras];
+      newExtras[index] = { ...newExtras[index], [name]: value };
+      return newExtras;
+    });
+  };
   const setItemsData = (food) => {
+    let updatedExtras = extras;
     setItemName(food);
     setFormData({
       ...formData,
@@ -30,6 +61,18 @@ function MenuItems({ adminUserEmail, setState }) {
       price: food.price,
       Information: food.Information,
     });
+    if (food.extras !== undefined) {
+      updatedExtras = extras.map((extra, index) => {
+        if (index < food.extras.length) {
+          return {
+            name: food.extras[index].name,
+            price: food.extras[index].price,
+          };
+        }
+        return extra;
+      });
+    }
+    setExtras(updatedExtras);
   };
   const handleChange = (event) => {
     setFormData({
@@ -98,25 +141,74 @@ function MenuItems({ adminUserEmail, setState }) {
               </div>
             );
           })}
-          <img
+          <div
             style={{
-              width: "350px",
-              height: "280px",
-              marginLeft: "0px",
-              marginRight: "auto",
+              width: "98%",
+              height: "auto",
+              display: "grid",
+              gridTemplateColumns: "50% 50%",
+              margin: "auto",
+              // background: "red",
             }}
-            alt=""
-            // alt="no Image added"
-            src={
-              itemName.fileURL
-                ? itemName.fileURL
-                : require("../../assets/NoImage.jpeg")
-            }
-          ></img>
+          >
+            <div style={{ width: "620px" }}>
+              <h1 style={{ color: "white" }}>Extras</h1>
+              {extras.map((data, i) => {
+                return (
+                  <div
+                    style={{
+                      display: "grid",
+                      width: "300px",
+                      gridTemplateColumns: "auto auto",
+                    }}
+                  >
+                    <div>
+                      <label className="input">Name</label>
+                      <input
+                        name="name"
+                        className="extrasInput"
+                        placeholder="Name"
+                        onChange={(e) => handleExtrasChange(e, i)}
+                        value={data.name}
+                      />
+                    </div>
+                    <div>
+                      <label>Price</label>
+                      <input
+                        name="price"
+                        className="extrasInput"
+                        placeholder="Price"
+                        onChange={(e) => handleExtrasChange(e, i)}
+                        value={data.price}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div>
+              <img
+                style={{
+                  width: "350px",
+                  height: "280px",
+                  marginLeft: "0px",
+                  marginRight: "auto",
+                  float: "right",
+                }}
+                alt=""
+                // alt="no Image added"
+                src={
+                  itemName.fileURL
+                    ? itemName.fileURL
+                    : require("../../assets/NoImage.jpeg")
+                }
+              ></img>
+            </div>
+          </div>
           <div
             style={{
               width: "400px",
-              margin: "auto",
+              margin: "20px auto",
               display: "grid",
               gridTemplateColumns: "auto auto",
             }}
@@ -146,6 +238,28 @@ function MenuItems({ adminUserEmail, setState }) {
       setItems([]);
     } else {
       setItemName("");
+      setExtras([
+        {
+          name: "",
+          price: "",
+        },
+        {
+          name: "",
+          price: "",
+        },
+        {
+          name: "",
+          price: "",
+        },
+        {
+          name: "",
+          price: "",
+        },
+        {
+          name: "",
+          price: "",
+        },
+      ]);
     }
   };
   const itemClick = (name) => {
@@ -200,6 +314,7 @@ function MenuItems({ adminUserEmail, setState }) {
         name: tableRow.value,
         price: tableRowPrice.value,
         Information: tableRowInformation.value,
+        extras: extras,
       });
       alert("Table row has been succesfully updated.");
       fetchPost(name);

@@ -102,13 +102,13 @@ function StoreSales({ storeName, storeDetails }) {
         style={{
           width: "auto",
           height: "auto",
-          background: "#ededed",
+          // background: "#ededed",
           margin: "50px auto",
           borderRadius: "10px",
           padding: "20px",
         }}
       >
-        <div style={{ display: "grid", gridTemplateColumns: "auto auto auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "33% 33% 33%" }}>
           {storeName[0] === "admin" ? (
             <select
               style={{
@@ -141,22 +141,23 @@ function StoreSales({ storeName, storeDetails }) {
             return (
               <div
                 style={{
-                  width: "250px",
+                  width: "90%",
                   height: "220px",
                   marginTop: "20px",
                   marginLeft: "auto",
                   marginRight: "auto",
                   marginBottom: "0px",
-                  background: "#fff",
+                  // background: "#fff",
+                  border: "1px solid #fff",
                   borderRadius: "10px",
                   boxShadow: "0 1px 2px rgba(0,0,0,0.2)",
                 }}
               >
                 {i === 0 && (
                   <>
-                    <p>Total Store Sales: </p>
+                    <p className="SalesText">Total Store Sales: </p>
                     <h2 className="Sales">R{sales === "" ? "" : sales}</h2>
-                    <p>Todays Sales:</p>
+                    <p className="SalesText">Todays Sales:</p>
                     <h2 className="Sales">
                       R{currentSales === "" ? "" : currentSales}
                     </h2>
@@ -164,11 +165,11 @@ function StoreSales({ storeName, storeDetails }) {
                 )}
                 {i === 1 && (
                   <>
-                    <p>Total Orders: </p>
+                    <p  className="SalesText">Total Orders: </p>
                     <h2 className="Sales">
                       {totalOrders === "" ? "" : totalOrders}
                     </h2>
-                    <p>Todays Orders:</p>
+                    <p className="SalesText">Todays Orders:</p>
                     <h2 className="Sales">
                       {todaysOrders === "" ? "" : todaysOrders}
                     </h2>

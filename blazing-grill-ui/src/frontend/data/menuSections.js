@@ -44,6 +44,10 @@ const MenuItemsSection = [
     img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Air%20Fryer%20Pizza.png",
   },
   {
+    name: "Grills",
+    img: "https://kaleem99.github.io/The-Blazing-Grill-Images/Grills.png",
+  },
+  {
     name: "Extras",
   },
 ];
