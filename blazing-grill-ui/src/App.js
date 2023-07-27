@@ -48,7 +48,7 @@ function App() {
       if (user && user.emailVerified) {
         setIsLoggedIn(true);
         setEmail(user.email);
-        console.log(user)
+        console.log(user);
       } else {
         setIsLoggedIn(false);
         console.log("user is logged out", isLoggedIn);

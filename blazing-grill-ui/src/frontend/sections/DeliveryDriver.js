@@ -1,33 +1,14 @@
 import { auth } from "../../database/config";
-import { signOut } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
-import axios from "axios";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  updateDoc,
-  doc,
-  deleteDoc,
-} from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../database/config";
-import {
-  signInWithEmailAndPassword,
-  updatePhoneNumber,
-  updateProfile,
-} from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 
 function DeliveryDriver({ storeName }) {
-  // const [storeInformation, setStoreInformation] = useState({
-  //   email: detailsOfStore.adminUsername,
-  //   storeName: detailsOfStore.store,
-  //   address: detailsOfStore.address,
-  // });
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -54,7 +35,7 @@ function DeliveryDriver({ storeName }) {
     }
   };
 
-  const SaveStoreInfor = async (event) => {
+  const SaveStoreInformation = async (event) => {
     event.preventDefault();
 
     if (email === "" || name === "" || password === "") {
@@ -69,23 +50,25 @@ function DeliveryDriver({ storeName }) {
       storeName: storeName[0],
     };
     try {
-      await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          updateProfile(user, {
-            displayName: name,
-          });
-          alert("Driver Profile was created successfully");
-          // navigate("/login");
-          addDoc(collection(db, "DriverProfiles"), DriverData);
-          sendEmailVerification(user);
-          // ...
-        })
-        .catch((error) => {
-          alert(error.message);
-          // ..
-        });
+      // await createUserWithEmailAndPassword(auth, email, password)
+      //   .then((userCredential) => {
+      // Signed in
+      // const user = userCredential.user;
+      // updateProfile(user, {
+      //   displayName: name,
+      // });
+      alert(
+        "Driver Profile was created successfully, please ensure the driver signs up on the mobile app to finish the sign up process and please ensure he uses the same email address"
+      );
+      // navigate("/login");
+      addDoc(collection(db, "DriverProfiles"), DriverData);
+      // sendEmailVerification(user);
+      // ...
+      // })
+      // .catch((error) => {
+      //   alert(error.message);
+      //   // ..
+      // });
     } catch (err) {
       alert(err.message);
     }
@@ -94,7 +77,7 @@ function DeliveryDriver({ storeName }) {
   return (
     <div className="AddMenu">
       <h1 style={{ color: "white" }}>Add Delivery Driver</h1>
-      <form onSubmit={SaveStoreInfor} className="form">
+      <form onSubmit={SaveStoreInformation} className="form">
         <label>Driver Name</label>
         <br></br>
 
@@ -168,22 +151,6 @@ function DeliveryDriver({ storeName }) {
           Add Driver
         </button>
       </form>
-
-      {/* <button
-        onClick={() => getDriverProfiles()}
-        style={{
-          width: "180px",
-          height: "40px",
-          background: "none",
-          borderRadius: "7px",
-          color: "white",
-          fontSize: "20px",
-          border: "1px solid white",
-          marginLeft: "30px",
-        }}
-      >
-        View Drivers
-      </button> */}
     </div>
   );
 }

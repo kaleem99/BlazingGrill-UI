@@ -62,8 +62,8 @@ function Orders({
             }
           });
           setPendingOrders(items);
+          console.log(items, "This is Items.");
           setInProgress(inProgress);
-          console.log(inProgress);
         } else {
           console.log("No data in the collection");
         }
@@ -104,51 +104,10 @@ function Orders({
     return status;
   };
 
-  // const incomingOrder = () => {
-  //   if (PendingOrders.length > 0) {
-  //     const docRef = doc(db, "Orders", PendingOrders[0].id);
-  //     const foodOrder = PendingOrders[0].food;
-  //     let foodStringData = "";
-  //     for (let i = 0; i < foodOrder.length; i++) {
-  //       foodStringData +=
-  //         "\n" +
-  //         foodOrder[i].productQuantity +
-  //         " x " +
-  //         foodOrder[i].productName;
-  //       // "\n";
-  //     }
-  //     if (window.confirm("New Incoming Order " + foodStringData)) {
-  //       const newOrderData = PendingOrders[0];
-  //       newOrderData.status = "In Progress";
-  //       SendEmailOrder(
-  //         newOrderData.Name,
-  //         newOrderData.food,
-  //         newOrderData.total,
-  //         newOrderData.email,
-  //         detailsOfStore.adminUsername,
-  //         newOrderData.orderNumber
-  //       );
-  //       updateDoc(docRef, newOrderData);
-
-  //       alert("Order has been accepted");
-  //       //
-  //       clearCart(newOrderData.userId);
-  //       let newPendingOrder = PendingOrders.shift();
-  //       setPendingOrders(PendingOrders);
-  //     } else {
-  //       const newOrderData = PendingOrders[0];
-  //       newOrderData.status = "Declined";
-  //       updateDoc(docRef, newOrderData);
-  //       // deleteDoc(docRef);
-  //       const deletedOrder = PendingOrders.shift();
-  //       alert("Order has been declined.");
-  //     }
-  //   }
-  // };
-  const handleAcceptOrder = () => {
-    const docRef = doc(db, "Orders", PendingOrders[0].id);
-    const foodOrder = PendingOrders[0].food;
-    const newOrderData = PendingOrders[0];
+  const handleAcceptOrder = (index) => {
+    const docRef = doc(db, "Orders", PendingOrders[index].id);
+    const foodOrder = PendingOrders[index].food;
+    const newOrderData = PendingOrders[index];
     newOrderData.status = "In Progress";
     newOrderData.estimate = time;
     SendEmailOrder(
@@ -170,13 +129,14 @@ function Orders({
     setPendingOrders(PendingOrders);
   };
 
-  const handleDeclineOrder = () => {
-    const docRef = doc(db, "Orders", PendingOrders[0].id);
-    const foodOrder = PendingOrders[0].food;
-    const newOrderData = PendingOrders[0];
+  const handleDeclineOrder = (index) => {
+    const docRef = doc(db, "Orders", PendingOrders[index].id);
+    const foodOrder = PendingOrders[index].food;
+    const newOrderData = PendingOrders[index];
     newOrderData.status = "Declined";
+    addDoc(collection(db, "DeclinedOrders"), newOrderData);
     updateDoc(docRef, newOrderData);
-    // deleteDoc(docRef);
+    deleteDoc(docRef);
     const deletedOrder = PendingOrders.shift();
     SendOrderCancellation(
       newOrderData.Name,
@@ -189,7 +149,26 @@ function Orders({
       newOrderData.phoneNumber,
       newOrderData.orderType
     );
-    alert("Order has been declined.");
+    // newOrderData.checkoutUrl
+    fetch(
+      `https://express-template-backend.onrender.com/refund/${newOrderData.checkoutID}/`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to process the refund.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        // Display a success message to the user when the refund is successful
+        alert("Order refund has been processed successfully.");
+      })
+      .catch((error) => {
+        console.error("Error processing the refund:", error);
+        // Display an error message to the user when the refund request fails
+        alert("Failed to process the refund. Please try again later.");
+      });
   };
   // console.log(PendingOrders);
   const setOrders = (data) => {
@@ -225,15 +204,18 @@ function Orders({
   };
   return (
     <div className="Home">
-      {PendingOrders.length > 0 && (
-        <OrderConfirmationModal
-          food={PendingOrders[0].food}
-          onAccept={handleAcceptOrder}
-          onDecline={handleDeclineOrder}
-          setTime={setTime}
-          time={time}
-        />
-      )}
+      {PendingOrders.length > 0 &&
+        PendingOrders.map((data, i) => {
+          return (
+            <OrderConfirmationModal
+              food={PendingOrders[i].food}
+              onAccept={() => handleAcceptOrder(i)}
+              onDecline={() => handleDeclineOrder(i)}
+              setTime={setTime}
+              time={time}
+            />
+          );
+        })}
       {storeName[0] !== "admin" && (
         <>
           <Switch
@@ -332,7 +314,6 @@ function Orders({
                             defaultValue={data.status}
                           >
                             <option value="In Progress">In Progress</option>
-                            {console.log(orderSection)}
                             {(orderSection === "Delivery" ||
                               orderSection === "Collection") && (
                               <option value="Complete">Complete</option>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AccountDetails from "./StoreAccountDetails";
 import { signOut } from "firebase/auth";
 import { auth } from "../../database/config";
@@ -6,6 +6,14 @@ import logout from "../../components/logoutOfStore";
 import ViewDeliveryDrivers from "../../components/viewDeliveryDrivers";
 import DeliveryDriver from "./DeliveryDriver";
 import { IoArrowBackCircleSharp } from "react-icons/io5";
+import { Admin, Resource } from "react-admin";
+import { firebaseConfig } from "../../database/config";
+import {
+  FirebaseAuthProvider,
+  FirebaseDataProvider,
+  FirebaseRealTimeSaga,
+} from "react-admin-firebase";
+
 import {
   MdAccountBox,
   MdDirectionsBike,
@@ -29,6 +37,28 @@ function Account({
   storeStatus,
   storeDetails,
 }) {
+  useEffect(() => {
+    fetch("https://express-template-backend.onrender.com/my/webhook/url", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => {
+        console.log(response, "check")
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        // You can handle the response here if needed
+        console.log(response, "response Data")
+        console.log("Webhook request successful");
+      })
+      .catch((error) => {
+        // You can handle errors here if needed
+        console.error("Error:", error);
+      });
+  }, []);
   const [sections, setSections] = useState("");
   const iconsArr = [
     <MdAccountBox />,
@@ -69,6 +99,8 @@ function Account({
       body = "";
       break;
   }
+  const dataProvider = FirebaseDataProvider(firebaseConfig, {});
+  console.log(dataProvider);
   return sections === "" ? (
     <div>
       <h1 style={{ color: "white" }}>Store Account</h1>

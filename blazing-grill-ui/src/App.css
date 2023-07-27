@@ -437,7 +437,7 @@ tr:nth-child(odd) {
 .ReactModal__Overlay,
 .ReactModal__Overlay--after-open {
   width: 50%;
-  height: 40vh;
+  max-height: 50%;
   margin: auto;
   border-radius: 30px;
   text-align: center;

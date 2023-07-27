@@ -12,11 +12,12 @@ import { useState, useEffect } from "react";
 import { db } from "../../database/config";
 function StoreSales({ storeName, storeDetails }) {
   const [sales, setSales] = useState("");
-  const [currentSales, setCurrentSales] = useState("");
-  const [totalOrders, setTotalOrders] = useState("");
-  const [todaysOrders, setTodaysOrders] = useState("");
+  const [currentSales, setCurrentSales] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [todaysOrders, setTodaysOrders] = useState(0);
   const [filteredData, setFilteredData] = useState("");
   const [selectedStore, setSelectedStore] = useState(storeName[0]);
+  const [rejectedOrders, setRejectedOrders] = useState(0);
   const arrSalesItems = [1, 2, 3, 4];
   useEffect(() => {
     getDocs(collection(db, "Orders")).then((querySnapshot) => {
@@ -29,11 +30,17 @@ function StoreSales({ storeName, storeDetails }) {
       const filteredArray = newData.filter(
         (obj) => obj.storeName === selectedStore
       );
+      const rejectedDatabaseOrders = filteredArray.filter(
+        (data) => data.status !== "Complete"
+      ).length;
+      console.log(rejectedDatabaseOrders);
       const totalSum = filteredArray.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.total;
       }, 0);
       const today = new Date().toISOString().split("T")[0];
-      const filteredTodaysSales = newData.filter((data) => data.date === today);
+      const filteredTodaysSales = filteredArray.filter(
+        (data) => data.date === today
+      );
 
       setSales(totalSum);
       setCurrentSales(
@@ -44,6 +51,7 @@ function StoreSales({ storeName, storeDetails }) {
       setTotalOrders(filteredArray.length);
       setTodaysOrders(filteredTodaysSales.length);
       setFilteredData(filteredArray);
+      setRejectedOrders(rejectedDatabaseOrders);
     });
   }, []);
   const changeStore = (value) => {
@@ -78,9 +86,7 @@ function StoreSales({ storeName, storeDetails }) {
     myDateInput.defaultValue = new Date().toISOString().substring(0, 10);
   }
   const changeSalesDate = (value) => {
-    console.log(value);
     const filterByDate = filteredData.filter((data) => data.date === value);
-    console.log(filterByDate);
     setCurrentSales(
       filterByDate.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.total;
@@ -156,16 +162,18 @@ function StoreSales({ storeName, storeDetails }) {
                 {i === 0 && (
                   <>
                     <p className="SalesText">Total Store Sales: </p>
-                    <h2 className="Sales">R{sales === "" ? "" : sales}</h2>
+                    <h2 className="Sales">
+                      R{sales === "" ? 0 : sales.toFixed(2)}
+                    </h2>
                     <p className="SalesText">Todays Sales:</p>
                     <h2 className="Sales">
-                      R{currentSales === "" ? "" : currentSales}
+                      R{currentSales === "" ? "" : currentSales.toFixed(2)}
                     </h2>
                   </>
                 )}
                 {i === 1 && (
                   <>
-                    <p  className="SalesText">Total Orders: </p>
+                    <p className="SalesText">Total Orders: </p>
                     <h2 className="Sales">
                       {totalOrders === "" ? "" : totalOrders}
                     </h2>
@@ -173,6 +181,14 @@ function StoreSales({ storeName, storeDetails }) {
                     <h2 className="Sales">
                       {todaysOrders === "" ? "" : todaysOrders}
                     </h2>
+                  </>
+                )}
+                {i === 2 && (
+                  <>
+                    <p className="SalesText">Total Rejected Orders: </p>
+                    <h2 className="Sales">{rejectedOrders}</h2>
+                    <p className="SalesText">Todays Rejected Orders:</p>
+                    <h2 className="Sales">{todaysOrders}</h2>
                   </>
                 )}
               </div>
