@@ -18,6 +18,10 @@ function StoreSales({ storeName, storeDetails }) {
   const [filteredData, setFilteredData] = useState("");
   const [selectedStore, setSelectedStore] = useState(storeName[0]);
   const [rejectedOrders, setRejectedOrders] = useState(0);
+  const [deliveryAndCollectionSales, setDeliveryAndCollectionSales] = useState({
+    Collection: 0,
+    Delivery: 0,
+  });
   const arrSalesItems = [1, 2, 3, 4];
   useEffect(() => {
     getDocs(collection(db, "Orders")).then((querySnapshot) => {
@@ -33,7 +37,6 @@ function StoreSales({ storeName, storeDetails }) {
       const rejectedDatabaseOrders = filteredArray.filter(
         (data) => data.status !== "Complete"
       ).length;
-      console.log(rejectedDatabaseOrders);
       const totalSum = filteredArray.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.total;
       }, 0);
@@ -41,7 +44,16 @@ function StoreSales({ storeName, storeDetails }) {
       const filteredTodaysSales = filteredArray.filter(
         (data) => data.date === today
       );
-
+      const collectionSales = filteredArray.filter(
+        (data) => data.orderType === "Collection"
+      ).length;
+      const deliverySales = filteredArray.filter(
+        (data) => data.orderType === "Delivery"
+      ).length;
+      setDeliveryAndCollectionSales({
+        Delivery: deliverySales,
+        Collection: collectionSales,
+      });
       setSales(totalSum);
       setCurrentSales(
         filteredTodaysSales.reduce((accumulator, currentObject) => {
@@ -189,6 +201,18 @@ function StoreSales({ storeName, storeDetails }) {
                     <h2 className="Sales">{rejectedOrders}</h2>
                     <p className="SalesText">Todays Rejected Orders:</p>
                     <h2 className="Sales">{todaysOrders}</h2>
+                  </>
+                )}
+                {i === 3 && (
+                  <>
+                    <p className="SalesText">Collection Orders: </p>
+                    <h2 className="Sales">
+                      {deliveryAndCollectionSales.Collection}
+                    </h2>
+                    <p className="SalesText">Delivery Orders:</p>
+                    <h2 className="Sales">
+                      {deliveryAndCollectionSales.Delivery}
+                    </h2>
                   </>
                 )}
               </div>
