@@ -17,6 +17,10 @@ function MenuItems({ adminUserEmail, setState }) {
   const [image, setImage] = useState("");
   const [itemName, setItemName] = useState("");
   const itemsFields = ["name", "price", "Information", "Update Image"];
+  const [extrasDropDown, setExtrasDropDown] = useState({
+    extras: false,
+    flavours: false,
+  });
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -44,6 +48,17 @@ function MenuItems({ adminUserEmail, setState }) {
       price: "",
     },
   ]);
+  const [flavours, setFlavours] = useState([
+    {
+      name: "",
+    },
+    {
+      name: "",
+    },
+    {
+      name: "",
+    },
+  ]);
   const handleExtrasChange = (event, index) => {
     const { name, value } = event.target;
     setExtras((prevExtras) => {
@@ -52,8 +67,17 @@ function MenuItems({ adminUserEmail, setState }) {
       return newExtras;
     });
   };
+  const handleFlavourChange = (event, index) => {
+    const { name, value } = event.target;
+    setFlavours((prevExtras) => {
+      const newExtras = [...prevExtras];
+      newExtras[index] = { ...newExtras[index], [name]: value };
+      return newExtras;
+    });
+  };
   const setItemsData = (food) => {
     let updatedExtras = extras;
+    let updatedFlavours = flavours;
     setItemName(food);
     setFormData({
       ...formData,
@@ -72,6 +96,18 @@ function MenuItems({ adminUserEmail, setState }) {
         return extra;
       });
     }
+    console.log(food);
+    if (food.flavours !== undefined) {
+      updatedFlavours = flavours.map((extra, index) => {
+        if (index < food.flavours.length) {
+          return {
+            name: food.flavours[index].name,
+          };
+        }
+        return extra;
+      });
+    }
+    setFlavours(updatedFlavours);
     setExtras(updatedExtras);
   };
   const handleChange = (event) => {
@@ -146,54 +182,82 @@ function MenuItems({ adminUserEmail, setState }) {
               width: "98%",
               height: "auto",
               display: "grid",
-              gridTemplateColumns: "50% 50%",
-              margin: "auto",
+              gridTemplateColumns: "33% auto 33%",
+              margin: "2% auto",
               // background: "red",
             }}
           >
-            <div style={{ width: "620px" }}>
-              <h1 style={{ color: "white" }}>Extras</h1>
-              {extras.map((data, i) => {
-                return (
-                  <div
-                    style={{
-                      display: "grid",
-                      width: "300px",
-                      gridTemplateColumns: "auto auto",
-                    }}
-                  >
-                    <div>
-                      <label className="input">Name</label>
-                      <input
-                        name="name"
-                        className="extrasInput"
-                        placeholder="Name"
-                        onChange={(e) => handleExtrasChange(e, i)}
-                        value={data.name}
-                      />
-                    </div>
-                    <div>
-                      <label>Price</label>
-                      <input
-                        name="price"
-                        className="extrasInput"
-                        placeholder="Price"
-                        onChange={(e) => handleExtrasChange(e, i)}
-                        value={data.price}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+            <div
+              style={{
+                width: "90%",
+                // border: "1px solid white",
+                margin: "0% auto",
+                padding: "5px",
+              }}
+            >
+              <button
+                style={{
+                  color: "white",
+                  background: "#F0941E",
+                  fontSize: "32px",
+                  width: "100%",
+                  // borderRadius: "10px",
+                  padding: "5px",
+                  border: "none",
+                }}
+                onClick={() => {
+                  setExtrasDropDown((prevState) => ({
+                    ...prevState,
+                    extras: !prevState.extras,
+                  }));
+                }}
+              >
+                Extras
+              </button>
+              {extrasDropDown.extras && (
+                <table style={{}}>
+                  <thead>
+                    <tr>
+                      <th style={{ fontSize: "25px" }}>Name:</th>
+                      <th style={{ fontSize: "25px" }}>Price:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {extras.map((data, i) => (
+                      <tr style={{ background: "transparent" }} key={i}>
+                        <td>
+                          <input
+                            name="name"
+                            className="extrasInput"
+                            placeholder="Name"
+                            onChange={(e) => handleExtrasChange(e, i)}
+                            value={data.name}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            name="price"
+                            className="extrasInput"
+                            placeholder="Price"
+                            type="number"
+                            onChange={(e) => handleExtrasChange(e, i)}
+                            value={data.price}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
             <div>
               <img
                 style={{
-                  width: "350px",
+                  width: "400px",
                   height: "280px",
                   marginLeft: "0px",
                   marginRight: "auto",
-                  float: "right",
+                  // float: "right",
                 }}
                 alt=""
                 // alt="no Image added"
@@ -203,6 +267,58 @@ function MenuItems({ adminUserEmail, setState }) {
                     : require("../../assets/NoImage.jpeg")
                 }
               ></img>
+            </div>
+            <div
+              style={{
+                width: "90%",
+                // border: "1px solid white",
+                margin: "0% auto",
+                padding: "5px",
+              }}
+            >
+              <button
+                style={{
+                  color: "white",
+                  background: "#F0941E",
+                  fontSize: "32px",
+                  width: "100%",
+                  // borderRadius: "10px",
+                  padding: "5px",
+                  border: "none",
+                }}
+                onClick={() => {
+                  setExtrasDropDown((prevState) => ({
+                    ...prevState,
+                    flavours: !prevState.flavours,
+                  }));
+                }}
+              >
+                Flavour
+              </button>
+              {extrasDropDown.flavours && (
+                <table style={{}}>
+                  <thead>
+                    <tr>
+                      <th style={{ fontSize: "25px" }}>Name:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {flavours.map((data, i) => (
+                      <tr style={{ background: "transparent" }} key={i}>
+                        <td>
+                          <input
+                            name="name"
+                            className="extrasInput"
+                            placeholder="Name"
+                            onChange={(e) => handleFlavourChange(e, i)}
+                            value={data.name}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
           <div
@@ -260,6 +376,17 @@ function MenuItems({ adminUserEmail, setState }) {
           price: "",
         },
       ]);
+      setFlavours([
+        {
+          name: "",
+        },
+        {
+          name: "",
+        },
+        {
+          name: "",
+        },
+      ]);
     }
   };
   const itemClick = (name) => {
@@ -315,6 +442,7 @@ function MenuItems({ adminUserEmail, setState }) {
         price: tableRowPrice.value,
         Information: tableRowInformation.value,
         extras: extras,
+        flavours: flavours,
       });
       alert("Table row has been succesfully updated.");
       fetchPost(name);
