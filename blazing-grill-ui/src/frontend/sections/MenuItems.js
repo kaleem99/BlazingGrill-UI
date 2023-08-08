@@ -58,6 +58,9 @@ function MenuItems({ adminUserEmail, setState }) {
     {
       name: "",
     },
+    {
+      name: "",
+    },
   ]);
   const handleExtrasChange = (event, index) => {
     const { name, value } = event.target;

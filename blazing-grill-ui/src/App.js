@@ -102,7 +102,7 @@ function App() {
   } else {
     return (
       <div className="App">
-        {!auth.currentUser ? (
+        {!auth.currentUser.emailVerified ? (
           <>
             {/* <Lottie options={defaultOptions} height={400} width={400} /> */}
             <img

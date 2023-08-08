@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../database/config";
 import { auth } from "../../database/config";
@@ -11,11 +11,13 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
+import { GoogleMap, LoadScript, Autocomplete } from "@react-google-maps/api";
 
 import MenuItemsSection from "../data/menuSections";
 import Geocode from "react-geocode";
 const APIKEY = "AIzaSyAe8Q7gExQ3CEzxqr4PFm3ikcMboQPKJIg";
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+
 Geocode.setApiKey(APIKEY);
 Geocode.setLanguage("en");
 
@@ -39,7 +41,14 @@ function Register({ setState }) {
     storeStatus: false,
   });
   const [credentials, setCredentials] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(null);
+  const libraries = ["places"];
+  useEffect(() => {
+    if (address) {
+      handleAddress();
+    }
+  }, [address]);
+  const inputRef = useRef();
   const Register = async (e) => {
     e.preventDefault();
     if (
@@ -94,6 +103,12 @@ function Register({ setState }) {
       [event.target.name]: event.target.value,
     });
   };
+  const handlePlaceChange = () => {
+    const [place] = inputRef.current.getPlaces();
+    if (place) {
+      console.log(place);
+    }
+  };
   const handleChange2 = (event) => {
     if (event.target.name === "credentials") {
       setCredentials(event.target.value);
@@ -116,16 +131,18 @@ function Register({ setState }) {
       // );
     }
   };
-  const handleAddress = (selectedAddress) => {
-    setAddress(selectedAddress);
-    Geocode.fromAddress(selectedAddress).then(
+  const handleAddress = () => {
+    console.log(address, " Adreesss");
+    Geocode.fromAddress(address.label).then(
       (response) => {
         const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
         setFormData({
           ...formData,
           latitude: lat,
           longitude: lng,
         });
+        setAddress(address.label);
       },
       (error) => {
         console.error(error);
@@ -186,10 +203,11 @@ function Register({ setState }) {
           value={address}
           onChange={handleChange2}
         /> */}
-        <PlacesAutocomplete
+        {/* <PlacesAutocomplete
           value={address}
           onChange={setAddress}
           onSelect={handleAddress}
+          apiKey={APIKEY}
         >
           {({
             getInputProps,
@@ -224,7 +242,11 @@ function Register({ setState }) {
               </div>
             </div>
           )}
-        </PlacesAutocomplete>
+        </PlacesAutocomplete> */}
+        <GooglePlacesAutocomplete
+          apiKey={APIKEY}
+          selectProps={{ address, onChange: setAddress }}
+        ></GooglePlacesAutocomplete>
         <br />
         <br></br>
         <button onClick={(e) => Register(e)}>Register</button>
