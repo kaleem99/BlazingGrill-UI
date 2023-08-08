@@ -102,7 +102,7 @@ function App() {
   } else {
     return (
       <div className="App">
-        {!isLoggedIn ? (
+        {!auth.currentUser ? (
           <>
             {/* <Lottie options={defaultOptions} height={400} width={400} /> */}
             <img

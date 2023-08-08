@@ -6,10 +6,17 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
+
 import MenuItemsSection from "../data/menuSections";
 import Geocode from "react-geocode";
+const APIKEY = "AIzaSyAe8Q7gExQ3CEzxqr4PFm3ikcMboQPKJIg";
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
-Geocode.setApiKey("AIzaSyAe8Q7gExQ3CEzxqr4PFm3ikcMboQPKJIg");
+Geocode.setApiKey(APIKEY);
 Geocode.setLanguage("en");
 
 Geocode.setRegion("za");
@@ -51,7 +58,6 @@ function Register({ setState }) {
     formData["address"] = address;
     const { store } = formData;
     //   const docRef = await addDoc(collection(db, formData.store), formData);
-    console.log(store);
     const docRef2 = await addDoc(collection(db, "BlazingStores"), {
       [store]: formData,
     });
@@ -61,7 +67,7 @@ function Register({ setState }) {
     // } catch (e) {
     //   console.error("Error adding store: ", e);
     // }
-
+    console.log(formData.adminUsername, formData.password);
     await createUserWithEmailAndPassword(
       auth,
       formData.adminUsername,
@@ -78,7 +84,7 @@ function Register({ setState }) {
         // ...
       })
       .catch((error) => {
-        alert(error.message);
+        alert("Hello World " + error.message);
         // ..
       });
   };
@@ -92,21 +98,39 @@ function Register({ setState }) {
     if (event.target.name === "credentials") {
       setCredentials(event.target.value);
     } else {
-      setAddress(event.target.value);
-      Geocode.fromAddress(event.target.value).then(
-        (response) => {
-          const { lat, lng } = response.results[0].geometry.location;
-          setFormData({
-            ...formData,
-            latitude: lat,
-            longitude: lng,
-          });
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
+      console.log(event);
+      // setAddress(event.target.value);
+      // Geocode.fromAddress(event.target.value).then(
+      //   (response) => {
+      //     const { lat, lng } = response.results[0].geometry.location;
+      //     console.log(lat, lng);
+      //     setFormData({
+      //       ...formData,
+      //       latitude: lat,
+      //       longitude: lng,
+      //     });
+      //   },
+      //   (error) => {
+      //     console.error(error);
+      //   }
+      // );
     }
+  };
+  const handleAddress = (selectedAddress) => {
+    setAddress(selectedAddress);
+    Geocode.fromAddress(selectedAddress).then(
+      (response) => {
+        const { lat, lng } = response.results[0].geometry.location;
+        setFormData({
+          ...formData,
+          latitude: lat,
+          longitude: lng,
+        });
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -155,14 +179,52 @@ function Register({ setState }) {
         />
         <br />
         <br></br>
-        <input
+        {/* <input
           type="search"
           name="address"
           placeholder="Store address"
           value={address}
           onChange={handleChange2}
-        />
-
+        /> */}
+        <PlacesAutocomplete
+          value={address}
+          onChange={setAddress}
+          onSelect={handleAddress}
+        >
+          {({
+            getInputProps,
+            suggestions,
+            getSuggestionItemProps,
+            loading,
+          }) => (
+            <div>
+              <input
+                className="googleSearch"
+                name="address"
+                value={address}
+                {...getInputProps({
+                  placeholder: "Enter location...",
+                })}
+              />
+              <div>
+                {loading && <div>Loading...</div>}
+                {suggestions.map((suggestion) => {
+                  const style = {
+                    backgroundColor: suggestion.active ? "#41b6e6" : "#fff",
+                  };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, { style })}
+                      key={suggestion.placeId}
+                    >
+                      {suggestion.description}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
         <br />
         <br></br>
         <button onClick={(e) => Register(e)}>Register</button>

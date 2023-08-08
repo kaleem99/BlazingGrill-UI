@@ -557,3 +557,17 @@ Store Menu
   color: white;
   font-size: larger;
 }
+
+.googleSearch {
+  /* background-color: #000000; */
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  width: 80.5%;
+  height: 40px;
+  /* font-family: "Libre Caslon Text", Sans-serif; */
+  font-weight: 400;
+  font-size: 20px;
+  color: white;
+  /* margin-left: 75px; */
+}
