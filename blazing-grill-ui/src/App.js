@@ -36,42 +36,35 @@ function App() {
   const [email, setEmail] = useState("");
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          setIsLoggedIn(true);
+          setEmail(user.email);
+          console.log(user);
+        } else {
+          setIsLoggedIn(false);
+          console.log("user is logged out", isLoggedIn);
+          if (state !== "Register") {
+            setState("Login");
+          }
+        }
+      } else {
+        // Handle the case when user is not logged in
+        setIsLoggedIn(false);
+        setState("Login");
+      }
+
       getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
         const newData = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
-
-        // console.log(newData);
         setStoreDetails(newData);
       });
-      if (user && user.emailVerified) {
-        setIsLoggedIn(true);
-        setEmail(user.email);
-        console.log(user);
-      } else {
-        setIsLoggedIn(false);
-        console.log("user is logged out", isLoggedIn);
-        if (state !== "Register") {
-          setState("Login");
-        }
-      }
     });
-    // const data = getDocs(collection(db, "BlazingStores")).then(
-    //   (querySnapshot) => {
-    //     const newData = querySnapshot.docs.map((doc) => ({
-    //       ...doc.data(),
-    //       id: doc.id,
-    //     }));
-    //     let Name = auth.currentUser.displayName;
-    //     const newFilteredData = newData.filter(
-    //       (data) => data[Name] !== undefined && data
-    //     );
-
-    //     setstoreStatus(newFilteredData[0][Name].storeStatus);
-    //   }
-    // );
+    // ...
   }, []);
+
   const store = storeDetails.filter((stores, i) => {
     if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
       return stores;
@@ -102,7 +95,7 @@ function App() {
   } else {
     return (
       <div className="App">
-        {!auth.currentUser.emailVerified ? (
+        {!isLoggedIn ? (
           <>
             {/* <Lottie options={defaultOptions} height={400} width={400} /> */}
             <img

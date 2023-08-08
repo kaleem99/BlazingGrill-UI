@@ -55,6 +55,7 @@ function Login({ setState, store, setStoreDetails, storeDetails }) {
           return alert("Please ensure to verify your email.");
         }
         setState("Home");
+        window.location.reload();
         alert("Welcome");
       })
       .catch((error) => {
