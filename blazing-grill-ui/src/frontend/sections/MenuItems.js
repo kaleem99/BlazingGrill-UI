@@ -9,14 +9,17 @@ import {
   updateDoc,
   doc,
   deleteDoc,
+  where,
 } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 function MenuItems({ adminUserEmail, setState }) {
   const [itemSection, setItemSection] = useState("");
   const [items, setItems] = useState([]);
+  const [inputPrice, setInputPrice] = useState(0);
   const [image, setImage] = useState("");
   const [itemName, setItemName] = useState("");
   const itemsFields = ["name", "price", "Information", "Update Image"];
+  const [operator, setOperator] = useState("Add");
   const [extrasDropDown, setExtrasDropDown] = useState({
     extras: false,
     flavours: false,
@@ -99,7 +102,6 @@ function MenuItems({ adminUserEmail, setState }) {
         return extra;
       });
     }
-    console.log(food);
     if (food.flavours !== undefined) {
       updatedFlavours = flavours.map((extra, index) => {
         if (index < food.flavours.length) {
@@ -119,11 +121,75 @@ function MenuItems({ adminUserEmail, setState }) {
       [event.target.name]: event.target.value,
     });
   };
+  const updateMultipleItemsPrices = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "Burgers"));
+      // Example data with updated prices
+      const updatedData = [
+        // ... your updated data objects here ...
+      ];
+      // await getDocs(collection(db, name)).then((querySnapshot) => {
+      //   const newData = querySnapshot.docs.map((doc) => ({
+      //     ...doc.data(),
+      //     id: doc.id,
+      //   }));
+      //   setItems(newData);
+      // });
+      items.map(async (data, i) => {
+        if (items) {
+          const docRef = doc(db, "Burgers", data.id);
+          let newPrice = 0;
+          if (operator === "Add") {
+            newPrice = parseFloat(data.price) + parseFloat(inputPrice);
+          } else {
+            newPrice = parseFloat(data.price) - parseFloat(inputPrice);
+          }
+          data.price = newPrice;
+          await updateDoc(docRef, data);
+        }
+      });
+      alert(`All ${itemSection} prices was updates successfully`);
+    } catch (error) {
+      alert("Error updating documents:", error);
+    }
+  };
   const itemsSectionComp = (name) => {
     // fetchPost();
     if (itemName === "") {
       return (
         <div className="ItemsSections">
+          <label>Operation: Add or Subtract</label>
+          <select
+            style={{
+              width: "170px",
+              height: "40px",
+              borderRadius: "10px",
+              background: "transparent",
+              color: "white",
+              fontSize: "large",
+            }}
+            id="category"
+            onChange={(e) => setOperator(e.target.value)}
+            value={"Add"}
+          >
+            <option value={"Add"}>Add</option>
+            <option value={"Subtract"}>Subtract</option>
+          </select>
+          <label>Price: </label>
+          <input
+            onChange={(e) => setInputPrice(e.target.value)}
+            type="number"
+            id="input0"
+            value={inputPrice}
+            placeholder="enter input amount"
+          />
+          <button
+            onClick={() => updateMultipleItemsPrices()}
+            className="FuncButtons"
+          >
+            Update all {name}
+          </button>
+
           <div>
             {items
               .sort((a, b) => (a.name > b.name ? 1 : -1))
