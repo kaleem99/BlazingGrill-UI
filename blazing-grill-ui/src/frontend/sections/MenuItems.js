@@ -601,6 +601,22 @@ function MenuItems({ adminUserEmail, setState }) {
               ></img>
               <text className="itemName">Sections</text>
             </div>
+            {/* <div
+              className="menuNameImage"
+              onClick={() =>
+                adminUserEmail === "yushaa@theblazinggrill.co.za" ||
+                adminUserEmail === "kaleem1999@outlook.com"
+                  ? setState("MenuSection")
+                  : alert("Only admin  user has full access.")
+              }
+            >
+              <img
+                alt=""
+                className="MenuImage"
+                src="https://kaleem99.github.io/The-Blazing-Grill-Images/sectionsImages.png"
+              ></img>
+              <text className="itemName">Place InStore Order</text>
+            </div> */}
           </div>
         </div>
       ) : (

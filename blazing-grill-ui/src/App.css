@@ -49,6 +49,10 @@ button:hover {
   color: white;
   font-weight: 600;
 }
+.placeOrder::placeholder {
+  color: black;
+  font-weight: 600;
+}
 .BlazingImage {
   width: 250px;
   margin: 2% auto;

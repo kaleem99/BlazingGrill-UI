@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Login from "./frontend/sections/Login";
 import Register from "./frontend/sections/Register";
 import Lottie from "react-lottie";
+import PlaceAndOrder from "./frontend/PlaceAndOrder";
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -34,6 +35,7 @@ function App() {
   const [storeStatus, setstoreStatus] = useState(false);
   const [currentStore, setCurrentStore] = useState("");
   const [email, setEmail] = useState("");
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -74,7 +76,6 @@ function App() {
     switch (state) {
       case "Register":
         return <Register setState={setState} />;
-      // return <h1>Hello</h1>;
       default:
         return (
           <Login
@@ -93,6 +94,8 @@ function App() {
       </div>
     );
   } else {
+    const arrUrl = window.location.href.split("/");
+    const urlChar = arrUrl[arrUrl.length - 1];
     return (
       <div className="App">
         {!isLoggedIn ? (
@@ -113,19 +116,23 @@ function App() {
               state={state}
               isLoggedIn={isLoggedIn}
             />
-            <div className="sections">
-              <Sections
-                state={state}
-                setState={setState}
-                isLoggedIn={isLoggedIn}
-                setStoreDetails={setStoreDetails}
-                storeDetails={storeDetails}
-                store={store}
-                storeStatus={storeStatus}
-                setstoreStatus={setstoreStatus}
-                auth={auth}
-              />
-            </div>
+            {urlChar === "Place-order" ? (
+              <PlaceAndOrder total={total} setTotal={setTotal} />
+            ) : (
+              <div className="sections">
+                <Sections
+                  state={state}
+                  setState={setState}
+                  isLoggedIn={isLoggedIn}
+                  setStoreDetails={setStoreDetails}
+                  storeDetails={storeDetails}
+                  store={store}
+                  storeStatus={storeStatus}
+                  setstoreStatus={setstoreStatus}
+                  auth={auth}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
