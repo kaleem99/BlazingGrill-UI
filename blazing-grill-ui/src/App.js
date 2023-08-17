@@ -1,4 +1,5 @@
 import "./App.css";
+import "./slideUp.css";
 // import { collection, addDoc } from "firebase/firestore";
 import { db } from "./database/config";
 import { useState, useEffect } from "react";
@@ -36,6 +37,9 @@ function App() {
   const [currentStore, setCurrentStore] = useState("");
   const [email, setEmail] = useState("");
   const [total, setTotal] = useState(0);
+  const [cart, setCart] = useState([]);
+  const [itemState, setItemState] = useState("");
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -94,7 +98,7 @@ function App() {
       </div>
     );
   } else {
-    const arrUrl = window.location.href.split("/");
+    const arrUrl = window.location.href.split("?");
     const urlChar = arrUrl[arrUrl.length - 1];
     return (
       <div className="App">
@@ -110,28 +114,71 @@ function App() {
           </>
         ) : (
           <>
-            <NavMenu
-              sections={sections}
-              setState={setState}
-              state={state}
-              isLoggedIn={isLoggedIn}
-            />
-            {urlChar === "Place-order" ? (
-              <PlaceAndOrder total={total} setTotal={setTotal} />
-            ) : (
-              <div className="sections">
-                <Sections
-                  state={state}
+            {urlChar !== "Place-order" ? (
+              <>
+                <NavMenu
+                  sections={sections}
                   setState={setState}
+                  state={state}
                   isLoggedIn={isLoggedIn}
-                  setStoreDetails={setStoreDetails}
-                  storeDetails={storeDetails}
-                  store={store}
-                  storeStatus={storeStatus}
-                  setstoreStatus={setstoreStatus}
-                  auth={auth}
                 />
-              </div>
+
+                <div className="sections">
+                  <Sections
+                    state={state}
+                    setState={setState}
+                    isLoggedIn={isLoggedIn}
+                    setStoreDetails={setStoreDetails}
+                    storeDetails={storeDetails}
+                    store={store}
+                    storeStatus={storeStatus}
+                    setstoreStatus={setstoreStatus}
+                    auth={auth}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
+                    height: "100px",
+                    position: "fixed",
+                    textAlign: "center",
+                    width: "100%",
+                    background: "#030303",
+                  }}
+                >
+                  <h1
+                    style={{
+                      color: "white",
+                    }}
+                  >
+                    The Blazing Grill In Store Point of Sale
+                  </h1>
+                  <img
+                    onClick={() => (window.location.href = "/BlazingGrill-UI")}
+                    width={"100px"}
+                    height={"80px"}
+                    style={{
+                      position: "fixed",
+                      top: "10px",
+                      left: "10px",
+                      bottom: "auto",
+                      cursor: "pointer",
+                    }}
+                    alt=""
+                    src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite-1024x894.png"
+                  />
+                </div>
+                <PlaceAndOrder
+                  setCart={setCart}
+                  cart={cart}
+                  total={total}
+                  setTotal={setTotal}
+                  itemState={itemState}
+                  setItemState={setItemState}
+                />
+              </>
             )}
           </>
         )}

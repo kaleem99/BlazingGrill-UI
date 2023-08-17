@@ -56,6 +56,7 @@ button:hover {
 .BlazingImage {
   width: 250px;
   margin: 2% auto;
+  cursor: pointer;
 }
 .form {
   margin: 2% auto;
@@ -152,17 +153,18 @@ li a:hover {
 }
 .itemName {
   color: #ffffff;
-  font-size: 40px;
+  font-size: 2em;
   font-weight: 500;
 }
 
 .items {
   display: grid;
-  grid-template-columns: 33% 33% 33%;
   margin: 5% auto;
+  /* grid-gap: 30px; */
+  grid-template-columns: repeat(auto-fit, minmax(25%, 1fr));
 }
 .MenuImage {
-  width: 300px;
+  width: 98%;
   height: 200px;
   margin: 10% auto;
   border-radius: 15px;
@@ -189,6 +191,8 @@ li a:hover {
   margin: 0% auto;
   border: 0.5px solid white;
   padding-bottom: 20px;
+  
+
 }
 .ItemsSections > h1 {
   color: #ffffff;
@@ -206,6 +210,7 @@ li a:hover {
   padding: 10px;
   text-align: left;
   border-radius: 10px;
+  
   /* grid-template-columns: 85% auto; */
 }
 .FuncButtons {
@@ -318,6 +323,7 @@ label {
   .BlazingImage {
     width: 300px;
     margin: 12% auto;
+    cursor: pointer;
   }
   .itemName {
     font-size: 25px;
@@ -432,12 +438,7 @@ tr:nth-child(odd) {
   height: 25px;
   font-weight: 600;
 }
-.BackButton {
-  font-size: 40px;
-  margin-block-start: 0em;
-  margin-block-end: 0em;
-  color: black;
-}
+
 .ReactModal__Overlay,
 .ReactModal__Overlay--after-open {
   width: 50%;
@@ -581,15 +582,15 @@ Store Menu
   width: 81% !important;
   margin: auto;
 }
-.css-1hwfws3{
+.css-1hwfws3 {
   color: white !important;
 }
-.css-1uccc91-singleValue{
+.css-1uccc91-singleValue {
   color: white !important;
 }
-.css-1pahdxg-control{
- width: 81% !important;
- margin: auto;
+.css-1pahdxg-control {
+  width: 81% !important;
+  margin: auto;
 }
 /* .css-26l3qy-menu{
   width: 81% !important;
