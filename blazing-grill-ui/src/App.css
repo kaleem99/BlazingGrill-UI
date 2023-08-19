@@ -355,8 +355,8 @@ label {
   }
   .HomeFoodItemName {
     width: 90%;
-    height: 100px;
-    grid-template-columns: auto 25%;
+    height: auto;
+    grid-template-columns: auto;
   }
   .FuncButtons {
     width: 70px;

@@ -144,7 +144,7 @@ function MenuItems({ adminUserEmail, setState }) {
           } else {
             newPrice = parseFloat(data.price) - parseFloat(inputPrice);
           }
-          data.price = newPrice;
+          data.price = newPrice.toFixed(2);
           await updateDoc(docRef, data);
         }
       });
