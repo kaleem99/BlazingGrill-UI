@@ -12,6 +12,7 @@ import Login from "./frontend/sections/Login";
 import Register from "./frontend/sections/Register";
 import Lottie from "react-lottie";
 import PlaceAndOrder from "./frontend/PlaceAndOrder";
+import Checkout from "./frontend/Checkout";
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -39,7 +40,7 @@ function App() {
   const [total, setTotal] = useState(0);
   const [cart, setCart] = useState([]);
   const [itemState, setItemState] = useState("");
-
+  const [checkout, setCheckout] = useState(false);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -169,15 +170,47 @@ function App() {
                     alt=""
                     src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite-1024x894.png"
                   />
+                  {checkout ? (
+                    <button
+                      onClick={() => setCheckout(false)}
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        top: 0,
+                        bottom: 0,
+                        height: "60px",
+                        margin: "auto",
+                        width: "140px",
+                        borderRadius: "30px",
+                        border: "none",
+                        fontSize: "larger",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Order
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setCheckout(true)}
+                      className="checkoutPlaceOrder"
+                      style={itemState != "" ? { right: "210px" } : {}}
+                    >
+                      Check out
+                    </button>
+                  )}
                 </div>
-                <PlaceAndOrder
-                  setCart={setCart}
-                  cart={cart}
-                  total={total}
-                  setTotal={setTotal}
-                  itemState={itemState}
-                  setItemState={setItemState}
-                />
+                {!checkout ? (
+                  <PlaceAndOrder
+                    setCart={setCart}
+                    cart={cart}
+                    total={total}
+                    setTotal={setTotal}
+                    itemState={itemState}
+                    setItemState={setItemState}
+                  />
+                ) : (
+                  <Checkout />
+                )}
               </>
             )}
           </>

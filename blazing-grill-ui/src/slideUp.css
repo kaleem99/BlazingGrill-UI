@@ -1,0 +1,66 @@
+/* SlideUpComponent.css */
+.slide-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.slide-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
+.slide-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slide-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
+.slide-up-content {
+  background-color: lightgray;
+  /* padding: 10px; */
+  border: 1px solid gray;
+  cursor: pointer;
+  height: 100px;
+}
+.sliderComp {
+  position: fixed;
+  width: 200px;
+  height: 20px;
+  /* background-color: black; */
+  background-image: url("./assets/smokeyBackground1024_1.png");
+  top: 0;
+  left: auto;
+  right: 0;
+  margin: auto;
+  color: white;
+  height: auto;
+}
+
+.sliderImage {
+  width: 200px;
+  height: 125px;
+  border-radius: 10px;
+  margin: auto;
+}
+.sliderItemName {
+  color: white;
+  font-size: 25px;
+}
+.menuNameImage {
+  margin: auto;
+  width: 95%;
+  height: auto;
+}
+.MainMenuHeader {
+  position: absolute;
+  left: 0;
+  font-size: 25px;
+  right: 0;
+  width: 170px;
+}

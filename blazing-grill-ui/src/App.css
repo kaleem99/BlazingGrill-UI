@@ -394,7 +394,7 @@ label {
 table {
   /* font-family: arial, sans-serif; */
   border-collapse: collapse;
-  width: 100%;
+  width: 50%;
   font-weight: bold;
 }
 
@@ -594,3 +594,17 @@ Store Menu
   width: 81% !important;
   margin: auto !important;
 }  */
+
+.checkoutPlaceOrder {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  bottom: 0;
+  height: 60px;
+  margin: auto;
+  width: 140px;
+  border-radius: 30px;
+  border: none;
+  font-size: larger;
+  font-weight: bold;
+}
