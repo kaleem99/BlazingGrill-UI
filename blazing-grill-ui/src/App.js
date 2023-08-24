@@ -41,6 +41,8 @@ function App() {
   const [cart, setCart] = useState([]);
   const [itemState, setItemState] = useState("");
   const [checkout, setCheckout] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -70,7 +72,28 @@ function App() {
       });
     });
     // ...
+    getTotalFromCart();
   }, []);
+  const getTotalFromCart = () => {
+    let x = localStorage.getItem("CART");
+    x = JSON.parse(x);
+    let num = 0;
+    let extrasNum = 0;
+    if (x != null && x.length > 0) {
+      for (let i = 0; i < x.length; i++) {
+        let extras = x[i].extras;
+        for (let key in extras) {
+          if (extras[key].quantity != 0) {
+            extrasNum += parseFloat(extras[key].price) * extras[key].quantity;
+          }
+        }
+        let newPrice = parseFloat(x[i].price) * x[i].quantity;
+        num += newPrice;
+      }
+      num += extrasNum;
+      setTotal(num.toFixed(2));
+    }
+  };
 
   const store = storeDetails.filter((stores, i) => {
     if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
@@ -170,25 +193,28 @@ function App() {
                     alt=""
                     src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite-1024x894.png"
                   />
+
                   {checkout ? (
-                    <button
-                      onClick={() => setCheckout(false)}
-                      style={{
-                        position: "absolute",
-                        right: "10px",
-                        top: 0,
-                        bottom: 0,
-                        height: "60px",
-                        margin: "auto",
-                        width: "140px",
-                        borderRadius: "30px",
-                        border: "none",
-                        fontSize: "larger",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Order
-                    </button>
+                    <>
+                      <button
+                        onClick={() => setCheckout(false)}
+                        style={{
+                          position: "absolute",
+                          right: "10px",
+                          top: 0,
+                          bottom: 0,
+                          height: "60px",
+                          margin: "auto",
+                          width: "140px",
+                          borderRadius: "30px",
+                          border: "none",
+                          fontSize: "larger",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Add more items
+                      </button>
+                    </>
                   ) : (
                     <button
                       onClick={() => setCheckout(true)}
@@ -196,6 +222,18 @@ function App() {
                       style={itemState != "" ? { right: "210px" } : {}}
                     >
                       Check out
+                    </button>
+                  )}
+                  {itemState === "" && selectedItem === "" && (
+                    <button
+                      style={{
+                        right: "200px",
+                        border: "2px solid #f7941d",
+                        width: "180px",
+                      }}
+                      className="checkoutPlaceOrder"
+                    >
+                      Total: {total}
                     </button>
                   )}
                 </div>
@@ -207,9 +245,18 @@ function App() {
                     setTotal={setTotal}
                     itemState={itemState}
                     setItemState={setItemState}
+                    setSelectedItem={setSelectedItem}
+                    selectedItem={selectedItem}
+                    getTotalFromCart={getTotalFromCart}
                   />
                 ) : (
-                  <Checkout />
+                  <Checkout
+                    selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                    getTotalFromCart={getTotalFromCart}
+                    total={total}
+                    setItemState={setItemState}
+                  />
                 )}
               </>
             )}

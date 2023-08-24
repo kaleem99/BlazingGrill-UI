@@ -63,7 +63,17 @@
   padding: 10px;
   font-weight: bold;
 }
-
+.editButton {
+  width: auto;
+  height: 40px;
+  background-color: darkgray;
+  font-size: large;
+  border: none;
+  border-radius: 20px;
+  color: black;
+  padding: 10px;
+  font-weight: bold;
+}
 .checkoutButton {
   border-radius: 30px;
   width: 200px;

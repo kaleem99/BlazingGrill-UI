@@ -6,7 +6,12 @@ import fetchPost from "../helpers/fetchData";
 import menu from "../assets/menu.svg";
 import Draggable from "react-draggable";
 
-const SlideUpComponent = ({ itemState, setItemState }) => {
+const SlideUpComponent = ({
+  itemState,
+  setItemState,
+  selectedItem,
+  setSelectedItem,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   let elementStyle = document.getElementsByClassName("sliderComp");
   const toggleSlide = () => {
@@ -16,9 +21,10 @@ const SlideUpComponent = ({ itemState, setItemState }) => {
     setIsOpen(!isOpen);
     console.log(elementStyle);
   };
-  const handleClickChange = (name, setItemState) => {
+  const handleClickChange = async (name, setItemState) => {
+    setSelectedItem("");
     setItemState("");
-    fetchPost(name, setItemState);
+    await fetchPost(name, setItemState);
     setIsOpen(!isOpen);
   };
   return (

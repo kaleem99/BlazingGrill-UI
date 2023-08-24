@@ -1,11 +1,28 @@
 import { useEffect, useState } from "react";
+import ViewItem from "../components/viewItems";
 
-function Checkout({}) {
+function Checkout({
+  getTotalFromCart,
+  selectedItem,
+  setSelectedItem,
+  total,
+  setItemState,
+}) {
   const [cartItems, setCartItems] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [index, setIndex] = useState(0);
+  // view cart items states
+  const [quantity, setQuantity] = useState(0);
+  const [flavour, setFlavour] = useState({});
+  const [extras, setExtras] = useState({});
+
   useEffect(() => {
+    getUpdatedCartItems();
+  }, []);
+  const getUpdatedCartItems = () => {
     const cartItems = JSON.parse(localStorage.getItem("CART"));
     setCartItems(cartItems);
-  }, []);
+  };
   const formatExtras = (data) => {
     const formattedData = data.extras.filter((item) => item.quantity > 0);
     if (formattedData.length > 0) {
@@ -35,8 +52,66 @@ function Checkout({}) {
     }
     await localStorage.setItem("CART", JSON.stringify(getAllItems));
     setCartItems(getAllItems);
+    getTotalFromCart();
   };
-  return (
+  const editItem = (index) => {
+    setIndex(index);
+    let carData = localStorage.getItem("CART");
+    carData = JSON.parse(carData);
+    console.log(carData[index]);
+    console.log(index);
+    setSelectedItem(carData[index]);
+    setExtras(carData[index].extras);
+    setFlavour(carData[index].flavours);
+    setQuantity(carData[index].quantity);
+    setEdit(true);
+  };
+  const handleExtrasQuantity = (name, type) => {
+    let newQuantity = 0;
+    const initialQuantity = extras.filter((item) => item.name === name)[0]
+      .quantity;
+    if (type === "PLUS") {
+      newQuantity = initialQuantity + 1;
+    } else {
+      newQuantity = initialQuantity - 1;
+    }
+    const updatedItems = extras.map((item) => {
+      if (item.name === name) {
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    });
+    setExtras(updatedItems);
+  };
+  const setFlavourSelected = (index) => {
+    const updatedFlavours = flavour.map((data, i) => {
+      if (index === i) {
+        data.selected = true;
+      } else {
+        data.selected = false;
+      }
+      return data;
+    });
+    console.log(updatedFlavours);
+    setFlavour(updatedFlavours);
+  };
+  const updateCart = async () => {
+    const result = { ...selectedItem };
+    result.extras = extras;
+    result.quantity = quantity;
+    result.flavours = flavour;
+    let getCartItems = localStorage.getItem("CART");
+    getCartItems = JSON.parse(getCartItems);
+    getCartItems[index] = result;
+    await localStorage.setItem("CART", JSON.stringify(getCartItems));
+    getUpdatedCartItems();
+    alert("Item has been successfully updated.");
+    getTotalFromCart();
+    setEdit(false);
+    setItemState("");
+    setSelectedItem("");
+  };
+  return !edit ? (
     <div
       style={{
         height: "auto",
@@ -55,6 +130,7 @@ function Checkout({}) {
           <th>Price</th>
           <th>Quantity</th>
           <th>Remove</th>
+          <th>Edit Cart</th>
         </tr>
         {cartItems != null &&
           cartItems.map((data, i) => {
@@ -74,6 +150,11 @@ function Checkout({}) {
                     Remove Item
                   </button>
                 </td>
+                <td>
+                  <button onClick={() => editItem(i)} className="editButton">
+                    Edit Item
+                  </button>
+                </td>
               </tr>
             );
           })}
@@ -86,6 +167,44 @@ function Checkout({}) {
         </button>
       </div>
     </div>
+  ) : (
+    <>
+      <ViewItem
+        selectedItem={selectedItem}
+        setQuantity={setQuantity}
+        quantity={quantity}
+        handleExtrasQuantity={handleExtrasQuantity}
+        extras={extras}
+        setFlavourSelected={setFlavourSelected}
+        flavour={flavour}
+      />
+      <div className="bottomFixedBar" style={{}}>
+        <div className="bottomFixedBarInner">
+          <h1 className="bottomInnerTotal">Total: {total}</h1>
+        </div>
+        {selectedItem !== "" ? (
+          <button
+            style={{
+              backgroundColor: "#F7941D",
+              marginLeft: "auto",
+              marginRight: "auto",
+              border: "none",
+              color: "white",
+              // fontSize: "larger",
+            }}
+            className="BackButton"
+            onClick={() => updateCart()}
+          >
+            Update cart
+          </button>
+        ) : (
+          <div></div>
+        )}
+        <button onClick={() => setEdit(false)} className="BackButton">
+          Back
+        </button>
+      </div>
+    </>
   );
 }
 
