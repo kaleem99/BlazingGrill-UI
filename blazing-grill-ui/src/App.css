@@ -394,7 +394,7 @@ label {
 table {
   /* font-family: arial, sans-serif; */
   border-collapse: collapse;
-  width: 50%;
+  width: 100%;
   font-weight: bold;
 }
 
@@ -607,4 +607,13 @@ Store Menu
   border: none;
   font-size: larger;
   font-weight: bold;
+}
+
+.place-order-input {
+  width: 70%;
+  height: 35px;
+  font-size: larger;
+}
+.place-order-label {
+  margin-top: 20px;
 }

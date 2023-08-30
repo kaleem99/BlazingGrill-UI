@@ -348,6 +348,7 @@ function Orders({
                 <td>
                   <p
                     className="BackButton"
+                    style={{width: "50px", height: "50px", border: "none"}}
                     onClick={() => setCustomersOrders([])}
                   >
                     <MdOutlineArrowCircleLeft />

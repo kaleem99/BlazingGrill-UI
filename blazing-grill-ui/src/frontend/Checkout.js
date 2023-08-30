@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
 import ViewItem from "../components/viewItems";
-
+import getDateAndTime from "../helpers/getDataAndTime";
+import Modal from "react-modal";
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "85%",
+  },
+};
 function Checkout({
   getTotalFromCart,
   selectedItem,
   setSelectedItem,
   total,
   setItemState,
+  store,
 }) {
   const [cartItems, setCartItems] = useState([]);
   const [edit, setEdit] = useState(false);
@@ -15,10 +28,22 @@ function Checkout({
   const [quantity, setQuantity] = useState(0);
   const [flavour, setFlavour] = useState({});
   const [extras, setExtras] = useState({});
-
+  const [popup, setPopup] = useState(false);
+  const [checkoutDetails, setCheckoutDetails] = useState({
+    name: "",
+    email: "",
+  });
   useEffect(() => {
     getUpdatedCartItems();
   }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCheckoutDetails({
+      ...checkoutDetails,
+      [name]: value,
+    });
+  };
   const getUpdatedCartItems = () => {
     const cartItems = JSON.parse(localStorage.getItem("CART"));
     setCartItems(cartItems);
@@ -111,6 +136,59 @@ function Checkout({
     setItemState("");
     setSelectedItem("");
   };
+  const getSubtotal = (data) => {
+    if (data.extras != null || data.extras.length > 0) {
+      let result = 0;
+      let num = 0;
+      for (let i = 0; i < data.extras.length; i++) {
+        let extras = data.extras[i];
+        if (extras.price != "") {
+          num += parseFloat(extras.price) * extras.quantity;
+        }
+      }
+      result = parseFloat(data.price) * data.quantity;
+      return (result + num).toFixed(2);
+    }
+    return data.price;
+  };
+  // console.log(cartItems);
+  const placeOrder = () => {
+    const resultCart = {};
+    const food = [];
+    for (let i = 0; i < cartItems.length; i++) {
+      const obj = {};
+      obj.productName = cartItems[i].name;
+      obj.productPrice = cartItems[i].price;
+      obj.productQuantity = cartItems[i].quantity;
+      obj.productType = cartItems[i].category;
+      obj.specialInstructions = "";
+      if (cartItems[i].extras != null && cartItems[i].extras.length > 0) {
+      }
+      food.push(obj);
+    }
+    const x = getDateAndTime();
+    const time = x.formattedTime;
+    const date = x.formattedDate;
+    console.log(time, date);
+    const storeName = Object.keys(store[0])[0];
+    console.log(storeName);
+    console.log(cartItems);
+    resultCart.Name = checkoutDetails.name;
+    resultCart.email = checkoutDetails.email;
+    resultCart.paid = "paid";
+    resultCart.status = "In Progress";
+    resultCart.storeName = storeName;
+    resultCart.time = time;
+    resultCart.date = date;
+    resultCart.orderType = "collection";
+    resultCart.estimate = "30";
+    resultCart.deliveryInstructions = "";
+    resultCart.phoneNumber = "";
+    resultCart.total = total;
+    resultCart.food = food;
+    console.log(resultCart);
+  };
+
   return !edit ? (
     <div
       style={{
@@ -121,7 +199,7 @@ function Checkout({
         overflow: "hidden",
       }}
     >
-      <table style={{ width: "80%", margin: "auto" }}>
+      <table style={{ width: "85%", margin: "auto" }}>
         <tr>
           <th>Category</th>
           <th>Name</th>
@@ -129,8 +207,9 @@ function Checkout({
           <th>Extras</th>
           <th>Price</th>
           <th>Quantity</th>
-          <th>Remove</th>
-          <th>Edit Cart</th>
+          <th>Remove Item</th>
+          <th>Subtotal</th>
+          <th>Edit Item</th>
         </tr>
         {cartItems != null &&
           cartItems.map((data, i) => {
@@ -147,12 +226,13 @@ function Checkout({
                     onClick={() => removeItem(i)}
                     className="removeButton"
                   >
-                    Remove Item
+                    Remove
                   </button>
                 </td>
+                <td>R{getSubtotal(data)}</td>
                 <td>
                   <button onClick={() => editItem(i)} className="editButton">
-                    Edit Item
+                    Edit
                   </button>
                 </td>
               </tr>
@@ -160,12 +240,73 @@ function Checkout({
           })}
       </table>
       <div className="bottomFixedBar" style={{ width: "50%" }}>
-        <button className="checkoutButton">Place Order</button>
+        <button className="checkoutButton" onClick={() => setPopup(true)}>
+          Place Order
+        </button>
 
         <button onClick={() => clearCart()} className="checkoutButton">
           Clear Cart
         </button>
       </div>
+      <Modal
+        // style={{
+        //   position: "fixed",
+        //   width: "50%",
+        //   height: "40vh",
+        //   margin: "auto",
+        //   borderRadius: "30px",
+        //   inset: "0px",
+        //   backgroundColor: "black",
+        // }}
+        style={customStyles}
+        isOpen={popup}
+      >
+        <h2>Please enter customers details below</h2>
+        <label className="place-order-label">Name</label>
+        <br></br>
+        <input
+          name="name"
+          value={checkoutDetails.name}
+          onChange={(e) => handleChange(e)}
+          className="place-order-input"
+        />
+        <br></br>
+        <label className="place-order-label">Email</label>
+        <br></br>
+        <input
+          name="email"
+          value={checkoutDetails.email}
+          onChange={(e) => handleChange(e)}
+          className="place-order-input"
+        />
+        <p>order receipts will be sent to store and customers email address</p>
+        <button
+          style={{
+            width: "150px",
+            height: "45px",
+            fontSize: "larger",
+            marginTop: "20px",
+            marginRight: "30px",
+          }}
+          onClick={() => placeOrder()}
+          className="checkoutButton"
+        >
+          Place order
+        </button>
+        <button
+          onClick={() => setPopup(false)}
+          style={{
+            width: "150px",
+            height: "45px",
+            fontSize: "larger",
+            marginTop: "20px",
+            marginLeft: "30px",
+          }}
+          className="checkoutButton"
+        >
+          Cancel
+        </button>
+      </Modal>
     </div>
   ) : (
     <>

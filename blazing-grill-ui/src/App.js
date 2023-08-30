@@ -115,6 +115,7 @@ function App() {
         );
     }
   };
+
   if (isLoggedIn === undefined) {
     return (
       <div className="App">
@@ -177,7 +178,7 @@ function App() {
                       color: "white",
                     }}
                   >
-                    The Blazing Grill In Store Point of Sale
+                    The Blazing Grill
                   </h1>
                   <img
                     onClick={() => (window.location.href = "/BlazingGrill-UI")}
@@ -256,6 +257,7 @@ function App() {
                     getTotalFromCart={getTotalFromCart}
                     total={total}
                     setItemState={setItemState}
+                    store={store}
                   />
                 )}
               </>

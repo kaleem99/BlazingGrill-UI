@@ -53,8 +53,8 @@
 }
 
 .removeButton {
-  width: auto;
-  height: 40px;
+  min-width: 100px;
+  height: 45px;
   background-color: #f7941d;
   font-size: large;
   border: none;
@@ -64,8 +64,8 @@
   font-weight: bold;
 }
 .editButton {
-  width: auto;
-  height: 40px;
+  min-width: 100px;
+  height: 45px;
   background-color: darkgray;
   font-size: large;
   border: none;
