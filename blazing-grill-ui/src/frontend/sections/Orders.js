@@ -176,7 +176,8 @@ function Orders({
   };
   const changeOrderStatus = (userId, data) => {
     const userRef = doc(db, "Orders", userId);
-    // console.log(userRef);
+    console.log(userId, data);
+    console.log(changeState)
     // let x = document.getElementById("SelectValue");
     const newData = data;
     newData.status = changeState;
@@ -189,7 +190,7 @@ function Orders({
   const handleNext = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
-
+  // console.log(inProgress)
   // Function to handle the "back" button click
   const handleBack = () => {
     setCurrentPage((prevPage) => prevPage - 1);
@@ -348,7 +349,7 @@ function Orders({
                 <td>
                   <p
                     className="BackButton"
-                    style={{width: "50px", height: "50px", border: "none"}}
+                    style={{ width: "50px", height: "50px", border: "none" }}
                     onClick={() => setCustomersOrders([])}
                   >
                     <MdOutlineArrowCircleLeft />
@@ -383,7 +384,7 @@ function Orders({
                   </td>
                   <td>{items.extras ? items.extras.join(", ") : "None"}</td>
                   <td>{items.productQuantity}</td>
-                  <td>R{items.productPrice.toFixed(2)}</td>
+                  <td>R{items.productPrice}</td>
                 </tr>
               ))}
             </table>

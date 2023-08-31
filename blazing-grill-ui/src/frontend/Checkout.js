@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import ViewItem from "../components/viewItems";
 import getDateAndTime from "../helpers/getDataAndTime";
 import Modal from "react-modal";
+import { db } from "../database/config";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import SendEmailOrder from "../components/sendEmailOrder";
+import { generateUniqueOrderNumber } from "../helpers/generateOrderNumber";
 const customStyles = {
   content: {
     top: "50%",
@@ -152,18 +156,28 @@ function Checkout({
     return data.price;
   };
   // console.log(cartItems);
-  const placeOrder = () => {
+  const placeOrder = async () => {
+    const colReference = collection(db, "Orders");
+
     const resultCart = {};
     const food = [];
     for (let i = 0; i < cartItems.length; i++) {
       const obj = {};
+      const extras = [];
       obj.productName = cartItems[i].name;
       obj.productPrice = cartItems[i].price;
       obj.productQuantity = cartItems[i].quantity;
       obj.productType = cartItems[i].category;
       obj.specialInstructions = "";
       if (cartItems[i].extras != null && cartItems[i].extras.length > 0) {
+        let cartExtras = cartItems[i].extras;
+        for (let j = 0; j < cartExtras.length; j++) {
+          if (cartExtras[j].quantity > 0) {
+            extras.push(`${cartExtras[j].quantity} x ${cartExtras[j].name}`);
+          }
+        }
       }
+      obj.extras = extras;
       food.push(obj);
     }
     const x = getDateAndTime();
@@ -171,6 +185,11 @@ function Checkout({
     const date = x.formattedDate;
     console.log(time, date);
     const storeName = Object.keys(store[0])[0];
+    const detailsOfStore = store[0][storeName];
+    const uniqueOrderNum = generateUniqueOrderNumber(
+      detailsOfStore.store,
+      checkoutDetails.name
+    );
     console.log(storeName);
     console.log(cartItems);
     resultCart.Name = checkoutDetails.name;
@@ -180,15 +199,49 @@ function Checkout({
     resultCart.storeName = storeName;
     resultCart.time = time;
     resultCart.date = date;
-    resultCart.orderType = "collection";
+    resultCart.orderType = "Collection";
     resultCart.estimate = "30";
     resultCart.deliveryInstructions = "";
     resultCart.phoneNumber = "";
     resultCart.total = total;
     resultCart.food = food;
-    console.log(resultCart);
+    resultCart.orderNumber = uniqueOrderNum;
+    addDoc(colReference, resultCart)
+      .then((docRef) => {
+        const addedDocumentId = docRef.id;
+        const newDocRef = doc(db, "Orders", addedDocumentId);
+        resultCart.id = addedDocumentId;
+        updateDoc(newDocRef, resultCart)
+          .then(() => {
+            console.log("Added Document with ID:", addedDocumentId);
+          })
+          .catch((error) => {
+            console.error("Error updating document:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error adding document:", error);
+      });
+    SendEmailOrder(
+      resultCart.Name,
+      resultCart.food,
+      resultCart.total,
+      resultCart.email,
+      detailsOfStore.adminUsername,
+      resultCart.orderNumber,
+      detailsOfStore.address,
+      time
+    );
+    alert(
+      "Order has been places please check the orders page and the in progress section."
+    );
+    await localStorage.removeItem("CART");
+    setCartItems([]);
+    console.log(store[0][storeName]);
+    setPopup(false);
+    getTotalFromCart();
+    console.log(colReference.id);
   };
-
   return !edit ? (
     <div
       style={{
