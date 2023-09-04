@@ -64,6 +64,7 @@ function Orders({
           setPendingOrders(items);
           console.log(items, "This is Items.");
           setInProgress(inProgress);
+          console.log(inProgress)
         } else {
           console.log("No data in the collection");
         }

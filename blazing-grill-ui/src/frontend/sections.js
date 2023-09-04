@@ -53,7 +53,7 @@ function Sections({
         const newFilteredData = newData.filter(
           (data) => data[Name] !== undefined && data
         );
-
+        console.log(newFilteredData);
         setstoreStatus(newFilteredData[0][Name].storeStatus);
         // console.log(1);
       }

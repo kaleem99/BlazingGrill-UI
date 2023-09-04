@@ -5,6 +5,7 @@ import { auth } from "../../database/config";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import PlacesAutocomplete, {
@@ -87,6 +88,9 @@ function Register({ setState }) {
         const user = userCredential.user;
         console.log(user);
         alert("Successful");
+        updateProfile(user, {
+          displayName: formData.store,
+        });
         // navigate("/login");
         sendEmailVerification(user);
         setState("Login");
