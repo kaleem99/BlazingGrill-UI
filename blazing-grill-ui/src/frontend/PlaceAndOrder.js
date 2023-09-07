@@ -61,6 +61,12 @@ const PlaceAndOrder = ({
     }
     alert("Item has been successfully added.");
     getTotalFromCart();
+    if (extras.length > 0) {
+      setAllQuantitiesToZero();
+    }
+    if (flavour.length > 0) {
+      setAllFlavoursToFalse();
+    }
   };
   const handleExtrasQuantity = (name, type) => {
     let newQuantity = 0;
@@ -79,6 +85,14 @@ const PlaceAndOrder = ({
     });
     setExtras(updatedItems);
   };
+  const setAllQuantitiesToZero = () => {
+    const updatedItems = extras.map((item) => ({ ...item, quantity: 0 }));
+    setExtras(updatedItems);
+  };
+  const setAllFlavoursToFalse = () => {
+    const updatedItems = flavour.map((item) => ({ ...item, selected: false }));
+    setFlavour(updatedItems);
+  };
   const handleItemClicked = (food) => {
     setSelectedItem(food);
     const result =
@@ -92,24 +106,34 @@ const PlaceAndOrder = ({
       food.flavours != null
         ? food.flavours.map((items) => {
             items.selected = false;
+            items.quantity = 0;
             return items;
           })
         : [];
     setExtras(result);
     setFlavour(flavour);
   };
-  const setFlavourSelected = (index) => {
+  console.log(flavour, "flavour");
+  const setFlavourSelected = (index, quantity) => {
     console.log(index);
-    const updatedFlavours = flavour.map((data, i) => {
-      if (index === i) {
-        data.selected = true;
-      } else {
-        data.selected = false;
-      }
-      return data;
-    });
-    console.log(updatedFlavours);
-    setFlavour(updatedFlavours);
+    const totalQuantity = flavour
+      .map((data) => data.quantity)
+      .reduce((a, b) => a + b);
+    if (totalQuantity < quantity) {
+      const updatedFlavours = flavour.map((data, i) => {
+        if (index === i) {
+          data.selected = true;
+          data.quantity += 1;
+        } else {
+          if(data.quantity === 0){
+            data.selected = false;
+          }
+        }
+        return data;
+      });
+      console.log(updatedFlavours);
+      setFlavour(updatedFlavours);
+    }
   };
   return itemState === "" ? (
     <div style={{ marginTop: "100px", padding: "20px" }} className="Menu">
@@ -202,6 +226,7 @@ const PlaceAndOrder = ({
           extras={extras}
           setFlavourSelected={setFlavourSelected}
           flavour={flavour}
+          setFlavour={setFlavour}
         />
       )}
       <div className="bottomFixedBar" style={{}}>

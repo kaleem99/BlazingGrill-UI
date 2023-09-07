@@ -65,14 +65,17 @@ function Checkout({
   };
   const formatFlavours = (data) => {
     if (data.flavours.filter((item) => item.name !== "").length > 0) {
-      return data.flavours.filter((item) => item.selected)[0].name;
+      return data.flavours
+        .filter((item) => item.selected)
+        .map((item) => `${item.quantity} x ${item.name}`).join(", ");
     } else {
       return "";
     }
   };
-  const clearCart = () => {
-    localStorage.removeItem("CART");
+  const clearCart = async () => {
+    await localStorage.removeItem("CART");
     setCartItems([]);
+    getTotalFromCart();
   };
   const removeItem = async (indexToRemove) => {
     const getAllItems = JSON.parse(localStorage.getItem("CART"));
@@ -252,7 +255,7 @@ function Checkout({
         overflow: "hidden",
       }}
     >
-      <table style={{ width: "85%", margin: "auto" }}>
+      <table style={{ width: "95%", margin: "auto" }}>
         <tr>
           <th>Category</th>
           <th>Name</th>
@@ -261,7 +264,7 @@ function Checkout({
           <th>Price</th>
           <th>Quantity</th>
           <th>Remove Item</th>
-          <th>Subtotal</th>
+          <th>Total</th>
           <th>Edit Item</th>
         </tr>
         {cartItems != null &&
@@ -371,6 +374,7 @@ function Checkout({
         extras={extras}
         setFlavourSelected={setFlavourSelected}
         flavour={flavour}
+        setFlavour={setFlavour}
       />
       <div className="bottomFixedBar" style={{}}>
         <div className="bottomFixedBarInner">

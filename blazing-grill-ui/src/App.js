@@ -92,6 +92,8 @@ function App() {
       }
       num += extrasNum;
       setTotal(num.toFixed(2));
+    } else {
+      setTotal(0);
     }
   };
 
@@ -198,7 +200,11 @@ function App() {
                   {checkout ? (
                     <>
                       <button
-                        onClick={() => setCheckout(false)}
+                        onClick={() => {
+                          setItemState("");
+                          setSelectedItem("");
+                          setCheckout(false);
+                        }}
                         style={{
                           position: "absolute",
                           right: "10px",
@@ -218,11 +224,15 @@ function App() {
                     </>
                   ) : (
                     <button
-                      onClick={() => setCheckout(true)}
+                      onClick={() => {
+                        setItemState("");
+                        setSelectedItem("");
+                        setCheckout(true);
+                      }}
                       className="checkoutPlaceOrder"
                       style={itemState != "" ? { right: "210px" } : {}}
                     >
-                      Check out
+                      Checkout
                     </button>
                   )}
                   {itemState === "" && selectedItem === "" && (

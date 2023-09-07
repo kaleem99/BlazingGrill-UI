@@ -1,3 +1,5 @@
+import { MdRestoreFromTrash } from "react-icons/md";
+
 const ViewItem = ({
   selectedItem,
   setQuantity,
@@ -6,7 +8,30 @@ const ViewItem = ({
   extras,
   setFlavourSelected,
   flavour,
+  setFlavour,
 }) => {
+  const subtractFlavour = (index, flavour) => {
+    const updatedFlavours = flavour.map((data, i) => {
+      if (index === i && data.quantity > 0) {
+        data.selected = true;
+        data.quantity -= 1;
+      }
+      return data;
+    });
+    console.log(updatedFlavours);
+    setFlavour(updatedFlavours);
+  };
+  const clearFlavourQuantity = (index, flavour) => {
+    const updatedFlavours = flavour.map((data, i) => {
+      if (index === i && data.quantity > 0) {
+        data.selected = false;
+        data.quantity = 0;
+      }
+      return data;
+    });
+    console.log(updatedFlavours);
+    setFlavour(updatedFlavours);
+  };
   return (
     <div style={{ marginTop: "4%", padding: "50px" }}>
       <div
@@ -215,21 +240,58 @@ const ViewItem = ({
                 <div
                   style={{
                     margin: "20px auto",
-                    width: "90%",
+                    width: "95%",
                     color: "white",
                     border: "1px solid",
+                    display: "flex",
                   }}
                 >
+                  <button
+                    onClick={() => subtractFlavour(i, flavour)}
+                    style={{ fontSize: "35px", width: "80px" }}
+                  >
+                    -
+                  </button>
                   <button
                     style={
                       data.selected
                         ? { background: "#F7941D", fontWeight: "900" }
                         : {}
                     }
-                    onClick={() => setFlavourSelected(i)}
+                    onClick={() => setFlavourSelected(i, quantity)}
                     className="flavourButton"
                   >
-                    {data.name}
+                    <p style={{ width: "70%" }}> {data.name}</p>{" "}
+                    <p
+                      style={{
+                        width: "30%",
+                        fontSize: "25px",
+                        fontWeight: "bold",
+                        marginBlockStart: "0.65em",
+                        // marginBlockEnd: "1em",
+                      }}
+                    >
+                      {data.quantity}
+                    </p>
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Are you sure you want to empty the flavour quantity"
+                        ) === true
+                      ) {
+                        clearFlavourQuantity(i, flavour);
+                      }
+                    }}
+                    style={{
+                      fontSize: "25px",
+                      width: "100px",
+                      background: "none",
+                      color: "white",
+                    }}
+                  >
+                    <MdRestoreFromTrash />
                   </button>
                 </div>
               ))}
