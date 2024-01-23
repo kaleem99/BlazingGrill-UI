@@ -231,7 +231,7 @@ const PlaceAndOrder = ({
       )}
       <div className="bottomFixedBar" style={{}}>
         <div className="bottomFixedBarInner">
-          <h1 className="bottomInnerTotal">Total: {total}</h1>
+          <p className="bottomInnerTotal">Total: {total}</p>
         </div>
         {selectedItem !== "" ? (
           <button
