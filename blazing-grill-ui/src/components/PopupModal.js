@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 
-function OrderConfirmationModal({ food, onAccept, onDecline, setTime, time }) {
+function OrderConfirmationModal({
+  food,
+  onAccept,
+  onDecline,
+  setTime,
+  time,
+  setTimerObj,
+  timerObj,
+}) {
   const [isOpen, setIsOpen] = useState(true);
   const handleAccept = () => {
     if (time === "") {
@@ -22,6 +30,9 @@ function OrderConfirmationModal({ food, onAccept, onDecline, setTime, time }) {
     // "\n";
   }
   console.log(foodStringData);
+  // const updateTimer = () => {
+  //   let min = 
+  // }
   return (
     <Modal
       isOpen={isOpen}
@@ -57,6 +68,7 @@ function OrderConfirmationModal({ food, onAccept, onDecline, setTime, time }) {
         <option value="50">50 minutes</option>
         <option value="60">60 minutes</option>
       </select>
+      {" "}{timerObj}
       <p>Do you want to accept this order?</p>
       <button className="btnOrder" onClick={handleAccept}>
         Accept

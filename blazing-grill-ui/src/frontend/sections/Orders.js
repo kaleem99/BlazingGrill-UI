@@ -34,6 +34,7 @@ function Orders({
   const [changeState, setChangeState] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // State to track the current page or index
   const [customerView, setCustomerView] = useState(false);
+  const [timerObj, setTimerObj] = useState("00:00");
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
@@ -217,6 +218,8 @@ function Orders({
                 onDecline={() => handleDeclineOrder(i)}
                 setTime={setTime}
                 time={time}
+                setTimerObj={setTimerObj}
+                timerObj={timerObj}
               />
             );
           })}
@@ -400,7 +403,12 @@ function Orders({
       </div>
     );
   } else {
-    return <OrdersCustomerView orders={checkConditionFunction(orderSection)} setCustomerView={setCustomerView} />;
+    return (
+      <OrdersCustomerView
+        orders={checkConditionFunction(orderSection)}
+        setCustomerView={setCustomerView}
+      />
+    );
   }
 }
 
