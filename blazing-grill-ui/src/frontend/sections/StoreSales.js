@@ -37,8 +37,10 @@ function StoreSales({ storeName, storeDetails }) {
       const rejectedDatabaseOrders = filteredArray.filter(
         (data) => data.status !== "Complete"
       ).length;
+      console.log(filteredArray)
       const totalSum = filteredArray.reduce((accumulator, currentObject) => {
-        return accumulator + currentObject.total;
+
+        return parseFloat(accumulator) + parseFloat(currentObject.total);
       }, 0);
       const today = new Date().toISOString().split("T")[0];
       const filteredTodaysSales = filteredArray.filter(
@@ -54,6 +56,7 @@ function StoreSales({ storeName, storeDetails }) {
         Delivery: deliverySales,
         Collection: collectionSales,
       });
+      console.log(totalSum, "TOTAL SUM:")
       setSales(totalSum);
       setCurrentSales(
         filteredTodaysSales.reduce((accumulator, currentObject) => {
@@ -174,6 +177,7 @@ function StoreSales({ storeName, storeDetails }) {
                 {i === 0 && (
                   <>
                     <p className="SalesText">Total Store Sales: </p>
+                    {console.log(sales)}
                     <h2 className="Sales">
                       R{sales === "" ? 0 : sales.toFixed(2)}
                     </h2>

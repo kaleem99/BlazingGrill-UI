@@ -20,6 +20,7 @@ import MenuSection from "./sections/MenuSections";
 import StoreMenu from "./StoreMenu/StoreMenu";
 import DeliveryDriver from "./sections/DeliveryDriver";
 import Account from "./sections/Account";
+import { auth } from "../database/config";
 function Sections({
   state,
   setState,
@@ -30,6 +31,11 @@ function Sections({
   storeStatus,
   store,
   auth,
+  setPendingOrders,
+  setInProgress,
+  PendingOrders,
+  inProgress,
+  currentStore
 }) {
   const [hasbeenClicked, setHasBeenClicked] = useState(false);
   const loginDetails = async () => {
@@ -41,7 +47,6 @@ function Sections({
     //   setStore(newData);
     // });
   };
-
   const checkStoreStatus = () => {
     const data = getDocs(collection(db, "BlazingStores")).then(
       (querySnapshot) => {
@@ -53,7 +58,6 @@ function Sections({
         const newFilteredData = newData.filter(
           (data) => data[Name] !== undefined && data
         );
-        console.log(newFilteredData);
         setstoreStatus(newFilteredData[0][Name].storeStatus);
         // console.log(1);
       }
@@ -75,20 +79,29 @@ function Sections({
       return <AddMenuItems adminUserEmail={auth.currentUser.email} />;
     case "Orders":
       checkStoreStatus();
-      if (store[0]) {
-        let storeName = Object.keys(store[0]);
-        const detailsOfStore = store[0][storeName[0]] || {
+      const testing = storeDetails.filter((stores, i) => {
+        if (stores[Object.keys(storeDetails[i])[0]].adminUsername === auth.currentUser.email) {
+          return stores;
+        }
+      });
+      if (testing[0]) {
+        let storeName = Object.keys(testing[0]);
+        const detailsOfStore = testing[0][storeName[0]] || {
           adminUsername: "",
           storeName: "",
           address: "",
-        };
+        }; 
         return (
           <Orders
             storeName={storeName}
             storeStatus={storeStatus}
             setstoreStatus={setstoreStatus}
-            store={store}
+            store={testing}
             detailsOfStore={detailsOfStore}
+            setPendingOrders={setPendingOrders}
+            setInProgress={setInProgress}
+            PendingOrders={PendingOrders}
+            inProgress={inProgress}
           />
         );
       }
@@ -115,16 +128,22 @@ function Sections({
     case "Menu":
       return <StoreMenu />;
     case "Account":
-      if (store[0]) {
-        let storeName = Object.keys(store[0]);
-        const detailsOfStore = store[0][storeName[0]] || {
+
+      const testing2 = storeDetails.filter((stores, i) => {
+        if (stores[Object.keys(storeDetails[i])[0]].adminUsername === auth.currentUser.email) {
+          return stores;
+        }
+      });
+      if (testing2[0]) {
+        let storeName = Object.keys(testing2[0]);
+        const detailsOfStore = testing2[0][storeName[0]] || {
           adminUsername: "",
           storeName: "",
           address: "",
         };
         return (
           <Account
-            store={store}
+            store={testing2[0]}
             setState={setState}
             storeName={storeName}
             detailsOfStore={detailsOfStore}

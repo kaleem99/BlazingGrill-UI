@@ -670,10 +670,8 @@ Store Menu
   grid-template-columns: 50% 50%;
   text-align: center;
   font-size: larger;
-  
-  
 }
-.OuterContentCustomerView{
+.OuterContentCustomerView {
   height: 99.5vh;
   position: absolute;
   background-image: url("./assets/smokeyBackground1024_1.png");
@@ -691,11 +689,12 @@ Store Menu
   align-items: center;
   display: flex;
   border-radius: 5px;
+  border: 1px solid white;
 }
-.customerColumnsItems{
+.customerColumnsItems {
   /* border: 1px solid white; */
 }
-.OrdersCustomerView{
+.OrdersCustomerView {
   width: 100%;
   overflow-x: hidden;
   height: 100%;

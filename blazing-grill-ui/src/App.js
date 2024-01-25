@@ -3,7 +3,14 @@ import "./slideUp.css";
 // import { collection, addDoc } from "firebase/firestore";
 import { db } from "./database/config";
 import { useState, useEffect } from "react";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import NavMenu from "./frontend/NavigationMenu";
 import Sections from "./frontend/sections";
 import { auth } from "./database/config";
@@ -12,7 +19,17 @@ import Login from "./frontend/sections/Login";
 import Register from "./frontend/sections/Register";
 import Lottie from "react-lottie";
 import PlaceAndOrder from "./frontend/PlaceAndOrder";
+import OrderConfirmationModal from "./components/PopupModal";
+// ...
+import { getCurrentTime } from "./helpers/getCurrentTime";
+
+import SendEmailOrder from "./components/sendEmailOrder";
+import SendOrderCancellation from "./components/SendOrderCancellation";
+import { clearCart } from "./helpers/ClearCart";
+
+// ...
 import Checkout from "./frontend/Checkout";
+import { getOrders } from "./helpers/GetOrdersPlaced";
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -42,14 +59,52 @@ function App() {
   const [itemState, setItemState] = useState("");
   const [checkout, setCheckout] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
+  const [PendingOrders, setPendingOrders] = useState([]);
+  const [inProgress, setInProgress] = useState([]);
 
+  // ...
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [time, setTime] = useState("");
+  const [timerObj, setTimerObj] = useState("00:00");
+  // ...
+  let store = "";
   useEffect(() => {
+    getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
+      const newData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setStoreDetails(newData);
+      store = newData.filter((stores, i) => {
+        if (stores[Object.keys(newData[i])[0]].adminUsername === email) {
+          return stores;
+        }
+      });
+      setCurrentStore(store);
+      // console.log(store[0], auth.currentUser.displayName)
+      // console.log(Object.keys(store[0]), "STOEE")
+      // if (store[0]) {
+      //   const storeName = Object.keys(store[0])[0];
+      //   setCurrentStore(store);
+
+      //   // console.log(store[0][storeName].store);
+      // }
+    });
     onAuthStateChanged(auth, (user) => {
+      console.log(store, auth.currentUser);
+      if (auth) {
+        console.log(auth.currentUser);
+        getOrders(
+          auth.currentUser.displayName,
+          setPendingOrders,
+          setInProgress
+        );
+      }
       if (user) {
         if (user.emailVerified) {
           setIsLoggedIn(true);
           setEmail(user.email);
-          console.log(user);
         } else {
           setIsLoggedIn(false);
           console.log("user is logged out", isLoggedIn);
@@ -62,15 +117,9 @@ function App() {
         setIsLoggedIn(false);
         setState("Login");
       }
-
-      getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
-        const newData = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setStoreDetails(newData);
-      });
     });
+    // ...
+
     // ...
     getTotalFromCart();
   }, []);
@@ -97,11 +146,6 @@ function App() {
     }
   };
 
-  const store = storeDetails.filter((stores, i) => {
-    if (stores[Object.keys(storeDetails[i])[0]].adminUsername === email) {
-      return stores;
-    }
-  });
   const loginRegister = () => {
     switch (state) {
       case "Register":
@@ -117,7 +161,99 @@ function App() {
         );
     }
   };
+  // let storeName = Object.keys(testing[0]);
+  // const detailsOfStore = testing[0][storeName[0]] || {
+  //   adminUsername: "",
+  //   storeName: "",
+  //   address: "",
+  // };
 
+  const getDetailsOfStore = () => {
+    const testing = storeDetails.filter((stores, i) => {
+      if (
+        stores[Object.keys(storeDetails[i])[0]].adminUsername ===
+        auth.currentUser.email
+      ) {
+        return stores;
+      }
+    });
+    let storeName = Object.keys(testing[0]);
+    const detailsOfStore = testing[0][storeName[0]] || {
+      adminUsername: "",
+      storeName: "",
+      address: "",
+    };
+    return detailsOfStore;
+  };
+  const handleAcceptOrder = (index) => {
+    const detailsOfStore = getDetailsOfStore();
+    const docRef = doc(db, "Orders", PendingOrders[index].id);
+    const foodOrder = PendingOrders[index].food;
+    const newOrderData = PendingOrders[index];
+    newOrderData.status = "In Progress";
+    newOrderData.estimate = time;
+    SendEmailOrder(
+      newOrderData.Name,
+      newOrderData.food,
+      newOrderData.total,
+      newOrderData.email,
+      detailsOfStore.adminUsername,
+      newOrderData.orderNumber,
+      detailsOfStore.address,
+      time
+    );
+    updateDoc(docRef, newOrderData);
+
+    alert("Order has been accepted");
+    //
+    clearCart(newOrderData.userId);
+    let newPendingOrder = PendingOrders.shift();
+    setPendingOrders(PendingOrders);
+  };
+
+  const handleDeclineOrder = (index) => {
+    const detailsOfStore = getDetailsOfStore();
+
+    const docRef = doc(db, "Orders", PendingOrders[index].id);
+    const foodOrder = PendingOrders[index].food;
+    const newOrderData = PendingOrders[index];
+    newOrderData.status = "Declined";
+    addDoc(collection(db, "DeclinedOrders"), newOrderData);
+    updateDoc(docRef, newOrderData);
+    deleteDoc(docRef);
+    const deletedOrder = PendingOrders.shift();
+    SendOrderCancellation(
+      newOrderData.Name,
+      newOrderData.food,
+      newOrderData.total,
+      newOrderData.email,
+      detailsOfStore.adminUsername,
+      newOrderData.orderNumber,
+      detailsOfStore.address,
+      newOrderData.phoneNumber,
+      newOrderData.orderType
+    );
+    // newOrderData.checkoutUrl;
+    fetch(
+      `https://express-template-backend.onrender.com/refund/${newOrderData.checkoutID}/`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to process the refund.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Display a success message to the user when the refund is successful
+        alert("Order refund has been processed successfully.");
+      })
+      .catch((error) => {
+        console.error("Error processing the refund:", error);
+        // Display an error message to the user when the refund request fails
+        alert("Failed to process the refund. Please try again later.");
+      });
+  };
+  // console.log(store, true, store === "")
   if (isLoggedIn === undefined) {
     return (
       <div className="App">
@@ -129,6 +265,22 @@ function App() {
     const urlChar = arrUrl[arrUrl.length - 1];
     return (
       <div className="App">
+        {PendingOrders.length > 0 &&
+          PendingOrders.map((data, i) => {
+            return (
+              <OrderConfirmationModal
+                food={PendingOrders[i].food}
+                onAccept={() => handleAcceptOrder(i)}
+                onDecline={() => handleDeclineOrder(i)}
+                setTime={setTime}
+                time={time}
+                setTimerObj={setTimerObj}
+                timerObj={timerObj}
+                getCurrentTime={getCurrentTime}
+                data={data}
+              />
+            );
+          })}
         {!isLoggedIn ? (
           <>
             {/* <Lottie options={defaultOptions} height={400} width={400} /> */}
@@ -161,6 +313,11 @@ function App() {
                     storeStatus={storeStatus}
                     setstoreStatus={setstoreStatus}
                     auth={auth}
+                    setPendingOrders={setPendingOrders}
+                    setInProgress={setInProgress}
+                    PendingOrders={PendingOrders}
+                    inProgress={inProgress}
+                    currentStore={currentStore}
                   />
                 </div>
               </>

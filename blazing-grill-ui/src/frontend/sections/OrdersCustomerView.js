@@ -70,7 +70,7 @@ const OrdersCustomerView = ({ orders, setCustomerView }) => {
                     style={{ marginBlockStart: "15px", marginBlockEnd: "0px" }}
                   >
                     {item.name}
-                    {i == 0 && (
+                    {i === 0 && (
                       <div
                         className="ordersExpand2"
                         onClick={() => setCustomerView(false)}
@@ -78,7 +78,7 @@ const OrdersCustomerView = ({ orders, setCustomerView }) => {
                         <MdExitToApp />
                       </div>
                     )}{" "}
-                    {i == 1 && (
+                    {i === 1 && (
                       <div
                         className="ordersExpand"
                         onClick={() => setExpand(!expand)}
@@ -92,7 +92,7 @@ const OrdersCustomerView = ({ orders, setCustomerView }) => {
               <div className="customerColumns">
                 {filteredData.map(
                   (item2) =>
-                    item.status == item2.status && (
+                    item.status === item2.status && (
                       <div className="customerColumnsItems">
                         <div className="sectionColumnItemOrders">
                           {item2.orderNumber}
