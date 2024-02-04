@@ -26,18 +26,17 @@
   /* padding: 10px; */
   border: 1px solid gray;
   cursor: pointer;
-  height: 100px;
+  height: 60px;
 }
 .sliderComp {
   position: fixed;
-  width: 200px;
-  height: 20px;
+  width: 100px;
   /* background-color: black; */
   background-image: url("./assets/smokeyBackground1024_1.png");
-  top: 0;
+  top: 10;
   left: auto;
   right: 0;
-  margin: auto;
+  margin: 20px auto;
   color: white;
   height: auto;
 }

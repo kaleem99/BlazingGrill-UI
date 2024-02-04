@@ -35,7 +35,7 @@ function AccountDetails({
   const [storeN, setStoreName] = useState(detailsOfStore.store);
   const [address, setAddress] = useState(detailsOfStore.address);
   const [password, setPassword] = useState("");
-
+  console.log(store)
   const upDateStoreInformation = (e) => {
     switch (e.target.name) {
       case "email":
@@ -57,7 +57,7 @@ function AccountDetails({
     if (password !== "P@ssw0rd786") {
       return alert("admin password is incorrect");
     }
-    const examcollref = doc(db, "BlazingStores", store[0].id);
+    const examcollref = doc(db, "BlazingStores", store.id);
     try {
       updateProfile(auth.currentUser, {
         email: email,

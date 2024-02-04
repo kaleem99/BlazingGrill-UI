@@ -10,29 +10,29 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../../database/config";
-import SendEmailOrder from "../../components/sendEmailOrder";
-import SendOrderCancellation from "../../components/SendOrderCancellation";
-import { clearCart } from "../../helpers/ClearCart";
+
 import { MdOutlineArrowCircleLeft } from "react-icons/md";
-import OrderConfirmationModal from "../../components/PopupModal";
+import OrdersCustomerView from "./OrdersCustomerView";
+import { getOrders } from "../../helpers/GetOrdersPlaced";
 function Orders({
   storeStatus,
   setstoreStatus,
   storeName,
   store,
   detailsOfStore,
+  setPendingOrders,
+  setInProgress,
+  PendingOrders,
+  inProgress
 }) {
-  const [PendingOrders, setPendingOrders] = useState([]);
-  const [inProgress, setInProgress] = useState([]);
   const examcollref = doc(db, "BlazingStores", store[0].id);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [time, setTime] = useState("");
+
   const [customersOrders, setCustomersOrders] = useState([]);
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
   const [changeState, setChangeState] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // State to track the current page or index
-
+  const [customerView, setCustomerView] = useState(false);
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
@@ -43,38 +43,7 @@ function Orders({
   // Get the items to display for the current page
   useEffect(() => {
     setstoreStatus(detailsOfStore.storeStatus);
-    const unsubscribe = onSnapshot(
-      collection(db, "Orders"),
-      (querySnapshot) => {
-        if (!querySnapshot.empty) {
-          const items = [];
-          const inProgress = [];
-          querySnapshot.forEach((doc) => {
-            if (
-              doc.data().status === "Pending" &&
-              doc.data().storeName === storeName[0]
-            ) {
-              audio.play();
-              items.push({ id: doc.id, ...doc.data() });
-            }
-            if (doc.data().storeName === storeName[0]) {
-              inProgress.push(doc.data());
-            }
-          });
-          setPendingOrders(items);
-          console.log(items, "This is Items.");
-          setInProgress(inProgress);
-          console.log(inProgress)
-        } else {
-          console.log("No data in the collection");
-        }
-      }
-    );
-
-    return () => {
-      // Cleanup function to unsubscribe from snapshot listener
-      unsubscribe();
-    };
+    // getOrders(storeName, setPendingOrders, setInProgress);
   }, []);
   const handleChange = () => {
     let status = "";
@@ -105,80 +74,15 @@ function Orders({
     return status;
   };
 
-  const handleAcceptOrder = (index) => {
-    const docRef = doc(db, "Orders", PendingOrders[index].id);
-    const foodOrder = PendingOrders[index].food;
-    const newOrderData = PendingOrders[index];
-    newOrderData.status = "In Progress";
-    newOrderData.estimate = time;
-    SendEmailOrder(
-      newOrderData.Name,
-      newOrderData.food,
-      newOrderData.total,
-      newOrderData.email,
-      detailsOfStore.adminUsername,
-      newOrderData.orderNumber,
-      detailsOfStore.address,
-      time
-    );
-    updateDoc(docRef, newOrderData);
 
-    alert("Order has been accepted");
-    //
-    clearCart(newOrderData.userId);
-    let newPendingOrder = PendingOrders.shift();
-    setPendingOrders(PendingOrders);
-  };
-
-  const handleDeclineOrder = (index) => {
-    const docRef = doc(db, "Orders", PendingOrders[index].id);
-    const foodOrder = PendingOrders[index].food;
-    const newOrderData = PendingOrders[index];
-    newOrderData.status = "Declined";
-    addDoc(collection(db, "DeclinedOrders"), newOrderData);
-    updateDoc(docRef, newOrderData);
-    deleteDoc(docRef);
-    const deletedOrder = PendingOrders.shift();
-    SendOrderCancellation(
-      newOrderData.Name,
-      newOrderData.food,
-      newOrderData.total,
-      newOrderData.email,
-      detailsOfStore.adminUsername,
-      newOrderData.orderNumber,
-      detailsOfStore.address,
-      newOrderData.phoneNumber,
-      newOrderData.orderType
-    );
-    // newOrderData.checkoutUrl
-    fetch(
-      `https://express-template-backend.onrender.com/refund/${newOrderData.checkoutID}/`
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to process the refund.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        // Display a success message to the user when the refund is successful
-        alert("Order refund has been processed successfully.");
-      })
-      .catch((error) => {
-        console.error("Error processing the refund:", error);
-        // Display an error message to the user when the refund request fails
-        alert("Failed to process the refund. Please try again later.");
-      });
-  };
   // console.log(PendingOrders);
   const setOrders = (data) => {
     setCustomersOrders(data);
   };
   const changeOrderStatus = (userId, data) => {
     const userRef = doc(db, "Orders", userId);
-    console.log(userId, data);
-    console.log(changeState)
+
+
     // let x = document.getElementById("SelectValue");
     const newData = data;
     newData.status = changeState;
@@ -204,196 +108,197 @@ function Orders({
       return inProgress;
     }
   };
-  return (
-    <div className="Home">
-      {PendingOrders.length > 0 &&
-        PendingOrders.map((data, i) => {
-          return (
-            <OrderConfirmationModal
-              food={PendingOrders[i].food}
-              onAccept={() => handleAcceptOrder(i)}
-              onDecline={() => handleDeclineOrder(i)}
-              setTime={setTime}
-              time={time}
+  if (!customerView) {
+    return (
+      <div className="Home">
+        
+        {storeName[0] !== "admin" && (
+          <>
+            <Switch
+              onChange={() => setstoreStatus(handleChange())}
+              checked={storeStatus}
             />
-          );
-        })}
-      {storeName[0] !== "admin" && (
-        <>
-          <Switch
-            onChange={() => setstoreStatus(handleChange())}
-            checked={storeStatus}
-          />
-          <br></br>
-          <p style={{ color: "white", fontSize: "30px" }}>
-            store status:{" "}
-            {storeStatus ? "Accepting Orders" : "Not Accepting Orders"}
-          </p>
-        </>
-      )}
-      <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
-      <br></br>
-      <div className="ItemsSections">
-        {/* <input type="text" className="searchInputBox" /> */}
-        <button
-          className="NextAndBackButton1"
-          onClick={handleBack}
-          disabled={currentPage === 0}
-        >
-          Previous
-        </button>
-        <button
-          className="NextAndBackButton2"
-          onClick={handleNext}
-          disabled={endIndex >= inProgress.length}
-        >
-          Next
-        </button>
-        <h2
-          style={{
-            color: "white",
-            fontSize: "22px",
-            fontWeight: "bolder",
-            fontFamily: "sans-serif",
-          }}
-        >
-          Page: {currentPage + 1}
-        </h2>
+            <br></br>
+            <p style={{ color: "white", fontSize: "30px" }}>
+              store status:{" "}
+              {storeStatus ? "Accepting Orders" : "Not Accepting Orders"}
+            </p>
+          </>
+        )}
+        <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
+        <br></br>
+        <div className="ItemsSections">
+          {/* <input type="text" className="searchInputBox" /> */}
+          <button
+            className="NextAndBackButton1"
+            onClick={handleBack}
+            disabled={currentPage === 0}
+          >
+            Previous
+          </button>
+          <button
+            className="NextAndBackButton2"
+            onClick={handleNext}
+            disabled={endIndex >= inProgress.length}
+          >
+            Next
+          </button>
+          <h2
+            style={{
+              color: "white",
+              fontSize: "22px",
+              fontWeight: "bolder",
+              fontFamily: "sans-serif",
+            }}
+          >
+            Page: {currentPage + 1}
+          </h2>
 
-        <div className="container">
-          {ButtonStatus.map((value) => (
-            <button
-              className={
-                orderSection === value ? "column btnActiveOrders" : "column"
-              }
-              onClick={() => handleStateChange(value)}
-            >
-              {value}
-            </button>
-          ))}
-        </div>
-        <div>
-          {customersOrders.length === 0 ? (
-            <table>
-              <tr>
-                <th>Order Number</th>
-                <th>Order Type</th>
-                <th>Customer Name</th>
-                <th>Customer Email</th>
-                <th>Customer Cell Number</th>
-                <th>Date</th>
-                <th>View Orders</th>
-                <th>Change Status</th>
-              </tr>
-              {checkConditionFunction(orderSection)
-                .sort((a, b) => (b.date > a.date ? 1 : -1))
-                .map(
-                  (data, i) =>
-                    data.status === orderSection && (
-                      <tr>
-                        <td>{data.orderNumber}</td>
-                        <td>{data.orderType}</td>
-                        <td>{data.Name}</td>
-                        <td>{data.email}</td>
-                        <td>{data.phoneNumber}</td>
-                        <td>{data.date}</td>
-                        <td>
-                          <button
-                            onClick={() => setOrders(data)}
-                            style={{
-                              height: "35px",
-                              borderRadius: "10px",
-                              border: "2px solid #f7941d",
-                            }}
-                          >
-                            View Customers Orders
-                          </button>
-                        </td>
-                        <td>
-                          <select
-                            id="SelectValue"
-                            onChange={(e) => setChangeState(e.target.value)}
-                            defaultValue={data.status}
-                          >
-                            <option value="In Progress">In Progress</option>
-                            {(orderSection === "Delivery" ||
-                              orderSection === "Collection") && (
-                              <option value="Complete">Complete</option>
-                            )}
-                            <option value={data.orderType}>
-                              {data.orderType}
-                            </option>
-                          </select>
-                          <button
-                            onClick={() => changeOrderStatus(data.id, data)}
-                            id="save"
-                          >
-                            Save
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                )}
-            </table>
-          ) : (
-            <table>
-              <tr>
-                <th>Go Back</th>
-                <th>Customer Name</th>
-                <th>Customer Email</th>
-                <th>Customer Phone Number</th>
-                <th>Order Type</th>
-                <th></th>
-                <th>Total</th>
-              </tr>
-              <tr>
-                <td>
-                  <p
-                    className="BackButton"
-                    style={{ width: "50px", height: "50px", border: "none" }}
-                    onClick={() => setCustomersOrders([])}
-                  >
-                    <MdOutlineArrowCircleLeft />
-                  </p>
-                </td>
-                <td>{customersOrders.Name}</td>
-                <td>{customersOrders.email}</td>
-                <td>{customersOrders.phoneNumber}</td>
-                <td>{customersOrders.orderType}</td>
-                <td></td>
-                <td>R{customersOrders.total}</td>
-              </tr>
-              <tr>
-                <th></th>
-                <th>Product Type</th>
-                <th>Product Name</th>
-                <th>Special Instructions</th>
-                <th>Extras</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-
-              {customersOrders.food.map((items) => (
+          <div className="container">
+            {ButtonStatus.map((value) => (
+              <button
+                className={
+                  orderSection === value ? "column btnActiveOrders" : "column"
+                }
+                onClick={() => handleStateChange(value)}
+              >
+                {value}
+              </button>
+            ))}
+          </div>
+          <div>
+            {customersOrders.length === 0 ? (
+              <table>
                 <tr>
-                  <td></td>
-                  <td>{items.productType}</td>
-                  <td>{items.productName}</td>
-                  <td>
-                    {items.specialInstructions
-                      ? items.specialInstructions
-                      : "None"}
-                  </td>
-                  <td>{items.extras ? items.extras.join(", ") : "None"}</td>
-                  <td>{items.productQuantity}</td>
-                  <td>R{items.productPrice}</td>
+                  <th>Order Number</th>
+                  <th>Order Type</th>
+                  <th>Customer Name</th>
+                  <th>Customer Email</th>
+                  <th>Customer Cell Number</th>
+                  <th>Date</th>
+                  <th>View Orders</th>
+                  <th>Change Status</th>
                 </tr>
-              ))}
-            </table>
-          )}
+                {checkConditionFunction(orderSection)
+                  .sort((a, b) => (b.date > a.date ? 1 : -1))
+                  .map(
+                    (data, i) =>
+                      data.status === orderSection && (
+                        <tr>
+                          <td>{data.orderNumber}</td>
+                          <td>{data.orderType}</td>
+                          <td>{data.Name}</td>
+                          <td>{data.email}</td>
+                          <td>{data.phoneNumber}</td>
+                          <td>{data.date}</td>
+                          <td>
+                            <button
+                              onClick={() => setOrders(data)}
+                              style={{
+                                height: "35px",
+                                borderRadius: "10px",
+                                border: "2px solid #f7941d",
+                              }}
+                            >
+                              View Customers Orders
+                            </button>
+                          </td>
+                          <td>
+                            <select
+                              id="SelectValue"
+                              onChange={(e) => setChangeState(e.target.value)}
+                              defaultValue={data.status}
+                            >
+                              <option value="In Progress">In Progress</option>
+                              {(orderSection === "Delivery" ||
+                                orderSection === "Collection") && (
+                                <option value="Complete">Complete</option>
+                              )}
+                              <option value={data.orderType}>
+                                {data.orderType}
+                              </option>
+                            </select>
+                            <button
+                              onClick={() => changeOrderStatus(data.id, data)}
+                              id="save"
+                            >
+                              Save
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                  )}
+                <button onClick={() => setCustomerView(true)}>
+                  Customer View
+                </button>
+              </table>
+            ) : (
+              <table>
+                <tr>
+                  <th>Go Back</th>
+                  <th>Customer Name</th>
+                  <th>Customer Email</th>
+                  <th>Customer Phone Number</th>
+                  <th>Order Type</th>
+                  <th></th>
+                  <th>Total</th>
+                </tr>
+                <tr>
+                  <td>
+                    <p
+                      className="BackButton"
+                      style={{ width: "50px", height: "50px", border: "none" }}
+                      onClick={() => setCustomersOrders([])}
+                    >
+                      <MdOutlineArrowCircleLeft />
+                    </p>
+                  </td>
+                  <td>{customersOrders.Name}</td>
+                  <td>{customersOrders.email}</td>
+                  <td>{customersOrders.phoneNumber}</td>
+                  <td>{customersOrders.orderType}</td>
+                  <td></td>
+                  <td>R{customersOrders.total}</td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>Product Type</th>
+                  <th>Product Name</th>
+                  <th>Special Instructions</th>
+                  <th>Extras</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                </tr>
+
+                {customersOrders.food.map((items) => (
+                  <tr>
+                    <td></td>
+                    <td>{items.productType}</td>
+                    <td>{items.productName}</td>
+                    <td>
+                      {items.specialInstructions
+                        ? items.specialInstructions
+                        : "None"}
+                    </td>
+                    <td>{items.extras ? items.extras.join(", ") : "None"}</td>
+                    <td>{items.productQuantity}</td>
+                    <td>R{items.productPrice}</td>
+                  </tr>
+                ))}
+              </table>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <OrdersCustomerView
+        orders={checkConditionFunction(orderSection)}
+        setCustomerView={setCustomerView}
+      />
+    );
+  }
 }
 
 export default Orders;
