@@ -19,7 +19,7 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
   measurementId: "G-L31CDZM39Y",
 };
-
+console.log(process.env.REACT_APP_API_KEY, 'kjjjjj');
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
