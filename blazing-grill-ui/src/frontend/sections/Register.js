@@ -1,5 +1,3 @@
-
-
 import { useEffect, useRef, useState } from "react";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../../database/config";
@@ -70,12 +68,14 @@ function Register({ setState }) {
     formData["address"] = address;
     const collectionRef = collection(db, "MenuItems");
     const querySnapshot = await getDocs(collectionRef);
-
     let documents = [];
+
     querySnapshot.forEach((doc) => {
       const arr = doc.data().menuItemsArr;
-      documents = [...arr];
+      documents = [...documents, ...arr]; // Use spread operator to concatenate arrays
     });
+
+    let result = [];
     const menuItemContent = {
       page: "None",
       positionX: "None",
@@ -84,11 +84,14 @@ function Register({ setState }) {
       width: 500,
       height: "192",
     };
+
+    console.log(documents);
+
     for (let i = 0; i < documents.length; i++) {
       menuItemContent.name = documents[i];
-      documents[i] = menuItemContent;
+      result.push({ ...menuItemContent }); // Use spread operator to create a new object
     }
-    formData.menuItems = documents;
+    formData.menuItems = result;
     const { store } = formData;
     //   const docRef = await addDoc(collection(db, formData.store), formData);
     const docRef2 = await addDoc(collection(db, "BlazingStores"), {
@@ -117,6 +120,7 @@ function Register({ setState }) {
         // navigate("/login");
         sendEmailVerification(user);
         setState("Login");
+        window.location.reload();
         // ...
       })
       .catch((error) => {
@@ -273,7 +277,6 @@ function Register({ setState }) {
         <GooglePlacesAutocomplete
           apiKey={APIKEY}
           selectProps={{ address, onChange: setAddress }}
-          
         ></GooglePlacesAutocomplete>
         <br />
         <br></br>
