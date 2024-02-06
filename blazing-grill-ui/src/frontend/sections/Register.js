@@ -44,11 +44,11 @@ function Register({ setState }) {
   const [credentials, setCredentials] = useState("");
   const [address, setAddress] = useState(null);
   const libraries = ["places"];
-  useEffect(() => {
-    if (address) {
-      handleAddress();
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   if (address) {
+  //     handleAddress();
+  //   }
+  // }, []);
   const inputRef = useRef();
   const Register = async (e) => {
     e.preventDefault();
@@ -65,7 +65,30 @@ function Register({ setState }) {
       return alert("Incorrect admin credentials");
     }
     // try {
-    formData["address"] = address;
+    console.log(address, 68);
+    await Geocode.fromAddress(address.label).then(
+      (response) => {
+        const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
+        setFormData({
+          ...formData,
+          latitude: lat,
+          longitude: lng,
+        });
+        setAddress(address.label);
+        formData["latitude"] = lat;
+        formData["longitude"] = lng;
+        formData["address"] = address.label;
+
+        console.log(address.label, 202);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    // return 0;
+
+    console.log(formData, "Address", 69);
     const collectionRef = collection(db, "MenuItems");
     const querySnapshot = await getDocs(collectionRef);
     let documents = [];
@@ -75,6 +98,18 @@ function Register({ setState }) {
       documents = [...documents, ...arr]; // Use spread operator to concatenate arrays
     });
 
+    // Image Documents
+    const collectionRef2 = collection(db, "MenuImages");
+    const querySnapshot2 = await getDocs(collectionRef2);
+    let documents2 = [];
+
+    querySnapshot2.forEach((doc) => {
+      const obj = doc.data();
+      console.log(obj);
+      documents2 = [...documents2, obj]; // Use spread operator to concatenate arrays
+    });
+    // return 0;
+    //
     let result = [];
     const menuItemContent = {
       page: "None",
@@ -86,11 +121,21 @@ function Register({ setState }) {
     };
 
     console.log(documents);
-
+    // return 0;
     for (let i = 0; i < documents.length; i++) {
       menuItemContent.name = documents[i];
       result.push({ ...menuItemContent }); // Use spread operator to create a new object
     }
+    // menuImages
+    for (let i = 0; i < documents2.length; i++) {
+      // menuItemContent.name = documents[i];
+      documents2[i].page = "None";
+      documents2[i].positionX = "None";
+      documents2[i].positionY = "None";
+      // result.push({ ...menuItemContent }); // Use spread operator to create a new object
+    }
+    //
+    formData.menuImages = documents2;
     formData.menuItems = result;
     const { store } = formData;
     //   const docRef = await addDoc(collection(db, formData.store), formData);
@@ -162,24 +207,10 @@ function Register({ setState }) {
       // );
     }
   };
-  const handleAddress = () => {
-    console.log(address, " Adreesss");
-    Geocode.fromAddress(address.label).then(
-      (response) => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.log(lat, lng);
-        setFormData({
-          ...formData,
-          latitude: lat,
-          longitude: lng,
-        });
-        setAddress(address.label);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  };
+  // const handleAddress = () => {
+  //   console.log(address, " Adreesss");
+
+  // };
   const handleSubmit = (event) => {
     event.preventDefault();
     // Add code to submit form data to server
