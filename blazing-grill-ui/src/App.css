@@ -92,6 +92,9 @@ button:hover {
   font-family: "Libre Caslon Text", Sans-serif;
   font-weight: 400;
 }
+option {
+  background-color: #202020 !important;
+}
 .form > button {
   width: 81% !important;
   height: 40px;
