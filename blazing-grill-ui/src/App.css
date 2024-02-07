@@ -623,3 +623,88 @@ Store Menu
 .css-1uccc91-singleValue {
   color: black !important;
 }
+
+.customerViewInnerContent {
+  width: 80%;
+  height: 50vh;
+  /* background-color: #f7941d; */
+  margin: auto;
+  border: 1px solid white;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  text-align: center;
+  font-size: larger;
+}
+.customerViewRows {
+  color: white;
+  border: 1px solid white;
+  font-size: larger;
+}
+.customerColumns {
+  width: 96%;
+  height: 40vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: repeat(12, 40px);
+  margin: auto;
+}
+.ordersExpand {
+  color: white;
+  position: relative;
+  /* right: 100px; */
+  right: -45%;
+  top: -15px;
+  cursor: pointer;
+}
+.ordersExpand2 {
+  color: white;
+  position: relative;
+  /* right: 100px; */
+  right: -45%;
+  top: -15px;
+  cursor: pointer;
+  font-size: larger;
+}
+.ordersPageExpanded {
+  background-image: url("./assets/smokeyBackground1024_1.png");
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  margin: auto;
+  border: 1px solid white;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  text-align: center;
+  font-size: larger;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.sectionColumnItemOrders {
+  width: 200px;
+  height: 40px;
+  background-color: #f7941d;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius: 5px;
+}
+.customerColumnsItems {
+  /* border: 1px solid white; */
+}
+/* .OuterContentCustomerView {
+  height: 99.5vh;
+  position: absolute;
+  background-image: url("./assets/smokeyBackground1024_1.png");
+  align-items: center;
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid white;
+}
+
+.OrdersCustomerView {
+  width: 100%;
+  overflow-x: hidden;
+  height: 100%;
+} */
