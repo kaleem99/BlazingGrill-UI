@@ -35,7 +35,7 @@ function AccountDetails({
   const [storeN, setStoreName] = useState(detailsOfStore.store);
   const [address, setAddress] = useState(detailsOfStore.address);
   const [password, setPassword] = useState("");
-  console.log(store)
+  console.log(store);
   const upDateStoreInformation = (e) => {
     switch (e.target.name) {
       case "email":
@@ -65,12 +65,13 @@ function AccountDetails({
       });
       updateDoc(examcollref, {
         [storeN]: {
+          ...detailsOfStore,
           adminUsername: email,
           address: address,
           store: storeN,
-          storeStatus: storeStatus,
-          latitude: detailsOfStore.latitude,
-          longitude: detailsOfStore.longitude,
+          // storeStatus: storeStatus,
+          // latitude: detailsOfStore.latitude,
+          // longitude: detailsOfStore.longitude,
         },
       });
       alert("updated");

@@ -23,7 +23,7 @@ function Orders({
   setPendingOrders,
   setInProgress,
   PendingOrders,
-  inProgress
+  inProgress,
 }) {
   const examcollref = doc(db, "BlazingStores", store[0].id);
 
@@ -53,15 +53,10 @@ function Orders({
     } else {
       status = true;
     }
+
+    detailsOfStore.storeStatus = status;
     updateDoc(examcollref, {
-      [storeName[0]]: {
-        adminUsername: detailsOfStore.adminUsername,
-        address: detailsOfStore.address,
-        store: detailsOfStore.store,
-        storeStatus: status,
-        latitude: detailsOfStore.latitude,
-        longitude: detailsOfStore.longitude,
-      },
+      [storeName[0]]: detailsOfStore,
     })
       .then((response) => {
         const result = status ? "online" : "offline";
@@ -74,14 +69,12 @@ function Orders({
     return status;
   };
 
-
   // console.log(PendingOrders);
   const setOrders = (data) => {
     setCustomersOrders(data);
   };
   const changeOrderStatus = (userId, data) => {
     const userRef = doc(db, "Orders", userId);
-
 
     // let x = document.getElementById("SelectValue");
     const newData = data;
@@ -111,7 +104,6 @@ function Orders({
   if (!customerView) {
     return (
       <div className="Home">
-        
         {storeName[0] !== "admin" && (
           <>
             <Switch

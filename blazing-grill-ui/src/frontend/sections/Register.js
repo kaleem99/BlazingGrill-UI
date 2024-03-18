@@ -139,9 +139,6 @@ function Register({ setState }) {
     formData.menuItems = result;
     const { store } = formData;
     //   const docRef = await addDoc(collection(db, formData.store), formData);
-    const docRef2 = await addDoc(collection(db, "BlazingStores"), {
-      [store]: formData,
-    });
 
     //   console.log("Document written with ID: ", docRef.id);
     //   alert("store has been created successfully");
@@ -154,8 +151,11 @@ function Register({ setState }) {
       formData.adminUsername,
       formData.password
     )
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
+        const docRef2 = await addDoc(collection(db, "BlazingStores"), {
+          [store]: formData,
+        });
         const user = userCredential.user;
         console.log(user);
         alert("Successful");
@@ -164,12 +164,15 @@ function Register({ setState }) {
         });
         // navigate("/login");
         sendEmailVerification(user);
-        setState("Login");
         window.location.reload();
+        setTimeout(() => {
+          setState("Login");
+        }, 500);
+
         // ...
       })
       .catch((error) => {
-        alert("Hello World " + error.message);
+        alert("Email Already in use" + error.message);
         // ..
       });
   };
