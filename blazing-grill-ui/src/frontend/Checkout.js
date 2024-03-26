@@ -25,6 +25,7 @@ function Checkout({
   setItemState,
   store,
 }) {
+  console.log(store);
   const [cartItems, setCartItems] = useState([]);
   const [edit, setEdit] = useState(false);
   const [index, setIndex] = useState(0);
@@ -67,7 +68,8 @@ function Checkout({
     if (data.flavours.filter((item) => item.name !== "").length > 0) {
       return data.flavours
         .filter((item) => item.selected)
-        .map((item) => `${item.quantity} x ${item.name}`).join(", ");
+        .map((item) => `${item.name}`)
+        .join(", ");
     } else {
       return "";
     }
@@ -186,8 +188,9 @@ function Checkout({
     const x = getDateAndTime();
     const time = x.formattedTime;
     const date = x.formattedDate;
-    console.log(time, date);
+    console.log(time, date, store);
     const storeName = Object.keys(store[0])[0];
+    console.log(storeName);
     const detailsOfStore = store[0][storeName];
     const uniqueOrderNum = generateUniqueOrderNumber(
       detailsOfStore.store,

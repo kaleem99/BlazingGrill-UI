@@ -8,6 +8,8 @@ import fetchPost from "../helpers/fetchData";
 import "./PlaceOrder.css";
 import deepEqual from "../helpers/AddToCartCheckIfKeyAreTheSame";
 import ViewItem from "../components/viewItems";
+import { connect, useDispatch } from "react-redux";
+import { VIEW_ITEM_STATE } from "../redux/actions";
 const PlaceAndOrder = ({
   total,
   setTotal,
@@ -16,10 +18,13 @@ const PlaceAndOrder = ({
   selectedItem,
   setSelectedItem,
   getTotalFromCart,
+  viewItem,
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [extras, setExtras] = useState({});
   const [flavour, setFlavour] = useState({});
+  const dispatch = useDispatch();
+
   const handleCartData = async () => {
     let checkPoint = false;
     if (flavour.filter((data) => data.name !== "").length > 0) {
@@ -28,6 +33,7 @@ const PlaceAndOrder = ({
       }
     }
     const result = { ...selectedItem };
+
     result.extras = extras;
     result.quantity = quantity;
     result.flavours = flavour;
@@ -37,7 +43,6 @@ const PlaceAndOrder = ({
     if (getCartItems == null) {
       localStorage.setItem("CART", JSON.stringify([result]));
     } else {
-      console.log(JSON.parse(getCartItems));
       const newResult = JSON.parse(getCartItems);
       for (let i = 0; i < newResult.length; i++) {
         let quantityA = newResult[i].quantity;
@@ -67,6 +72,16 @@ const PlaceAndOrder = ({
     if (flavour.length > 0) {
       setAllFlavoursToFalse();
     }
+  };
+  const addItemsToCart = () => {
+    console.log(viewItem);
+    viewItem.map((data) => (data.quantity = 1));
+    const previousCart = JSON.parse(localStorage.getItem("CART"));
+
+    localStorage.setItem(
+      "CART",
+      JSON.stringify([...viewItem, ...previousCart])
+    );
   };
   const handleExtrasQuantity = (name, type) => {
     let newQuantity = 0;
@@ -112,10 +127,12 @@ const PlaceAndOrder = ({
         : [];
     setExtras(result);
     setFlavour(flavour);
+    setQuantity(1);
+    const copiedFood = Object.assign({}, food);
+
+    dispatch({ type: VIEW_ITEM_STATE, payload: copiedFood });
   };
-  console.log(flavour, "flavour");
   const setFlavourSelected = (index, quantity) => {
-    console.log(index);
     const totalQuantity = flavour
       .map((data) => data.quantity)
       .reduce((a, b) => a + b);
@@ -125,13 +142,12 @@ const PlaceAndOrder = ({
           data.selected = true;
           data.quantity += 1;
         } else {
-          if(data.quantity === 0){
+          if (data.quantity === 0) {
             data.selected = false;
           }
         }
         return data;
       });
-      console.log(updatedFlavours);
       setFlavour(updatedFlavours);
     }
   };
@@ -244,7 +260,7 @@ const PlaceAndOrder = ({
               // fontSize: "larger",
             }}
             className="BackButton"
-            onClick={() => handleCartData()}
+            onClick={() => addItemsToCart()}
           >
             Add to cart
           </button>
@@ -270,6 +286,13 @@ const PlaceAndOrder = ({
     </>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    viewItem: state.viewItem,
+  };
+};
+export default connect(mapStateToProps, {})(PlaceAndOrder);
+
 const widthImage = "100%";
 const styles = {
   selectDropDownList: {
@@ -397,4 +420,4 @@ const styles = {
     marginBottom: "auto",
   },
 };
-export default PlaceAndOrder;
+// export default PlaceAndOrder;

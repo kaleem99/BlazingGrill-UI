@@ -1,4 +1,14 @@
+import { useState } from "react";
+import Draggable from "react-draggable";
 import { MdRestoreFromTrash } from "react-icons/md";
+import { connect, useDispatch } from "react-redux";
+import {
+  INCREMENT_CART_AND_ADD_OBJECT,
+  UPDATE_FLAVOURS,
+  UPDATE_SELECTED_ITEM,
+  UPDATE_SELECTED_ITEM_EXTRAS,
+  VIEW_ITEM_STATE,
+} from "../redux/actions";
 
 const ViewItem = ({
   selectedItem,
@@ -9,29 +19,38 @@ const ViewItem = ({
   setFlavourSelected,
   flavour,
   setFlavour,
+  viewItem,
 }) => {
-  const subtractFlavour = (index, flavour) => {
-    const updatedFlavours = flavour.map((data, i) => {
-      if (index === i && data.quantity > 0) {
-        data.selected = true;
-        data.quantity -= 1;
-      }
-      return data;
+  console.log(viewItem, 18);
+  const dispatch = useDispatch();
+  const [state, setState] = useState(viewItem[0]);
+  const [stateIndex, setStateIndex] = useState(0);
+
+  const setFlavourMeth = (data, index) => {
+    dispatch({
+      type: UPDATE_FLAVOURS,
+      payload: { objIndex: stateIndex, flavourIndex: index },
     });
-    console.log(updatedFlavours);
-    setFlavour(updatedFlavours);
+    console.log(selectedItem);
   };
-  const clearFlavourQuantity = (index, flavour) => {
-    const updatedFlavours = flavour.map((data, i) => {
-      if (index === i && data.quantity > 0) {
-        data.selected = false;
-        data.quantity = 0;
-      }
-      return data;
+  // console.log(selectedItem)
+  const handleExtrasQuantityMeth = (name, type, index) => {
+    dispatch({
+      type: UPDATE_SELECTED_ITEM_EXTRAS,
+      payload: { stateIndex: stateIndex, name, type, index },
     });
-    console.log(updatedFlavours);
-    setFlavour(updatedFlavours);
   };
+  // const clearFlavourQuantity = (index, flavour) => {
+  //   const updatedFlavours = flavour.map((data, i) => {
+  //     if (index === i && data.quantity > 0) {
+  //       data.selected = false;
+  //       data.quantity = 0;
+  //     }
+  //     return data;
+  //   });
+  //   setFlavour(updatedFlavours);
+  // };
+
   return (
     <div style={{ marginTop: "4%", padding: "50px" }}>
       <div
@@ -42,8 +61,15 @@ const ViewItem = ({
           marginRight: "auto",
         }}
       ></div>
-      <div style={{ height: "auto", width: "100%", display: "flex" }}>
-        <div style={{ width: "50%" }}>
+      <div
+        style={{
+          height: "auto",
+          width: "100%",
+          display: "flex",
+          marginBottom: "50px",
+        }}
+      >
+        <div style={{ width: "40%" }}>
           <h1 style={styles.text2}>{selectedItem.name}</h1>
 
           <h2
@@ -110,198 +136,260 @@ const ViewItem = ({
 
             <button
               style={{ fontSize: "48px", borderRadius: "10px" }}
-              onClick={() => setQuantity(quantity + 1)}
+              onClick={() => {
+                const newQuantity = quantity + 1;
+                setQuantity(newQuantity);
+                const newObject = {
+                  ...state,
+                  name: state.name + " " + newQuantity,
+                };
+                newObject.selected = false;
+                dispatch({
+                  type: INCREMENT_CART_AND_ADD_OBJECT,
+                  payload: newObject,
+                });
+              }}
             >
               +
             </button>
           </div>
         </div>
-        {extras != null && extras.length > 0 && (
-          <div style={{ width: "80%" }}>
-            <h2
-              style={{
-                textAlign: "center",
-                color: "#F7941D",
-                fontSize: "35px",
-              }}
-            >
-              Extras
-            </h2>
-            {extras
-              .filter((data, i) => data.price != "" && data.name != "")
-              .map((data) => (
-                <div
-                  style={{
-                    margin: "20px auto",
-                    width: "90%",
-                    color: "white",
-                    border: "1px solid",
-                    display: "grid",
-                    gridTemplateColumns: "50% 50%",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "grid",
-                      width: "100%",
-                      gridTemplateColumns: "60% 40%",
-                    }}
-                  >
-                    <h1
-                      style={{
-                        marginBlockStart: "0em",
-                        marginBlockEnd: "0em",
-                        height: "40px",
-                        marginTop: "auto",
-                        marginBottom: "auto",
-                        fontSize: "1.5em",
-                      }}
-                    >
-                      {data.name}
-                    </h1>
-                    <h1
-                      style={{
-                        marginBlockStart: "0em",
-                        marginBlockEnd: "0em",
-                        height: "40px",
-                        marginTop: "auto",
-                        marginBottom: "auto",
-                        fontSize: "1.5em",
-                      }}
-                    >
-                      R{data.price}
-                    </h1>
-                  </div>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "auto auto auto",
-                      height: "auto",
-                    }}
-                  >
-                    <button
-                      onClick={(e) =>
-                        data.quantity > 0 &&
-                        handleExtrasQuantity(e.currentTarget.name, "MINUS")
-                      }
-                      name={data.name}
-                      style={{
-                        fontSize: "40px",
-                        borderRadius: "10px",
-                        width: "90px",
-                        margin: "auto",
-                        height: "60px",
-                        borderRadius: "20px",
-                      }}
-                    >
-                      -
-                    </button>
-                    <h1 style={{ textAlign: "center", fontSize: 30 }}>
-                      {data.quantity}
-                    </h1>
+        <div style={{ width: "40%" }}>
+          {/* <Draggable> */}
+          <div>
+            <div className="selectedItemOption">
+              <h1 style={{ color: "white" }}>{state.name}</h1>
 
-                    <button
+              {flavour != null && flavour.length > 0 && (
+                <div style={{ width: "90%", margin: "auto" }}>
+                  {flavour.filter((data) => data.name != "").length > 0 && (
+                    <h2
                       style={{
-                        fontSize: "40px",
-                        borderRadius: "10px",
-                        width: "90px",
-                        margin: "auto",
-                        height: "60px",
-                        borderRadius: "20px",
-                      }}
-                      name={data.name}
-                      onClick={(e) =>
-                        handleExtrasQuantity(e.currentTarget.name, "PLUS")
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              ))}
-          </div>
-        )}
-
-        {/*  */}
-        {flavour != null && flavour.length > 0 && (
-          <div style={{ width: "40%" }}>
-            <h2
-              style={{
-                textAlign: "center",
-                color: "#F7941D",
-                fontSize: "35px",
-              }}
-            >
-              Flavour
-            </h2>
-            {flavour
-              .filter((data) => data.name != "")
-              .map((data, i) => (
-                <div
-                  style={{
-                    margin: "20px auto",
-                    width: "95%",
-                    color: "white",
-                    border: "1px solid",
-                    display: "flex",
-                  }}
-                >
-                  <button
-                    onClick={() => subtractFlavour(i, flavour)}
-                    style={{ fontSize: "35px", width: "80px" }}
-                  >
-                    -
-                  </button>
-                  <button
-                    style={
-                      data.selected
-                        ? { background: "#F7941D", fontWeight: "900" }
-                        : {}
-                    }
-                    onClick={() => setFlavourSelected(i, quantity)}
-                    className="flavourButton"
-                  >
-                    <p style={{ width: "70%" }}> {data.name}</p>{" "}
-                    <p
-                      style={{
-                        width: "30%",
+                        textAlign: "center",
+                        color: "#F7941D",
                         fontSize: "25px",
-                        fontWeight: "bold",
-                        marginBlockStart: "0.65em",
-                        // marginBlockEnd: "1em",
                       }}
                     >
-                      {data.quantity}
-                    </p>
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Are you sure you want to empty the flavour quantity"
-                        ) === true
-                      ) {
-                        clearFlavourQuantity(i, flavour);
-                      }
-                    }}
-                    style={{
-                      fontSize: "25px",
-                      width: "100px",
-                      background: "none",
-                      color: "white",
-                    }}
-                  >
-                    <MdRestoreFromTrash />
-                  </button>
+                      Flavour
+                    </h2>
+                  )}
+                  <div style={{ display: "flex", margin: "auto" }}>
+                    {viewItem[stateIndex].flavours
+                      .filter((data) => data.name != "")
+                      .map((data, i) => (
+                        <div
+                          style={{
+                            margin: "0px auto",
+                            width: "95%",
+                            color: "white",
+                            position: "relative",
+                            // zIndex: 99,
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              // border: "1px solid",
+                              width: "95%",
+                              fontSize: "15px",
+                            }}
+                          >
+                            <button
+                              onClick={() => setFlavourMeth(data, i)}
+                              className={
+                                data.selected ? "activeBtn" : "notActiveBtn"
+                              }
+                              // style={
+                              //   flavour[i].selected
+                              //     ? { backgroundColor: "#F0941E", width: "100%" }
+                              //     : { width: "100%" }
+                              // }
+                            >
+                              <h2>{data.name}</h2>
+                              {/* {console.log(selectedItem, "SELECTED ITEM")} */}
+                            </button>
+                            {/* <button
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "Are you sure you want to empty the flavour quantity"
+                              ) === true
+                            ) {
+                              clearFlavourQuantity(i, flavour);
+                            }
+                          }}
+                          style={{
+                            fontSize: "25px",
+                            width: "100%",
+                            background: "none",
+                            color: "white",
+                          }}
+                        >
+                          <MdRestoreFromTrash />
+                        </button> */}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                  {extras != null && extras.length > 0 && (
+                    <div style={{ width: "100%", margin: "auto" }}>
+                      <h2
+                        style={{
+                          textAlign: "center",
+                          color: "#F7941D",
+                          fontSize: "25px",
+                        }}
+                      >
+                        Extras
+                      </h2>
+                      {viewItem[stateIndex].extras
+                        .filter(
+                          (data, i) => data.price != "" && data.name != ""
+                        )
+                        .map((data, index) => (
+                          <div
+                            style={{
+                              margin: "20px auto",
+                              width: "100%",
+                              color: "white",
+                              border: "1px solid",
+                              display: "grid",
+                              gridTemplateColumns: "50% 50%",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "grid",
+                                width: "100%",
+                                gridTemplateColumns: "60% 40%",
+                              }}
+                            >
+                              <h1
+                                style={{
+                                  marginBlockStart: "0em",
+                                  marginBlockEnd: "0em",
+                                  height: "40px",
+                                  marginTop: "auto",
+                                  marginBottom: "auto",
+                                  fontSize: "1.5em",
+                                }}
+                              >
+                                {data.name}
+                              </h1>
+                              <h1
+                                style={{
+                                  marginBlockStart: "0em",
+                                  marginBlockEnd: "0em",
+                                  height: "40px",
+                                  marginTop: "auto",
+                                  marginBottom: "auto",
+                                  fontSize: "1.5em",
+                                }}
+                              >
+                                R{data.price}
+                              </h1>
+                            </div>
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "auto auto auto",
+                                height: "auto",
+                              }}
+                            >
+                              <button
+                                onClick={(e) =>
+                                  data.quantity > 0 &&
+                                  handleExtrasQuantityMeth(
+                                    e.currentTarget.name,
+                                    "MINUS",
+                                    index
+                                  )
+                                }
+                                name={data.name}
+                                style={{
+                                  fontSize: "40px",
+                                  borderRadius: "10px",
+                                  width: "90px",
+                                  margin: "auto",
+                                  height: "60px",
+                                  borderRadius: "20px",
+                                }}
+                              >
+                                -
+                              </button>
+                              <h1 style={{ textAlign: "center", fontSize: 30 }}>
+                                {data.quantity}
+                              </h1>
+
+                              <button
+                                style={{
+                                  fontSize: "40px",
+                                  borderRadius: "10px",
+                                  width: "90px",
+                                  margin: "auto",
+                                  height: "60px",
+                                  borderRadius: "20px",
+                                }}
+                                name={data.name}
+                                onClick={(e) =>
+                                  handleExtrasQuantityMeth(
+                                    e.currentTarget.name,
+                                    "PLUS",
+                                    index
+                                  )
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  )}
                 </div>
-              ))}
+              )}
+            </div>
           </div>
-        )}
+          {/* </Draggable> */}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            width: "25%",
+          }}
+        >
+          {viewItem.map((data, i) => (
+            <button
+              onClick={() => {
+                setState(data);
+                setStateIndex(i);
+                dispatch({ type: UPDATE_SELECTED_ITEM, payload: i });
+              }}
+              className={data.selected ? "activeBtn" : "notActiveBtn"}
+              style={{
+                width: "90%",
+                height: "60px",
+                fontSize: "22px",
+                margin: "10px auto",
+                // textAlign: "left",
+              }}
+            >
+              {data.name}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
-export default ViewItem;
+const mapStateToProps = (state) => {
+  return {
+    viewItem: state.viewItem,
+  };
+};
+export default connect(mapStateToProps, {})(ViewItem);
 
 const styles = {
   selectDropDownList: {

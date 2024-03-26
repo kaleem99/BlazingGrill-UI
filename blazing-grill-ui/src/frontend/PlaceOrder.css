@@ -52,7 +52,7 @@
   height: 70px;
   font-size: larger;
   border: none;
-  display: flex;
+  /* display: flex; */
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -91,4 +91,29 @@
   font-size: 30px;
   color: black;
   border: 1px solid;
+}
+
+.selectedItemOption {
+  width: 100%;
+  height: auto;
+  background-image: url("../assets/smokeyBackground1024_1.png");
+  /* position: absolute; */
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 2px solid #f7941d;
+  border-radius: 10px;
+}
+.activeBtn {
+  background-color: #f7941d;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+}
+.notActiveBtn {
+  width: 100%;
+  border: none;
+  border-radius: 5px;
 }

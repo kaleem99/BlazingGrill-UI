@@ -30,6 +30,7 @@ import { clearCart } from "./helpers/ClearCart";
 // ...
 import Checkout from "./frontend/Checkout";
 import { getOrders } from "./helpers/GetOrdersPlaced";
+import DownloadImages from "./components/DownloadAllImages";
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -92,9 +93,7 @@ function App() {
       // }
     });
     onAuthStateChanged(auth, (user) => {
-      console.log(store, auth.currentUser);
       if (auth.currentUser) {
-        console.log(auth.currentUser);
         getOrders(
           auth.currentUser.displayName,
           setPendingOrders,
@@ -424,7 +423,7 @@ function App() {
                     getTotalFromCart={getTotalFromCart}
                     total={total}
                     setItemState={setItemState}
-                    store={store}
+                    store={currentStore}
                   />
                 )}
               </>

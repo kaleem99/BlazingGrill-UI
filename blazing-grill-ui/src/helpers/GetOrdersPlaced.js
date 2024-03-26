@@ -18,7 +18,6 @@ const getOrders = (storeName, setPendingOrders, setInProgress) => {
       const items = [];
       const inProgress = [];
       querySnapshot.forEach((doc) => {
-        console.log(doc.data().storeName, storeName)
         if (
           doc.data().status === "Pending" &&
           doc.data().storeName === storeName
@@ -31,9 +30,7 @@ const getOrders = (storeName, setPendingOrders, setInProgress) => {
         }
       });
       setPendingOrders(items);
-      console.log(items, "This is Items.");
       setInProgress(inProgress);
-      console.log(inProgress);
     } else {
       console.log("No data in the collection");
     }
