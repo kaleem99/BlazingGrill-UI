@@ -77,11 +77,38 @@ const PlaceAndOrder = ({
     console.log(viewItem);
     viewItem.map((data) => (data.quantity = 1));
     const previousCart = JSON.parse(localStorage.getItem("CART"));
-
-    localStorage.setItem(
-      "CART",
-      JSON.stringify([...viewItem, ...previousCart])
-    );
+    console.log(previousCart);
+    if (!checkIfAllFlavoursAdded()) {
+      return alert("please ensure to choose a flavour for all items");
+    }
+    if (previousCart) {
+      localStorage.setItem(
+        "CART",
+        JSON.stringify([...viewItem, ...previousCart])
+      );
+    } else {
+      localStorage.setItem("CART", JSON.stringify(viewItem));
+    }
+    getTotalFromCart();
+    alert("Items have been added successfully to your cart.");
+  };
+  const checkIfAllFlavoursAdded = () => {
+    let count = 0;
+    for (let i = 0; i < viewItem.length; i++) {
+      const flavours = viewItem[i].flavours;
+      console.log(flavours);
+      for (let j = 0; j < flavours.length; j++) {
+        if (flavours[j].selected === true) {
+          count++;
+        }
+      }
+      const filteredFlavours = flavours.filter((data) => data.name != "");
+      if (filteredFlavours.length === 0) {
+        return true;
+      }
+      console.log(filteredFlavours, "SS");
+    }
+    return count === viewItem.length;
   };
   const handleExtrasQuantity = (name, type) => {
     let newQuantity = 0;

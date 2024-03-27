@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import { MdRestoreFromTrash } from "react-icons/md";
 import { connect, useDispatch } from "react-redux";
 import {
+  DECREMENT_CART_AND_OBJECT,
   INCREMENT_CART_AND_ADD_OBJECT,
   UPDATE_FLAVOURS,
   UPDATE_SELECTED_ITEM,
@@ -127,7 +128,14 @@ const ViewItem = ({
             }}
           >
             <button
-              onClick={() => quantity > 0 && setQuantity(quantity - 1)}
+              onClick={() => {
+                if (quantity > 1) {
+                  setQuantity(quantity - 1);
+                  setState(viewItem[0]);
+                  setStateIndex(0);
+                  dispatch({ type: DECREMENT_CART_AND_OBJECT });
+                }
+              }}
               style={{ fontSize: "48px", borderRadius: "10px" }}
             >
               -
@@ -141,7 +149,7 @@ const ViewItem = ({
                 setQuantity(newQuantity);
                 const newObject = {
                   ...state,
-                  name: state.name + " " + newQuantity,
+                  name: selectedItem.name + " " + newQuantity,
                 };
                 newObject.selected = false;
                 dispatch({
@@ -306,14 +314,7 @@ const ViewItem = ({
                                   )
                                 }
                                 name={data.name}
-                                style={{
-                                  fontSize: "40px",
-                                  borderRadius: "10px",
-                                  width: "90px",
-                                  margin: "auto",
-                                  height: "60px",
-                                  borderRadius: "20px",
-                                }}
+                                className="extrasButton"
                               >
                                 -
                               </button>
@@ -322,14 +323,7 @@ const ViewItem = ({
                               </h1>
 
                               <button
-                                style={{
-                                  fontSize: "40px",
-                                  borderRadius: "10px",
-                                  width: "90px",
-                                  margin: "auto",
-                                  height: "60px",
-                                  borderRadius: "20px",
-                                }}
+                                className="extrasButton"
                                 name={data.name}
                                 onClick={(e) =>
                                   handleExtrasQuantityMeth(

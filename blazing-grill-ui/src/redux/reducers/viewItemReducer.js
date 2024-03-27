@@ -4,6 +4,7 @@ import {
   UPDATE_SELECTED_ITEM_EXTRAS,
   VIEW_ITEM_STATE,
   UPDATE_FLAVOURS,
+  DECREMENT_CART_AND_OBJECT,
 } from "../actions";
 
 const defaultState = [];
@@ -45,6 +46,10 @@ const viewItemReducer = (state = defaultState, action) => {
       newObj.flavours[flavourIndex].selected = true;
       newUpdatedState[objIndex] = newObj;
       return newUpdatedState;
+    case DECREMENT_CART_AND_OBJECT:
+      const updatedStateCart = [...state];
+      updatedStateCart.pop();
+      return updatedStateCart;
     default:
       return state;
   }

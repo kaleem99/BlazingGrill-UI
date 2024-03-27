@@ -97,6 +97,9 @@
   width: 100%;
   height: auto;
   background-image: url("../assets/smokeyBackground1024_1.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   /* position: absolute; */
   left: 0;
   right: 0;
@@ -116,4 +119,13 @@
   width: 100%;
   border: none;
   border-radius: 5px;
+}
+
+.extrasButton {
+  font-size: 40px;
+  width: 90px;
+  margin: auto;
+  height: 60px;
+  border-radius: 20px;
+  border: none;
 }

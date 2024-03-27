@@ -329,6 +329,7 @@ function App() {
                     textAlign: "center",
                     width: "100%",
                     background: "#030303",
+                    zIndex: 99,
                   }}
                 >
                   <h1
