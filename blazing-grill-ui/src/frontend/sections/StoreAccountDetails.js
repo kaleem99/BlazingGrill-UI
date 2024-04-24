@@ -35,7 +35,7 @@ function AccountDetails({
   const [storeN, setStoreName] = useState(detailsOfStore.store);
   const [address, setAddress] = useState(detailsOfStore.address);
   const [password, setPassword] = useState("");
-  console.log(store);
+  // console.log(store);
   const upDateStoreInformation = (e) => {
     switch (e.target.name) {
       case "email":

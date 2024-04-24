@@ -100,7 +100,7 @@ function Account({
       break;
   }
   const dataProvider = FirebaseDataProvider(firebaseConfig, {});
-  console.log(dataProvider);
+  // console.log(dataProvider);
   return sections === "" ? (
     <div>
       <h1 style={{ color: "white" }}>Store Account</h1>

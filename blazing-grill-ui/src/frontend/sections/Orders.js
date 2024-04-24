@@ -45,6 +45,39 @@ function Orders({
     setstoreStatus(detailsOfStore.storeStatus);
     // getOrders(storeName, setPendingOrders, setInProgress);
   }, []);
+  const PrintReciept = (data) => {
+    const food = data.food;
+    //   [
+    //     {
+    //         "productName": "Classic Cheese Burger Single",
+    //         "extras": [],
+    //         "productQuantity": 1,
+    //         "productType": "Burgers",
+    //         "specialInstructions": "",
+    //         "productPrice": "69.90"
+    //     }
+    // ]
+    // console.log(food);
+    // console.log(data);
+    var printContents = document.createElement("div");
+    printContents.innerHTML += "<h1>The Blazing Grill</h1><br>";
+    printContents.innerHTML += data.storeName + "<br>";
+
+    for (let i = 0; i < food.length; i++) {
+      printContents.innerHTML +=
+        food[i].productName + "         R" + food[i].productPrice + "<br>";
+    }
+    printContents.innerHTML += "<br>";
+    printContents.innerHTML += "Total       " + data.total + "<br>";
+    printContents.innerHTML += "Date       " + data.date + "<br>";
+    printContents.innerHTML += "Sales Channel      Kaleemba<br> ";
+    printContents.innerHTML += "Come Get Some!!!<br>";
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents.innerHTML;
+    window.print();
+    document.body.innerHTML = originalContents;
+  };
   const handleChange = () => {
     let status = "";
 
@@ -169,6 +202,7 @@ function Orders({
                   <th>Customer Cell Number</th>
                   <th>Date</th>
                   <th>View Orders</th>
+                  <th>Print</th>
                   <th>Change Status</th>
                 </tr>
                 {checkConditionFunction(orderSection)
@@ -192,7 +226,19 @@ function Orders({
                                 border: "2px solid #f7941d",
                               }}
                             >
-                              View Customers Orders
+                              Order Details
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => PrintReciept(data)}
+                              style={{
+                                height: "35px",
+                                borderRadius: "10px",
+                                border: "2px solid #f7941d",
+                              }}
+                            >
+                              Reciept
                             </button>
                           </td>
                           <td>
@@ -245,6 +291,7 @@ function Orders({
                       <MdOutlineArrowCircleLeft />
                     </p>
                   </td>
+                  {console.log(customersOrders)}
                   <td>{customersOrders.Name}</td>
                   <td>{customersOrders.email}</td>
                   <td>{customersOrders.phoneNumber}</td>
