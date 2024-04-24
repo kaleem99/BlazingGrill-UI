@@ -14,6 +14,7 @@ import { db } from "../../database/config";
 import { MdOutlineArrowCircleLeft } from "react-icons/md";
 import OrdersCustomerView from "./OrdersCustomerView";
 import { getOrders } from "../../helpers/GetOrdersPlaced";
+import PrintComponent from "../../components/PrintPdf";
 function Orders({
   storeStatus,
   setstoreStatus,
@@ -33,6 +34,7 @@ function Orders({
   const [changeState, setChangeState] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // State to track the current page or index
   const [customerView, setCustomerView] = useState(false);
+  const [showReciept, setShowReciept] = useState(false);
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
@@ -45,39 +47,58 @@ function Orders({
     setstoreStatus(detailsOfStore.storeStatus);
     // getOrders(storeName, setPendingOrders, setInProgress);
   }, []);
-  const PrintReciept = (data) => {
-    const food = data.food;
-    //   [
-    //     {
-    //         "productName": "Classic Cheese Burger Single",
-    //         "extras": [],
-    //         "productQuantity": 1,
-    //         "productType": "Burgers",
-    //         "specialInstructions": "",
-    //         "productPrice": "69.90"
-    //     }
-    // ]
-    // console.log(food);
-    // console.log(data);
-    var printContents = document.createElement("div");
-    printContents.innerHTML += "<h1>The Blazing Grill</h1><br>";
-    printContents.innerHTML += data.storeName + "<br>";
+  // const PrintReciept = (data) => {
+  //   const food = data.food;
+  //   //   [
+  //   //     {
+  //   //         "productName": "Classic Cheese Burger Single",
+  //   //         "extras": [],
+  //   //         "productQuantity": 1,
+  //   //         "productType": "Burgers",
+  //   //         "specialInstructions": "",
+  //   //         "productPrice": "69.90"
+  //   //     }
+  //   // ]
+  //   // console.log(food);
+  //   // console.log(data);
+  //   var printContents = document.createElement("div");
+  //   printContents.style.padding = "20px"; // Adding padding for spacing
+  //   printContents.style.backgroundColor = "#ffffff"; // White background
+  //   printContents.style.fontFamily = "Arial, sans-serif"; // Setting font family
+  //   printContents.style.border = "1px solid #ccc"; // Adding a border
+  //   document.title = "The Blazing Grill Store Reciept";
+  //   printContents.innerHTML +=
+  //     "<h2 style='color: #333; margin-bottom: 10px;'>The Blazing Grill</h2>"; // Custom color for the heading
+  //   printContents.innerHTML += "<strong>" + data.storeName + "</strong><br>"; // Making the store name bold
 
-    for (let i = 0; i < food.length; i++) {
-      printContents.innerHTML +=
-        food[i].productName + "         R" + food[i].productPrice + "<br>";
-    }
-    printContents.innerHTML += "<br>";
-    printContents.innerHTML += "Total       " + data.total + "<br>";
-    printContents.innerHTML += "Date       " + data.date + "<br>";
-    printContents.innerHTML += "Sales Channel      Kaleemba<br> ";
-    printContents.innerHTML += "Come Get Some!!!<br>";
-    var originalContents = document.body.innerHTML;
+  //   for (let i = 0; i < food.length; i++) {
+  //     printContents.innerHTML +=
+  //       "<div style='margin-bottom: 5px;'>" +
+  //       food[i].productQuantity +
+  //       " x " +
+  //       food[i].productName +
+  //       " <span style='float: right;'>R" +
+  //       food[i].productPrice +
+  //       "</span></div>";
+  //   }
 
-    document.body.innerHTML = printContents.innerHTML;
-    window.print();
-    document.body.innerHTML = originalContents;
-  };
+  //   printContents.innerHTML += "<br>";
+  //   printContents.innerHTML +=
+  //     "<hr style='border-top: 1px dashed #ccc; margin-bottom: 10px;'>"; // Adding a dashed line
+  //   printContents.innerHTML +=
+  //     "<strong>Total:</strong> R" + data.total + "<br>"; // Making the total bold
+  //   printContents.innerHTML += "<strong>Date:</strong> " + data.date + "<br>"; // Making the date bold
+  //   printContents.innerHTML += "<strong>Sales Channel:</strong> Kaleemba<br>"; // Making the sales channel bold
+  //   printContents.innerHTML +=
+  //     "<hr style='border-top: 1px dashed #ccc; margin-top: 10px;'>"; // Adding another dashed line
+  //   printContents.innerHTML += "<em>Come Get Some!!!</em>"; // Making "Come Get Some!!!" italic
+
+  //   var originalContents = document.body.innerHTML;
+
+  //   document.body.innerHTML = printContents.innerHTML;
+  //   window.print();
+  //   document.body.innerHTML = originalContents;
+  // };
   const handleChange = () => {
     let status = "";
 
@@ -230,15 +251,16 @@ function Orders({
                             </button>
                           </td>
                           <td>
+                            {showReciept && <PrintComponent data={data} />}
                             <button
-                              onClick={() => PrintReciept(data)}
+                              onClick={() => setShowReciept(!showReciept)}
                               style={{
                                 height: "35px",
                                 borderRadius: "10px",
                                 border: "2px solid #f7941d",
                               }}
                             >
-                              Reciept
+                              Show Reciept
                             </button>
                           </td>
                           <td>

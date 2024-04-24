@@ -252,7 +252,7 @@ function App() {
         alert("Failed to process the refund. Please try again later.");
       });
   };
-  // console.log(store, true, store === "")
+  // console.log(currentStore, true, store === currentStore)
   if (isLoggedIn === undefined) {
     return (
       <div className="App">

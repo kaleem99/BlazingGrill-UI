@@ -25,7 +25,7 @@ function Checkout({
   setItemState,
   store,
 }) {
-  console.log(store);
+  console.log(store, 1000);
   const [cartItems, setCartItems] = useState([]);
   const [edit, setEdit] = useState(false);
   const [index, setIndex] = useState(0);
@@ -188,7 +188,7 @@ function Checkout({
     const x = getDateAndTime();
     const time = x.formattedTime;
     const date = x.formattedDate;
-    console.log(time, date, store);
+    console.log(store);
     const storeName = Object.keys(store[0])[0];
     console.log(storeName);
     const detailsOfStore = store[0][storeName];
