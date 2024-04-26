@@ -62,27 +62,27 @@ function App() {
   const [selectedItem, setSelectedItem] = useState("");
   const [PendingOrders, setPendingOrders] = useState([]);
   const [inProgress, setInProgress] = useState([]);
-
+  // const [store, setStore] = useState("");
   // ...
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [time, setTime] = useState("");
   const [timerObj, setTimerObj] = useState("00:00");
   // ...
-  let store = "";
-  useEffect(() => {
+  const fetchStoreDetails = () => {
     getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
       const newData = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
       setStoreDetails(newData);
-      store = newData.filter((stores, i) => {
+      let newstore = newData.filter((stores, i) => {
         if (stores[Object.keys(newData[i])[0]].adminUsername === email) {
           return stores;
         }
       });
-      setCurrentStore(store);
+      // setStore(newstore);
+      setCurrentStore(newstore);
       // console.log(store[0], auth.currentUser.displayName)
       // console.log(Object.keys(store[0]), "STOEE")
       // if (store[0]) {
@@ -92,6 +92,8 @@ function App() {
       //   // console.log(store[0][storeName].store);
       // }
     });
+  };
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (auth.currentUser) {
         getOrders(
@@ -121,6 +123,7 @@ function App() {
 
     // ...
     getTotalFromCart();
+    fetchStoreDetails();
   }, []);
   const getTotalFromCart = () => {
     let x = localStorage.getItem("CART");
@@ -209,7 +212,7 @@ function App() {
     let newPendingOrder = PendingOrders.shift();
     setPendingOrders(PendingOrders);
   };
-
+  console.log(currentStore);
   const handleDeclineOrder = (index) => {
     const detailsOfStore = getDetailsOfStore();
 
@@ -308,7 +311,7 @@ function App() {
                     isLoggedIn={isLoggedIn}
                     setStoreDetails={setStoreDetails}
                     storeDetails={storeDetails}
-                    store={store}
+                    store={currentStore}
                     storeStatus={storeStatus}
                     setstoreStatus={setstoreStatus}
                     auth={auth}
@@ -420,6 +423,7 @@ function App() {
                 ) : (
                   <Checkout
                     selectedItem={selectedItem}
+                    fetchStoreDetails={fetchStoreDetails}
                     setSelectedItem={setSelectedItem}
                     getTotalFromCart={getTotalFromCart}
                     total={total}

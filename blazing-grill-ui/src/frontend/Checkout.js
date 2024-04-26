@@ -24,8 +24,8 @@ function Checkout({
   total,
   setItemState,
   store,
+  fetchStoreDetails,
 }) {
-  console.log(store, 1000);
   const [cartItems, setCartItems] = useState([]);
   const [edit, setEdit] = useState(false);
   const [index, setIndex] = useState(0);
@@ -40,6 +40,9 @@ function Checkout({
   });
   useEffect(() => {
     getUpdatedCartItems();
+    fetchStoreDetails();
+    console.log(store, 1000);
+
   }, []);
 
   const handleChange = (e) => {
