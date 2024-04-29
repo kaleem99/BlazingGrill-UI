@@ -417,7 +417,7 @@ th {
   min-width: 60px;
   border-radius: 5px;
   border: 2px solid #f7941d;
-  height: 25px;
+  height: 34px;
   font-weight: 600;
 }
 tr:nth-child(even) {
@@ -436,8 +436,9 @@ tr:nth-child(odd) {
 #SelectValue {
   border-radius: 5px;
   /* color: red; */
-  height: 25px;
+  height: 34px;
   font-weight: 600;
+  border: 2px solid#f7941d;
 }
 
 .ReactModal__Overlay,

@@ -31,10 +31,11 @@ function Orders({
   const [customersOrders, setCustomersOrders] = useState([]);
   const [orderSection, setOrderSection] = useState("Collection");
   const ButtonStatus = ["In Progress", "Collection", "Delivery", "Complete"];
-  const [changeState, setChangeState] = useState("");
+  const [changeState, setChangeState] = useState("In Progress");
   const [currentPage, setCurrentPage] = useState(0); // State to track the current page or index
   const [customerView, setCustomerView] = useState(false);
   const [showReciept, setShowReciept] = useState(false);
+  const [receiptData, setReceiptData] = useState([]);
   const audio = new Audio(
     "https://kaleem99.github.io/hostingContents/mixkit-clear-announce-tones-2861.wav"
   );
@@ -127,12 +128,13 @@ function Orders({
   const setOrders = (data) => {
     setCustomersOrders(data);
   };
-  const changeOrderStatus = (userId, data) => {
+  const changeOrderStatus = (userId, data, i) => {
     const userRef = doc(db, "Orders", userId);
-
-    // let x = document.getElementById("SelectValue");
+    // console.log(data, "DATA", changeState);
+    let x = document.getElementById(`SelectValue${i}`).value;
+    // console.log(x, "AAA");
     const newData = data;
-    newData.status = changeState;
+    newData.status = x;
     updateDoc(userRef, newData);
   };
   const handleStateChange = (value) => {
@@ -158,6 +160,15 @@ function Orders({
   if (!customerView) {
     return (
       <div className="Home">
+        {showReciept && (
+          <PrintComponent
+            receiptData={receiptData}
+            setReceiptData={setReceiptData}
+            setShowReciept={setShowReciept}
+            // data={data}
+            // i={i}
+          />
+        )}
         {storeName[0] !== "admin" && (
           <>
             <Switch
@@ -251,9 +262,11 @@ function Orders({
                             </button>
                           </td>
                           <td>
-                            {showReciept && <PrintComponent data={data} />}
                             <button
-                              onClick={() => setShowReciept(!showReciept)}
+                              onClick={() => {
+                                setShowReciept(!showReciept);
+                                setReceiptData(data);
+                              }}
                               style={{
                                 height: "35px",
                                 borderRadius: "10px",
@@ -265,9 +278,10 @@ function Orders({
                           </td>
                           <td>
                             <select
-                              id="SelectValue"
-                              onChange={(e) => setChangeState(e.target.value)}
+                              id={`SelectValue${i}`}
+                              onChange={(e) => e.currentTarget.value}
                               defaultValue={data.status}
+                              // value={"In Progress"}
                             >
                               <option value="In Progress">In Progress</option>
                               {(orderSection === "Delivery" ||
@@ -279,7 +293,9 @@ function Orders({
                               </option>
                             </select>
                             <button
-                              onClick={() => changeOrderStatus(data.id, data)}
+                              onClick={() =>
+                                changeOrderStatus(data.id, data, i)
+                              }
                               id="save"
                             >
                               Save
