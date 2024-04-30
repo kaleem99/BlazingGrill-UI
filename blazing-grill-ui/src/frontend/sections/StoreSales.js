@@ -35,11 +35,10 @@ function StoreSales({ storeName, storeDetails }) {
         (obj) => obj.storeName === selectedStore
       );
       const rejectedDatabaseOrders = filteredArray.filter(
-        (data) => data.status !== "Complete"
+        (data) => data.status === "Declined"
       ).length;
-      console.log(filteredArray)
+      console.log(filteredArray);
       const totalSum = filteredArray.reduce((accumulator, currentObject) => {
-
         return parseFloat(accumulator) + parseFloat(currentObject.total);
       }, 0);
       const today = new Date().toISOString().split("T")[0];
@@ -56,13 +55,13 @@ function StoreSales({ storeName, storeDetails }) {
         Delivery: deliverySales,
         Collection: collectionSales,
       });
-      console.log(totalSum, "TOTAL SUM:")
-      setSales(totalSum);
-      setCurrentSales(
-        filteredTodaysSales.reduce((accumulator, currentObject) => {
-          return accumulator + currentObject.total;
-        }, 0)
-      );
+      // console.log(totalSum, "TOTAL SUM:");
+      setSales(totalSum.toFixed(2));
+      const sumOfCurrentSales = filteredTodaysSales.reduce((a, b) => {
+        return a + parseFloat(b.total);
+      }, 0);
+      // console.log(filteredTodaysSales, "filteredTodaysSales");
+      setCurrentSales(sumOfCurrentSales.toFixed(2));
       setTotalOrders(filteredArray.length);
       setTodaysOrders(filteredTodaysSales.length);
       setFilteredData(filteredArray);
@@ -85,11 +84,11 @@ function StoreSales({ storeName, storeDetails }) {
       const today = new Date().toISOString().split("T")[0];
       const filteredTodaysSales = newData.filter((data) => data.date === today);
 
-      setSales(totalSum);
+      setSales(totalSum.toFixed(2));
       setCurrentSales(
         filteredTodaysSales.reduce((accumulator, currentObject) => {
           return accumulator + currentObject.total;
-        }, 0)
+        }, [])
       );
       setTotalOrders(filteredArray.length);
       setTodaysOrders(filteredTodaysSales.length);
@@ -105,7 +104,7 @@ function StoreSales({ storeName, storeDetails }) {
     setCurrentSales(
       filterByDate.reduce((accumulator, currentObject) => {
         return accumulator + currentObject.total;
-      }, 0)
+      }, [])
     );
     setTodaysOrders(filterByDate.length);
   };
@@ -177,13 +176,10 @@ function StoreSales({ storeName, storeDetails }) {
                 {i === 0 && (
                   <>
                     <p className="SalesText">Total Store Sales: </p>
-                    {console.log(sales)}
-                    <h2 className="Sales">
-                      R{sales === "" ? 0 : sales.toFixed(2)}
-                    </h2>
+                    <h2 className="Sales">R{sales === "" ? 0 : sales}</h2>
                     <p className="SalesText">Todays Sales:</p>
                     <h2 className="Sales">
-                      R{currentSales === "" ? "" : currentSales.toFixed(2)}
+                      R{currentSales === "" ? "" : currentSales}
                     </h2>
                   </>
                 )}
@@ -201,10 +197,10 @@ function StoreSales({ storeName, storeDetails }) {
                 )}
                 {i === 2 && (
                   <>
-                    <p className="SalesText">Total Rejected Orders: </p>
-                    <h2 className="Sales">{rejectedOrders}</h2>
-                    <p className="SalesText">Todays Rejected Orders:</p>
-                    <h2 className="Sales">{todaysOrders}</h2>
+                    {/* <p className="SalesText">Total Rejected Orders: </p> */}
+                    {/* <h2 className="Sales">{rejectedOrders}</h2> */}
+                    {/* <p className="SalesText">Todays Rejected Orders:</p> */}
+                    {/* <h2 className="Sales">{todaysOrders}</h2> */}
                   </>
                 )}
                 {i === 3 && (

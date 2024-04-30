@@ -281,6 +281,7 @@ function Orders({
                               id={`SelectValue${i}`}
                               onChange={(e) => e.currentTarget.value}
                               defaultValue={data.status}
+                              className="SelectValue"
                               // value={"In Progress"}
                             >
                               <option value="In Progress">In Progress</option>

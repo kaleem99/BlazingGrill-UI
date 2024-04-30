@@ -433,7 +433,7 @@ tr:nth-child(odd) {
   background-color: #f7941d;
 }
 
-#SelectValue {
+.SelectValue {
   border-radius: 5px;
   /* color: red; */
   height: 34px;
@@ -712,3 +712,7 @@ Store Menu
   overflow-x: hidden;
   height: 100%;
 } */
+
+.right {
+  text-align: left;
+}
