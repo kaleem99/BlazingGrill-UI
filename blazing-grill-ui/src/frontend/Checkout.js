@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import ViewItem from "../components/viewItems";
-import getDateAndTime from "../helpers/getDataAndTime";
-import Modal from "react-modal";
-import { db } from "../database/config";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Modal from "react-modal";
 import SendEmailOrder from "../components/sendEmailOrder";
+import ViewItem from "../components/viewItems";
+import { db } from "../database/config";
 import { generateUniqueOrderNumber } from "../helpers/generateOrderNumber";
+import getDateAndTime from "../helpers/getDataAndTime";
 const customStyles = {
   content: {
     top: "50%",
@@ -42,7 +42,6 @@ function Checkout({
     getUpdatedCartItems();
     fetchStoreDetails();
     console.log(store, 1000);
-
   }, []);
 
   const handleChange = (e) => {
@@ -214,6 +213,7 @@ function Checkout({
     resultCart.phoneNumber = "";
     resultCart.total = total;
     resultCart.food = food;
+    resultCart.storeOrder = true;
     resultCart.orderNumber = uniqueOrderNum;
     addDoc(colReference, resultCart)
       .then((docRef) => {

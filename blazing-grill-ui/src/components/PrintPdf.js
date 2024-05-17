@@ -8,7 +8,7 @@ import CustomerReceipts from "./CustomerReceipt";
 import KitchenReceipt from "./KitchenReceipt";
 import revokeReceiptData from "../helpers/revokeReceipt";
 const PrintComponent = ({ receiptData, setShowReciept, setReceiptData }) => {
-  const [state, setState] = useState();
+  const [state, setState] = useState("");
   const food = receiptData.food;
   const componentRef = React.useRef();
   const kitchenComponentRef = React.useRef();

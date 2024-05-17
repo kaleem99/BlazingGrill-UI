@@ -716,3 +716,13 @@ Store Menu
 .right {
   text-align: left;
 }
+.pRemoveMargins {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+}
+.pRemoveMargins:nth-child(1) {
+  text-align: left;
+}
+.pRemoveMargins:nth-child(2) {
+  text-align: right;
+}

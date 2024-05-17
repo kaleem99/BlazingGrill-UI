@@ -21,10 +21,14 @@ import {
   MdLogout,
   MdPointOfSale,
 } from "react-icons/md";
+import { TiCancel } from "react-icons/ti";
+
 import StoreSales from "./StoreSales";
+import RevokedOrders from "./RevokedOrder";
 const accountSections = [
   "Account Details",
   "Store Sales",
+  "Revoked Orders",
   "Add Delivery Drivers",
   "View Delivery Drivers",
   "Logout of Store",
@@ -46,12 +50,12 @@ function Account({
       body: JSON.stringify({}),
     })
       .then((response) => {
-        console.log(response, "check")
+        console.log(response, "check");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         // You can handle the response here if needed
-        console.log(response, "response Data")
+        console.log(response, "response Data");
         console.log("Webhook request successful");
       })
       .catch((error) => {
@@ -63,6 +67,7 @@ function Account({
   const iconsArr = [
     <MdAccountBox />,
     <MdPointOfSale />,
+    <TiCancel />,
     <MdDirectionsBike />,
     <MdOutlineRateReview />,
     <MdLogout />,
@@ -94,6 +99,9 @@ function Account({
       break;
     case "View Delivery Drivers":
       body = <ViewDeliveryDrivers storeName={storeName} />;
+      break;
+    case "Revoked Orders":
+      body = <RevokedOrders />;
       break;
     default:
       body = "";

@@ -63,11 +63,17 @@ const RevokeReceipt = ({
         </div>
         <button
           style={style.printButtons}
-          onClick={() =>
-            state !== ""
-              ? handleRevokePrint()
-              : alert("Please ensure to add a valid reason")
-          }
+          onClick={() => {
+            if (state !== "") {
+              alert("Please ensure to add a valid reason");
+            }
+            const result = window.confirm(
+              "Are your sure you want to revoke the order."
+            );
+            if (result) {
+              handleRevokePrint();
+            }
+          }}
         >
           Revoke Customer Reciept
         </button>

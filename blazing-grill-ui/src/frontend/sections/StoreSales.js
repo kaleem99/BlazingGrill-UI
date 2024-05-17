@@ -8,13 +8,18 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { auth } from "../../database/config";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "../../database/config";
+import getDatabaseDocs from "../../helpers/GetDatabaseDocs";
+import { useReactToPrint } from "react-to-print";
+import CashoutReciepts from "../../components/CashoutReceipt";
+
 function StoreSales({ storeName, storeDetails }) {
   const [sales, setSales] = useState("");
   const [currentSales, setCurrentSales] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [todaysOrders, setTodaysOrders] = useState(0);
+  const [todaysRejectedOrders, setTodaysRejectedOrders] = useState();
   const [filteredData, setFilteredData] = useState("");
   const [selectedStore, setSelectedStore] = useState(storeName[0]);
   const [rejectedOrders, setRejectedOrders] = useState(0);
@@ -22,8 +27,24 @@ function StoreSales({ storeName, storeDetails }) {
     Collection: 0,
     Delivery: 0,
   });
-  const arrSalesItems = [1, 2, 3, 4];
+  const [receiptData, setReceiptData] = useState([]);
+  const [cashout, setCashout] = useState(false);
+  const ref = useRef();
+  const arrSalesItems = [1, 2, 3, 4, 5];
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   useEffect(() => {
+    const fetchDeclinedOrders = async () => {
+      let result = await getDatabaseDocs("DeclinedOrders");
+      // console.log(result, 2);
+      result = result.filter((data) => data.storeName === storeName[0]);
+      setRejectedOrders(result.length);
+      // "Blazing Grills Florida"
+      // console.log(storeName[0], result, 34);
+    };
+    fetchDeclinedOrders();
     getDocs(collection(db, "Orders")).then((querySnapshot) => {
       const newData = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -65,7 +86,6 @@ function StoreSales({ storeName, storeDetails }) {
       setTotalOrders(filteredArray.length);
       setTodaysOrders(filteredTodaysSales.length);
       setFilteredData(filteredArray);
-      setRejectedOrders(rejectedDatabaseOrders);
     });
   }, []);
   const changeStore = (value) => {
@@ -108,6 +128,17 @@ function StoreSales({ storeName, storeDetails }) {
     );
     setTodaysOrders(filterByDate.length);
   };
+  const chashoutSales = async () => {
+    const orders = await getDatabaseDocs("Orders");
+    const filteredOrders = orders.filter(
+      (data) => data.date === ref.current.value
+    );
+    setReceiptData(filteredData);
+    setCashout(true);
+    console.log(orders, 10);
+    console.log(new Date().getUTCDate());
+    console.log(filteredOrders, ref.current.value);
+  };
   return (
     <div
       style={{
@@ -117,6 +148,14 @@ function StoreSales({ storeName, storeDetails }) {
         margin: "auto",
       }}
     >
+      {cashout && (
+        <CashoutReciepts
+          receiptData={receiptData}
+          handlePrint={handlePrint}
+          componentRef={componentRef}
+          setCashout={setCashout}
+        />
+      )}
       <h1 style={{ color: "white" }}>Store Sales</h1>
       <div
         style={{
@@ -154,6 +193,7 @@ function StoreSales({ storeName, storeDetails }) {
           <input
             onChange={(e) => changeSalesDate(e.target.value)}
             type="date"
+            ref={ref}
             id="SalesDatePicker"
           />
           <div></div>
@@ -197,8 +237,8 @@ function StoreSales({ storeName, storeDetails }) {
                 )}
                 {i === 2 && (
                   <>
-                    {/* <p className="SalesText">Total Rejected Orders: </p> */}
-                    {/* <h2 className="Sales">{rejectedOrders}</h2> */}
+                    <p className="SalesText">Total Rejected Orders: </p>
+                    <h2 className="Sales">{rejectedOrders}</h2>
                     {/* <p className="SalesText">Todays Rejected Orders:</p> */}
                     {/* <h2 className="Sales">{todaysOrders}</h2> */}
                   </>
@@ -213,6 +253,12 @@ function StoreSales({ storeName, storeDetails }) {
                     <h2 className="Sales">
                       {deliveryAndCollectionSales.Delivery}
                     </h2>
+                  </>
+                )}
+                {i === 4 && (
+                  <>
+                    <p className="SalesText">Cash Out Sales: </p>
+                    <button onClick={() => chashoutSales()}>Cash out</button>
                   </>
                 )}
               </div>
