@@ -127,16 +127,20 @@ function StoreSales({ storeName, storeDetails }) {
       }, [])
     );
     setTodaysOrders(filterByDate.length);
+    // ref.current.value = value;
+    console.log(ref.current.value);
   };
   const chashoutSales = async () => {
     const orders = await getDatabaseDocs("Orders");
     const filteredOrders = orders.filter(
       (data) => data.date === ref.current.value
     );
-    setReceiptData(filteredData);
-    setCashout(true);
+    setReceiptData(filteredOrders);
+    // if (filteredOrders.length > 0) {
+      setCashout(true);
+    // }
     console.log(orders, 10);
-    console.log(new Date().getUTCDate());
+    console.log(new Date().getUTCDate(), ref.current.value);
     console.log(filteredOrders, ref.current.value);
   };
   return (
