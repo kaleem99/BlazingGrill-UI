@@ -174,7 +174,7 @@ li a:hover {
   background-color: #f7941d;
 }
 .NavItemMenuSections.active {
-  color: #f7941d;
+  background: #f7941d;
   font-size: 22px;
   margin: 10px auto;
   /* height: 40px; */
