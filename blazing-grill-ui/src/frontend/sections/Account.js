@@ -110,7 +110,7 @@ function Account({
   const dataProvider = FirebaseDataProvider(firebaseConfig, {});
   // console.log(dataProvider);
   return sections === "" ? (
-    <div>
+    <div className="AccountDiv">
       <h1 style={{ color: "white" }}>Store Account</h1>
       {accountSections.map((data, i) => {
         return (
@@ -131,7 +131,7 @@ function Account({
       })}
     </div>
   ) : (
-    <div>
+    <div className="AccountDiv">
       <h1
         onClick={() => setSections("")}
         style={{

@@ -78,7 +78,7 @@ const PlaceAndOrder = ({
     viewItem.map((data) => (data.quantity = 1));
     const previousCart = JSON.parse(localStorage.getItem("CART"));
     console.log(previousCart);
-    if (!checkIfAllFlavoursAdded()) {
+    if (viewItem.flavours && !checkIfAllFlavoursAdded()) {
       return alert("please ensure to choose a flavour for all items");
     }
     if (previousCart) {
@@ -97,16 +97,18 @@ const PlaceAndOrder = ({
     for (let i = 0; i < viewItem.length; i++) {
       const flavours = viewItem[i].flavours;
       console.log(flavours);
-      for (let j = 0; j < flavours.length; j++) {
-        if (flavours[j].selected === true) {
-          count++;
+      if (flavours) {
+        for (let j = 0; j < flavours.length; j++) {
+          if (flavours[j].selected === true) {
+            count++;
+          }
         }
+        const filteredFlavours = flavours.filter((data) => data.name != "");
+        if (filteredFlavours.length === 0) {
+          return true;
+        }
+        console.log(filteredFlavours, "SS");
       }
-      const filteredFlavours = flavours.filter((data) => data.name != "");
-      if (filteredFlavours.length === 0) {
-        return true;
-      }
-      console.log(filteredFlavours, "SS");
     }
     return count === viewItem.length;
   };
@@ -179,7 +181,7 @@ const PlaceAndOrder = ({
     }
   };
   return itemState === "" ? (
-    <div style={{ marginTop: "100px", padding: "20px" }} className="Menu">
+    <div style={{ padding: "20px" }} className="Menu">
       <div style={{ margin: "0% auto" }} className="items">
         {MenuItemsSection.slice(0, MenuItemsSection.length - 1).map((item) => {
           return (

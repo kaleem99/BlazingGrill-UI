@@ -1,29 +1,40 @@
 import { useState } from "react";
+import { IoMdCloseCircle } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import logout from "../components/logoutOfStore";
 
 function NavMenu({ sections, setState, state, isLoggedIn }) {
+  const dispatch = useDispatch();
   const changeStatus = (type) => {
     setState(type);
   };
   return (
     <div className="NavMenu">
       {sections.slice(0, sections.length - 1).map((section, i) => {
-        if (i === 2) {
+        if (i === 0) {
           return (
-            <img
-              onClick={() =>
-                (window.location.href = "/BlazingGrill-UI?Place-order")
-              }
-              alt=""
-              className="BlazingImage"
-              src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
-            ></img>
+            <div>
+              <div className="closeIcon">
+                <IoMdCloseCircle
+                  onClick={() => dispatch({ type: "CLOSE_NAV" })}
+                />
+              </div>
+              <img
+                onClick={() =>
+                  (window.location.href = "/BlazingGrill-UI?Place-order")
+                }
+                alt=""
+                className="BlazingImage"
+                src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"
+              ></img>
+            </div>
           );
         } else {
           return (
             <div
               className={
                 section === state
-                  ? "NavItemMenuSectionsactive"
+                  ? "NavItemMenuSections active"
                   : "NavItemMenuSections"
               }
               onClick={() => setState(section)}
@@ -68,6 +79,13 @@ function NavMenu({ sections, setState, state, isLoggedIn }) {
           <a onClick={() => changeStatus(userStatus())}>{userStatus()}</a>
         </li>
       </ul> */}
+      <div
+        onClick={() => logout(setState)}
+        className={"NavItemMenuSections"}
+        // onClick={() => setState(section)}
+      >
+        Logout of store
+      </div>
     </div>
   );
 }

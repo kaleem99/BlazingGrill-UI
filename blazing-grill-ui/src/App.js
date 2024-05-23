@@ -26,11 +26,14 @@ import { getCurrentTime } from "./helpers/getCurrentTime";
 import SendEmailOrder from "./components/sendEmailOrder";
 import SendOrderCancellation from "./components/SendOrderCancellation";
 import { clearCart } from "./helpers/ClearCart";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 // ...
 import Checkout from "./frontend/Checkout";
 import { getOrders } from "./helpers/GetOrdersPlaced";
 import DownloadImages from "./components/DownloadAllImages";
+import { connect, useDispatch } from "react-redux";
+import PlaceAnOrderMain from "./frontend/PlaceAnOrderMain";
 const defaultOptions = {
   loop: true,
   autoplay: true,
@@ -40,14 +43,15 @@ const defaultOptions = {
   },
 };
 const sections = [
+  "image",
   "Home",
   "Add Menu Item",
-  "image",
   "Orders",
   "Account",
+  "Place-order",
   "Driver",
 ];
-function App() {
+function App({ navigation }) {
   const [state, setState] = useState("Home");
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
   const [storeDetails, setStoreDetails] = useState([]);
@@ -69,6 +73,7 @@ function App() {
   const [time, setTime] = useState("");
   const [timerObj, setTimerObj] = useState("00:00");
   // ...
+  const dispatch = useDispatch();
   const fetchStoreDetails = () => {
     getDocs(collection(db, "BlazingStores")).then((querySnapshot) => {
       const newData = querySnapshot.docs.map((doc) => ({
@@ -296,13 +301,21 @@ function App() {
         ) : (
           <>
             {urlChar !== "Place-order" ? (
-              <>
-                <NavMenu
-                  sections={sections}
-                  setState={setState}
-                  state={state}
-                  isLoggedIn={isLoggedIn}
-                />
+              <div className="MainSectionDiv">
+                {navigation ? (
+                  <NavMenu
+                    sections={sections}
+                    setState={setState}
+                    state={state}
+                    isLoggedIn={isLoggedIn}
+                  />
+                ) : (
+                  <div className="ClosedMenu">
+                    <GiHamburgerMenu
+                      onClick={() => dispatch({ type: "OPEN_NAV" })}
+                    />
+                  </div>
+                )}
 
                 <div className="sections">
                   <Sections
@@ -320,118 +333,37 @@ function App() {
                     PendingOrders={PendingOrders}
                     inProgress={inProgress}
                     currentStore={currentStore}
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  style={{
-                    height: "100px",
-                    position: "fixed",
-                    textAlign: "center",
-                    width: "100%",
-                    background: "#030303",
-                    zIndex: 99,
-                  }}
-                >
-                  <h1
-                    style={{
-                      color: "white",
-                    }}
-                  >
-                    The Blazing Grill
-                  </h1>
-                  <img
-                    onClick={() => (window.location.href = "/BlazingGrill-UI")}
-                    width={"100px"}
-                    height={"80px"}
-                    style={{
-                      position: "fixed",
-                      top: "10px",
-                      left: "10px",
-                      bottom: "auto",
-                      cursor: "pointer",
-                    }}
-                    alt=""
-                    src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite-1024x894.png"
-                  />
-
-                  {checkout ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          setItemState("");
-                          setSelectedItem("");
-                          setCheckout(false);
-                        }}
-                        style={{
-                          position: "absolute",
-                          right: "10px",
-                          top: 0,
-                          bottom: 0,
-                          height: "60px",
-                          margin: "auto",
-                          width: "140px",
-                          borderRadius: "30px",
-                          border: "none",
-                          fontSize: "larger",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Add more items
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        setItemState("");
-                        setSelectedItem("");
-                        setCheckout(true);
-                      }}
-                      className="checkoutPlaceOrder"
-                      style={itemState != "" ? { right: "210px" } : {}}
-                    >
-                      Checkout
-                    </button>
-                  )}
-                  {itemState === "" && selectedItem === "" && (
-                    <button
-                      style={{
-                        right: "200px",
-                        border: "2px solid #f7941d",
-                        width: "180px",
-                      }}
-                      className="checkoutPlaceOrder"
-                    >
-                      Total: {total}
-                    </button>
-                  )}
-                </div>
-                {!checkout ? (
-                  <PlaceAndOrder
-                    setCart={setCart}
-                    cart={cart}
+                    checkout={checkout}
+                    setCheckout={setCheckout}
+                    setItemState={setItemState}
+                    setSelectedItem={setSelectedItem}
+                    itemState={itemState}
+                    selectedItem={selectedItem}
                     total={total}
                     setTotal={setTotal}
-                    itemState={itemState}
-                    setItemState={setItemState}
-                    setSelectedItem={setSelectedItem}
-                    selectedItem={selectedItem}
+                    setCart={setCart}
+                    cart={cart}
                     getTotalFromCart={getTotalFromCart}
-                  />
-                ) : (
-                  <Checkout
-                    selectedItem={selectedItem}
                     fetchStoreDetails={fetchStoreDetails}
-                    setSelectedItem={setSelectedItem}
-                    getTotalFromCart={getTotalFromCart}
-                    total={total}
-                    setItemState={setItemState}
-                    store={currentStore}
                   />
-                )}
-              </>
+                </div>
+              </div>
+            ) : (
+              <PlaceAnOrderMain
+                checkout={checkout}
+                setCheckout={setCheckout}
+                setItemState={setItemState}
+                setSelectedItem={setSelectedItem}
+                itemState={itemState}
+                selectedItem={selectedItem}
+                total={total}
+                setTotal={setTotal}
+                setCart={setCart}
+                cart={cart}
+                getTotalFromCart={getTotalFromCart}
+                fetchStoreDetails={fetchStoreDetails}
+                currentStore={currentStore}
+              />
             )}
           </>
         )}
@@ -439,6 +371,11 @@ function App() {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    navigation: state.appReducer.navigation,
+  };
+};
 // function App() {
 //   return (
 //     <div>
@@ -446,4 +383,4 @@ function App() {
 //     </div>
 //   );
 // }
-export default App;
+export default connect(mapStateToProps, {})(App);

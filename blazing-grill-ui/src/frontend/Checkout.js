@@ -37,6 +37,7 @@ function Checkout({
   const [checkoutDetails, setCheckoutDetails] = useState({
     name: "",
     email: "",
+    table: "None",
   });
   useEffect(() => {
     getUpdatedCartItems();
@@ -46,6 +47,7 @@ function Checkout({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setCheckoutDetails({
       ...checkoutDetails,
       [name]: value,
@@ -198,10 +200,11 @@ function Checkout({
       detailsOfStore.store,
       checkoutDetails.name
     );
-    console.log(storeName);
-    console.log(cartItems);
+    // console.log(storeName);
+    // console.log(cartItems);
     resultCart.Name = checkoutDetails.name;
     resultCart.email = checkoutDetails.email;
+    resultCart.table = checkoutDetails.table;
     resultCart.paid = "paid";
     resultCart.status = "In Progress";
     resultCart.storeName = storeName;
@@ -215,6 +218,10 @@ function Checkout({
     resultCart.food = food;
     resultCart.storeOrder = true;
     resultCart.orderNumber = uniqueOrderNum;
+    console.log(resultCart);
+    if (checkoutDetails.table !== "None") {
+      resultCart.orderType = "Table Ordering " + checkoutDetails.table;
+    }
     addDoc(colReference, resultCart)
       .then((docRef) => {
         const addedDocumentId = docRef.id;
@@ -254,11 +261,11 @@ function Checkout({
   return !edit ? (
     <div
       style={{
-        height: "auto",
+        maxHeight: "60vh",
         width: "100%",
-        margin: "100px auto",
+        margin: "auto",
         paddingTop: "50px",
-        overflow: "hidden",
+        overflow: "auto",
       }}
     >
       <table style={{ width: "95%", margin: "auto" }}>
@@ -279,7 +286,7 @@ function Checkout({
               <tr>
                 <td>{data.category}</td>
                 <td>{data.name}</td>
-                <td>{formatFlavours(data)}</td>
+                <td>{data.flavours ? formatFlavours(data) : "None"}</td>
                 <td>{formatExtras(data)}</td>
                 <td>R{data.price}</td>
                 <td style={{ textAlign: "center" }}>{data.quantity}</td>
@@ -301,14 +308,16 @@ function Checkout({
             );
           })}
       </table>
-      <div className="bottomFixedBar" style={{ width: "50%" }}>
-        <button className="checkoutButton" onClick={() => setPopup(true)}>
-          Place Order
-        </button>
+      <div className="bottomFixedBarParent">
+        <div className="bottomFixedBar" style={{ width: "50%" }}>
+          <button className="checkoutButton" onClick={() => setPopup(true)}>
+            Place Order
+          </button>
 
-        <button onClick={() => clearCart()} className="checkoutButton">
-          Clear Cart
-        </button>
+          <button onClick={() => clearCart()} className="checkoutButton">
+            Clear Cart
+          </button>
+        </div>
       </div>
       <Modal
         // style={{
@@ -341,6 +350,22 @@ function Checkout({
           onChange={(e) => handleChange(e)}
           className="place-order-input"
         />
+        <br></br>
+        <label>Please select a Table</label>
+        <br></br>
+        <select
+          name="table"
+          onChange={(e) => handleChange(e)}
+          style={{ width: "200px", height: "30px" }}
+        >
+          <option selected>None</option>
+          {"0"
+            .repeat(5)
+            .split("")
+            .map((data, i) => (
+              <option>Table {i + 1}</option>
+            ))}
+        </select>
         <p>order receipts will be sent to store and customers email address</p>
         <button
           style={{

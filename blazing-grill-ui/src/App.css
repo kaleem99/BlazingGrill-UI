@@ -1,35 +1,73 @@
 @import url("https://fonts.googleapis.com/css?family=IM Fell DW Pica");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 .App {
   text-align: center;
   width: 100%;
   height: 100vh;
-  background-image: url("./assets/smokeyBackground1024_1.png");
+  background-image: url("./assets/background2.jpg");
   /* background-color: black; */
   background-repeat: no-repeat;
   font-family: "IM Fell";
   background-position: center;
   background-size: cover;
   display: grid;
-  overflow-x: scroll;
+  overflow: hidden;
   grid-template-rows: auto auto;
+}
+.sections {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.closeIcon {
+  font-size: 30px;
+  color: white;
+  width: 98%;
+  margin: 5px auto;
+  text-align: right;
+  cursor: pointer;
 }
 .NavMenu {
   /* position: fixed; */
-  width: 100%;
-  height: 250px;
-  display: grid;
+  width: 25%;
+  height: 99vh;
+  /* display: flex; */
   text-transform: uppercase;
-  grid-template-columns: 10% 25% auto 25% 10%;
+  border-radius: 10px;
+  /* grid-template-columns: 10% 25% auto 25% 10%; */
+  /* background-color: black; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border: 5px solid white;
 }
-
+.AccountDiv {
+  width: 100%;
+}
+.ClosedMenu {
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+}
 .NavItemMenuSections {
   font-size: 22px;
-  margin: auto;
+  margin: 20px auto;
   color: white;
+  width: 90%;
+  height: 40px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
 }
 .NavItemMenuSections:hover {
   color: #f7941d;
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
   cursor: pointer;
 }
 button {
@@ -55,7 +93,7 @@ button:hover {
 }
 .BlazingImage {
   width: 250px;
-  margin: 2% auto;
+  margin: 2% auto 10% auto;
   cursor: pointer;
 }
 .form {
@@ -135,15 +173,18 @@ li a:hover {
   cursor: pointer;
   background-color: #f7941d;
 }
-.NavItemMenuSectionsactive {
+.NavItemMenuSections.active {
   color: #f7941d;
   font-size: 22px;
-  margin: auto;
+  margin: 10px auto;
+  /* height: 40px; */
+  /* width: 100%; */
+  border: 1px solid #f7941d;
 }
 .Menu {
   width: 90%;
   height: auto;
-  margin: 0% auto;
+  margin: auto;
   /* background-color: black; */
 }
 .menuNameImage {
@@ -180,6 +221,7 @@ li a:hover {
 .Home {
   width: 100%;
   height: auto;
+  overflow: auto;
   /* background-color: #000000; */
   /* overflow-x: scroll; */
   /* padding: 20px; */
@@ -192,7 +234,7 @@ li a:hover {
   /* background-color: #202124; */
   /* border-radius: 10px; */
   margin: 0% auto;
-  border: 0.5px solid white;
+  /* border: 0.5px solid white; */
   padding-bottom: 20px;
 }
 .ItemsSections > h1 {
@@ -399,33 +441,58 @@ table {
   border-collapse: collapse;
   width: 100%;
   font-weight: bold;
+  margin-top: 30px;
+  height: auto;
+  /* border: 1px solid white;
+  border-radius: 10px; */
 }
-
+.TableParentDiv {
+  height: 60vh;
+  overflow: auto;
+  width: 100%;
+}
+tr:nth-child(1) > th,
+tr:nth-child(1) {
+  border: none;
+  background-color: #333;
+}
+.CustomerViewBtn {
+  width: 200px;
+  height: 40px;
+  margin: 20px auto;
+  border-radius: 5px;
+  border: none;
+  font-size: large;
+}
 td,
 th {
-  border: 1px solid #dddddd;
+  /* border: 1px solid #dddddd; */
   text-align: left;
   padding: 8px;
-  font-size: large;
+  font-size: medium;
   height: 50px;
 }
 .log {
   color: white;
 }
 #save {
-  float: right;
+  /* float: right; */
   min-width: 60px;
   border-radius: 5px;
   border: 2px solid #f7941d;
   height: 34px;
   font-weight: 600;
+  width: 100px;
+  margin-top: 5px;
 }
-tr:nth-child(even) {
-  background-color: #dddddd;
-  color: black;
+tr {
+  background-color: #ffffff;
+  color: gray;
+  font-family: "Montserrat", sans-serif;
+  border-bottom: 1px solid;
 }
 
-tr:nth-child(odd) {
+tr:nth-child(1) {
   color: white;
 }
 
@@ -439,6 +506,7 @@ tr:nth-child(odd) {
   height: 34px;
   font-weight: 600;
   border: 2px solid#f7941d;
+  width: 100px;
 }
 
 .ReactModal__Overlay,
@@ -448,6 +516,7 @@ tr:nth-child(odd) {
   margin: auto;
   border-radius: 30px;
   text-align: center;
+  background-color: darkgray !important;
 }
 .btnOrder {
   width: 200px;
@@ -600,17 +669,18 @@ Store Menu
 }  */
 
 .checkoutPlaceOrder {
-  position: absolute;
+  /* position: absolute; */
   right: 10px;
   top: 0;
   bottom: 0;
   height: 60px;
-  margin: auto;
+  margin: 20px 10px;
   width: 140px;
   border-radius: 30px;
   border: none;
   font-size: larger;
   font-weight: bold;
+  float: right;
 }
 
 .place-order-input {
@@ -712,7 +782,11 @@ Store Menu
   overflow-x: hidden;
   height: 100%;
 } */
-
+.OuterContentCustomerViewNotExpanded,
+.OrdersCustomerView {
+  width: 100%;
+  height: 90vh;
+}
 .right {
   text-align: left;
 }
@@ -725,4 +799,7 @@ Store Menu
 }
 .pRemoveMargins:nth-child(2) {
   text-align: right;
+}
+.MainSectionDiv {
+  display: flex;
 }

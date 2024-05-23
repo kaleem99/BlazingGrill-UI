@@ -49,6 +49,7 @@ const PrintComponent = ({ receiptData, setShowReciept, setReceiptData }) => {
         alignItems: "center",
         justifyContent: "center",
         zIndex: "9",
+        overflow: "auto",
       }}
     >
       <button onClick={() => setShowReciept(false)} style={style.closeBtn}>

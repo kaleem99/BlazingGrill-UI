@@ -171,18 +171,18 @@ function Orders({
         )}
         {storeName[0] !== "admin" && (
           <>
-            <Switch
-              onChange={() => setstoreStatus(handleChange())}
-              checked={storeStatus}
-            />
             <br></br>
             <p style={{ color: "white", fontSize: "30px" }}>
               store status:{" "}
-              {storeStatus ? "Accepting Orders" : "Not Accepting Orders"}
+              {storeStatus ? "Accepting Orders" : "Not Accepting Orders"}{" "}
+              <Switch
+                onChange={() => setstoreStatus(handleChange())}
+                checked={storeStatus}
+              />
             </p>
           </>
         )}
-        <text style={{ color: "white", fontSize: "30px" }}>Orders</text>
+        {/* <text style={{ color: "white", fontSize: "30px" }}>Orders</text> */}
         <br></br>
         <div className="ItemsSections">
           {/* <input type="text" className="searchInputBox" /> */}
@@ -223,16 +223,16 @@ function Orders({
               </button>
             ))}
           </div>
-          <div>
+          <div className="TableParentDiv">
             {customersOrders.length === 0 ? (
               <table>
                 <tr>
                   <th>Order Number</th>
                   <th>Order Type</th>
-                  <th>Customer Name</th>
-                  <th>Customer Email</th>
-                  <th>Customer Cell Number</th>
-                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Cell Number</th>
+                  <th>Order Date</th>
                   <th>View Orders</th>
                   <th>Print</th>
                   <th>Change Status</th>
@@ -253,7 +253,8 @@ function Orders({
                             <button
                               onClick={() => setOrders(data)}
                               style={{
-                                height: "35px",
+                                height: "40px",
+                                width: "100px",
                                 borderRadius: "10px",
                                 border: "2px solid #f7941d",
                               }}
@@ -268,7 +269,8 @@ function Orders({
                                 setReceiptData(data);
                               }}
                               style={{
-                                height: "35px",
+                                height: "40px",
+                                width: "100px",
                                 borderRadius: "10px",
                                 border: "2px solid #f7941d",
                               }}
@@ -289,8 +291,20 @@ function Orders({
                                 orderSection === "Collection") && (
                                 <option value="Complete">Complete</option>
                               )}
-                              <option value={data.orderType}>
-                                {data.orderType}
+                              <option
+                                value={
+                                  data.orderType
+                                    .toLowerCase()
+                                    .includes("table ordering")
+                                    ? "Complete"
+                                    : data.orderType
+                                }
+                              >
+                                {data.orderType
+                                  .toLowerCase()
+                                  .includes("table ordering")
+                                  ? "Complete"
+                                  : data.orderType}
                               </option>
                             </select>
                             <button
@@ -305,9 +319,6 @@ function Orders({
                         </tr>
                       )
                   )}
-                <button onClick={() => setCustomerView(true)}>
-                  Customer View
-                </button>
               </table>
             ) : (
               <table>
@@ -367,6 +378,12 @@ function Orders({
             )}
           </div>
         </div>
+        <button
+          className="CustomerViewBtn"
+          onClick={() => setCustomerView(true)}
+        >
+          Customer View
+        </button>
       </div>
     );
   } else {

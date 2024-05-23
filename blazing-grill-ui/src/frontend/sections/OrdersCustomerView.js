@@ -16,7 +16,7 @@ const OrdersCustomerView = ({ orders, setCustomerView }) => {
   );
   return (
     <div className="OrdersCustomerView">
-      <div className={expand ? "OuterContentCustomerView" : ""}>
+      <div className={expand ? "OuterContentCustomerView" : "OuterContentCustomerViewNotExpanded"}>
         {expand && (
           <div
             style={{

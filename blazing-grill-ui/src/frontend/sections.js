@@ -21,6 +21,7 @@ import StoreMenu from "./StoreMenu/StoreMenu";
 import DeliveryDriver from "./sections/DeliveryDriver";
 import Account from "./sections/Account";
 import { auth } from "../database/config";
+import PlaceAnOrderMain from "./PlaceAnOrderMain";
 function Sections({
   state,
   setState,
@@ -35,7 +36,19 @@ function Sections({
   setInProgress,
   PendingOrders,
   inProgress,
-  currentStore
+  currentStore,
+  checkout,
+  setCheckout,
+  setItemState,
+  setSelectedItem,
+  itemState,
+  selectedItem,
+  total,
+  setTotal,
+  setCart,
+  cart,
+  getTotalFromCart,
+  fetchStoreDetails,
 }) {
   const [hasbeenClicked, setHasBeenClicked] = useState(false);
   const loginDetails = async () => {
@@ -80,7 +93,10 @@ function Sections({
     case "Orders":
       checkStoreStatus();
       const testing = storeDetails.filter((stores, i) => {
-        if (stores[Object.keys(storeDetails[i])[0]].adminUsername === auth.currentUser.email) {
+        if (
+          stores[Object.keys(storeDetails[i])[0]].adminUsername ===
+          auth.currentUser.email
+        ) {
           return stores;
         }
       });
@@ -90,7 +106,7 @@ function Sections({
           adminUsername: "",
           storeName: "",
           address: "",
-        }; 
+        };
         return (
           <Orders
             storeName={storeName}
@@ -128,9 +144,11 @@ function Sections({
     case "Menu":
       return <StoreMenu />;
     case "Account":
-
       const testing2 = storeDetails.filter((stores, i) => {
-        if (stores[Object.keys(storeDetails[i])[0]].adminUsername === auth.currentUser.email) {
+        if (
+          stores[Object.keys(storeDetails[i])[0]].adminUsername ===
+          auth.currentUser.email
+        ) {
           return stores;
         }
       });
@@ -188,6 +206,24 @@ function Sections({
         );
       }
       break;
+    case "Place-order":
+      return (
+        <PlaceAnOrderMain
+          checkout={checkout}
+          setCheckout={setCheckout}
+          setItemState={setItemState}
+          setSelectedItem={setSelectedItem}
+          itemState={itemState}
+          selectedItem={selectedItem}
+          total={total}
+          setTotal={setTotal}
+          setCart={setCart}
+          cart={cart}
+          getTotalFromCart={getTotalFromCart}
+          fetchStoreDetails={fetchStoreDetails}
+          currentStore={currentStore}
+        />
+      );
     default:
       return <MenuItems />;
   }
