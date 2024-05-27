@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/BlazingGrill-UI/static/css/main.c07bb9f2.css",
-    "main.js": "/BlazingGrill-UI/static/js/main.8f5082d2.js",
+    "main.css": "/BlazingGrill-UI/static/css/main.a159926c.css",
+    "main.js": "/BlazingGrill-UI/static/js/main.bac9ec3f.js",
     "static/js/787.30597f2f.chunk.js": "/BlazingGrill-UI/static/js/787.30597f2f.chunk.js",
     "static/media/smokeyBackground1024_1.png": "/BlazingGrill-UI/static/media/smokeyBackground1024_1.168d2a96c81c0792de19.png",
     "static/media/background2.jpg": "/BlazingGrill-UI/static/media/background2.030f23df53591a96f4d3.jpg",
     "static/media/NoImage.jpeg": "/BlazingGrill-UI/static/media/NoImage.2efe78cdf6dbf909f571.jpeg",
     "static/media/menu.svg": "/BlazingGrill-UI/static/media/menu.0fd7e6ebf099858f982f65fe39f85f01.svg",
     "index.html": "/BlazingGrill-UI/index.html",
-    "main.c07bb9f2.css.map": "/BlazingGrill-UI/static/css/main.c07bb9f2.css.map",
-    "main.8f5082d2.js.map": "/BlazingGrill-UI/static/js/main.8f5082d2.js.map",
+    "main.a159926c.css.map": "/BlazingGrill-UI/static/css/main.a159926c.css.map",
+    "main.bac9ec3f.js.map": "/BlazingGrill-UI/static/js/main.bac9ec3f.js.map",
     "787.30597f2f.chunk.js.map": "/BlazingGrill-UI/static/js/787.30597f2f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c07bb9f2.css",
-    "static/js/main.8f5082d2.js"
+    "static/css/main.a159926c.css",
+    "static/js/main.bac9ec3f.js"
   ]
 }
