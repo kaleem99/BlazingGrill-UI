@@ -19,7 +19,7 @@ const PlaceAnOrderMain = ({
     <div style={{ width: "90%", margin: "auto", height: "100%" }}>
       <div
         style={{
-          height: "100px",
+          height: "80px",
           //   position: "fixed",
           textAlign: "center",
           width: "100%",

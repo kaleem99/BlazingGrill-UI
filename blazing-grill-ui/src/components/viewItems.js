@@ -53,7 +53,7 @@ const ViewItem = ({
   // };
 
   return (
-    <div style={{ marginTop: "4%", padding: "50px" }}>
+    <div style={{ margin: "auto", padding: "0px" }}>
       <div
         style={{
           width: "98%",
@@ -240,7 +240,15 @@ const ViewItem = ({
                       ))}
                   </div>
                   {extras != null && extras.length > 0 && (
-                    <div style={{ width: "100%", margin: "auto" }}>
+                    <div
+                      style={{
+                        width: "100%",
+                        margin: "auto",
+                        height: "40vh",
+                        overflowX: "auto",
+                        padding: "2px",
+                      }}
+                    >
                       <h2
                         style={{
                           textAlign: "center",
@@ -279,7 +287,7 @@ const ViewItem = ({
                                   height: "40px",
                                   marginTop: "auto",
                                   marginBottom: "auto",
-                                  fontSize: "1.5em",
+                                  fontSize: "1.25em",
                                 }}
                               >
                                 {data.name}
@@ -291,7 +299,7 @@ const ViewItem = ({
                                   height: "40px",
                                   marginTop: "auto",
                                   marginBottom: "auto",
-                                  fontSize: "1.5em",
+                                  fontSize: "1.25em",
                                 }}
                               >
                                 R{data.price}
@@ -351,7 +359,7 @@ const ViewItem = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            width: "25%",
+            width: "20%",
           }}
         >
           {viewItem.map((data, i) => (

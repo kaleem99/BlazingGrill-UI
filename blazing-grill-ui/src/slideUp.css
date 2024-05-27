@@ -33,10 +33,10 @@
   width: 100px;
   /* background-color: black; */
   background-image: url("./assets/smokeyBackground1024_1.png");
-  top: 10;
+  bottom: 15px;
   left: auto;
-  right: 0;
-  margin: 20px auto;
+  right: 15px;
+  margin: 0px auto;
   color: white;
   height: auto;
 }
