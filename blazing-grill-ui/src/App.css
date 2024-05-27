@@ -619,14 +619,13 @@ Store Menu
 }
 
 #SalesDatePicker {
-  width: 250px;
+  width: auto;
   height: 50px;
   margin: auto;
   /* position: absolute; */
-  left: 0;
-  right: 0;
-  border-radius: 10px;
-  font-size: 30px;
+
+  border-radius: 5px;
+  font-size: 20px;
 }
 
 .SalesText {

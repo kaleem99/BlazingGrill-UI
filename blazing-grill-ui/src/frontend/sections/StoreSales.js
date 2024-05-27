@@ -166,9 +166,9 @@ function StoreSales({ storeName, storeDetails }) {
           width: "auto",
           height: "auto",
           // background: "#ededed",
-          margin: "50px auto",
+          margin: "auto",
           borderRadius: "10px",
-          padding: "20px",
+          padding: "10px",
         }}
       >
         <div style={{ display: "grid", gridTemplateColumns: "33% 33% 33%" }}>
