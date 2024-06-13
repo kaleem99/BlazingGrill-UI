@@ -192,9 +192,9 @@ function Checkout({
     const x = getDateAndTime();
     const time = x.formattedTime;
     const date = x.formattedDate;
-    console.log(store);
+    // console.log(store);
     const storeName = Object.keys(store[0])[0];
-    console.log(storeName);
+    // console.log(storeName);
     const detailsOfStore = store[0][storeName];
     const uniqueOrderNum = generateUniqueOrderNumber(
       detailsOfStore.store,
@@ -218,7 +218,7 @@ function Checkout({
     resultCart.food = food;
     resultCart.storeOrder = true;
     resultCart.orderNumber = uniqueOrderNum;
-    console.log(resultCart);
+    // console.log(resultCart);
     if (checkoutDetails.table !== "None") {
       resultCart.orderType = "Table Ordering " + checkoutDetails.table;
     }
@@ -253,10 +253,10 @@ function Checkout({
     );
     await localStorage.removeItem("CART");
     setCartItems([]);
-    console.log(store[0][storeName]);
+    // console.log(store[0][storeName]);
     setPopup(false);
     getTotalFromCart();
-    console.log(colReference.id);
+    // console.log(colReference.id);
   };
   return !edit ? (
     <div

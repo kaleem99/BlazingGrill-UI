@@ -1,6 +1,7 @@
 export const generateUniqueOrderNumber = (storeName, username) => {
   const storeN = storeName.split(" ");
   const userN = username.split(" ");
+  // console.log(userN);
   let storeCode = "";
   let userCode = "";
   for (let i = 0; i < storeN.length; i++) {
@@ -14,8 +15,15 @@ export const generateUniqueOrderNumber = (storeName, username) => {
     uniqueNumber.length - 5,
     uniqueNumber.length - 1
   );
+  if (userCode == "undefined") {
+    userCode = "customer";
+  }
+  // console.log(userCode);
+
+  // console.log(
+  //   storeCode.toUpperCase() + "-" + userCode.toUpperCase() + "-" + fourDigitCode
+  // );
   return (
     storeCode.toUpperCase() + "-" + userCode.toUpperCase() + "-" + fourDigitCode
   );
 };
-

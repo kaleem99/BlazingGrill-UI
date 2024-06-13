@@ -37,7 +37,10 @@ const RevokeReceipt = ({
           </h3>
           <br />
           {food.map((item) => (
-            <div key={item.productName} style={{ marginBottom: "5px" }}>
+            <div
+              key={item.productName}
+              style={{ marginBottom: "5px", textAlign: "left" }}
+            >
               {item.productQuantity} x {item.productName}{" "}
               <input
                 style={{ float: "right", height: "17px", width: "17px" }}
@@ -52,11 +55,14 @@ const RevokeReceipt = ({
           <strong>
             <h2>** Revoked **</h2>
           </strong>
-          <strong>Date:</strong> {receiptData.date}
+          <strong style={{ float: "left" }}>Date:</strong>{" "}
+          <text style={{ float: "right" }}>{receiptData.date}</text>
           <br />
-          <strong>Time:</strong> {receiptData.time}
+          <strong style={{ float: "left" }}>Time:</strong>
+          <text style={{ float: "right" }}> {receiptData.time}</text>
           <br />
-          <strong>Channel:</strong> Kaleem
+          <strong style={{ float: "left" }}>Channel:</strong>
+          <text style={{ float: "right" }}> Kaleem</text>
           <br />
           <hr style={{ borderTop: "1px dashed #ccc", marginTop: "10px" }} />
           <em>Come Get Some!!!</em>
