@@ -99,6 +99,12 @@ const CashoutReciepts = ({
                 <p className="Left pRemoveMargins">Cashier:</p>
                 <p className="right pRemoveMargins">{".".repeat(35)}</p>
               </div>
+              <button
+                style={style.printButtons}
+                onClick={() => setCashout(false)}
+              >
+                Close Reciept
+              </button>
               {/* <br />
           <hr
             style={{ borderTop: "1px dashed #ccc", marginBottom: "10px" }}

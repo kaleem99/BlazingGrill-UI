@@ -122,6 +122,12 @@ function MenuItems({ adminUserEmail, setState }) {
     });
   };
   const updateMultipleItemsPrices = async () => {
+    const result = window.confirm(
+      "Are you sure you would like to update all " + itemSection
+    );
+    if (!result) {
+      return false;
+    }
     try {
       const querySnapshot = await getDocs(collection(db, "Burgers"));
       // Example data with updated prices
@@ -158,39 +164,51 @@ function MenuItems({ adminUserEmail, setState }) {
     if (itemName === "") {
       return (
         <div className="ItemsSections">
-          <label>Operation: Add or Subtract</label>
-          <select
+          <div
             style={{
-              width: "170px",
-              height: "40px",
+              width: "96%",
+              margin: "auto",
+              display: "flex",
+              height: "80px",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "1px solid white",
               borderRadius: "10px",
-              background: "transparent",
-              color: "white",
-              fontSize: "large",
+              marginBottom: "10px",
             }}
-            id="category"
-            onChange={(e) => setOperator(e.target.value)}
-            value={"Add"}
           >
-            <option value={"Add"}>Add</option>
-            <option value={"Subtract"}>Subtract</option>
-          </select>
-          <label>Price: </label>
-          <input
-            onChange={(e) => setInputPrice(e.target.value)}
-            type="number"
-            id="input0"
-            value={inputPrice}
-            placeholder="enter input amount"
-          />
-          <button
-            onClick={() => updateMultipleItemsPrices()}
-            className="FuncButtons"
-          >
-            Update all {name}
-          </button>
+            <div style={{ width: "300px" }}>
+              <label>Operation: Add or Subtract</label>
+            </div>
+            <select
+              style={{
+                width: "170px",
+                height: "40px",
+                borderRadius: "10px",
+                background: "transparent",
+                color: "white",
+                fontSize: "large",
+              }}
+              id="category"
+              onChange={(e) => setOperator(e.target.value)}
+              value={"Add"}
+            >
+              <option value={"Add"}>Add</option>
+              <option value={"Subtract"}>Subtract</option>
+            </select>
+            <div style={{ width: "140px" }}>
+              <label>Price: </label>
+            </div>
+            <input
+              onChange={(e) => setInputPrice(e.target.value)}
+              type="number"
+              id="input0"
+              value={inputPrice}
+              placeholder="enter input amount"
+            />
+          </div>
 
-          <div>
+          <div className="HomeFoodItemDiv">
             {items
               .sort((a, b) => (a.name > b.name ? 1 : -1))
               .map((food, i) => {
@@ -623,15 +641,12 @@ function MenuItems({ adminUserEmail, setState }) {
         <>
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "20% auto 20%",
+              // display: "grid",
+              // gridTemplateColumns: "20% auto 20%",
               margin: "auto",
               width: "80%",
             }}
           >
-            <button className="FuncButtons" onClick={() => goBack()}>
-              Back
-            </button>
             <p
               className="ItemName"
               style={{
@@ -651,6 +666,26 @@ function MenuItems({ adminUserEmail, setState }) {
           {itemsSectionComp(itemSection)}
         </>
       )}
+      <div
+        style={{
+          width: "86%",
+          display: "flex",
+          margin: "auto",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <button className="FuncButtons" onClick={() => goBack()}>
+          Back
+        </button>
+        <p>&nbsp;&nbsp; &nbsp; </p>
+        <button
+          onClick={() => updateMultipleItemsPrices()}
+          className="FuncButtons"
+        >
+          Update all {itemSection}
+        </button>
+      </div>
     </div>
   );
 }

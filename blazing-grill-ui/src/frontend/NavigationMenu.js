@@ -20,9 +20,9 @@ function NavMenu({ sections, setState, state, isLoggedIn }) {
                 />
               </div>
               <img
-                onClick={() =>
-                  (window.location.href = "/BlazingGrill-UI?Place-order")
-                }
+                // onClick={() =>
+                //   (window.location.href = "/BlazingGrill-UI?Place-order")
+                // }
                 alt=""
                 className="BlazingImage"
                 src="https://www.theblazinggrill.co.za/wp-content/uploads/2021/07/TBG_Final_TransWhite.png"

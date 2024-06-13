@@ -217,7 +217,7 @@ function App({ navigation }) {
     let newPendingOrder = PendingOrders.shift();
     setPendingOrders(PendingOrders);
   };
-  console.log(currentStore);
+  // console.log(currentStore);
   const handleDeclineOrder = (index) => {
     const detailsOfStore = getDetailsOfStore();
 

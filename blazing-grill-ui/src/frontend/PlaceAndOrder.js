@@ -201,14 +201,13 @@ const PlaceAndOrder = ({
       {selectedItem === "" ? (
         <div
           style={{
-            marginTop: "100px",
+            margin: "auto",
             width: "100%",
             height: "auto",
             overflow: "auto",
           }}
         >
           <>
-            <h1 style={{ color: "white" }}>Place An Order</h1>
             <div
               style={{
                 margin: "3% auto",
@@ -250,6 +249,7 @@ const PlaceAndOrder = ({
                             borderBottom: "none",
                             fontSize: "1.3em",
                             fontWeight: "200",
+                            border: "0px",
                           }}
                           // defaultValue={food.name}
                         >

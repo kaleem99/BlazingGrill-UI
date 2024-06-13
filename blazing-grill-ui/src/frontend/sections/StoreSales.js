@@ -121,11 +121,15 @@ function StoreSales({ storeName, storeDetails }) {
   }
   const changeSalesDate = (value) => {
     const filterByDate = filteredData.filter((data) => data.date === value);
-    setCurrentSales(
-      filterByDate.reduce((accumulator, currentObject) => {
-        return accumulator + currentObject.total;
-      }, [])
-    );
+    const total = filterByDate.reduce((accumulator, currentObject) => {
+      return accumulator + parseFloat(currentObject.total);
+    }, 0);
+    // console.log(
+    //   ,
+    //   "SUM",
+    //   126
+    // );
+    setCurrentSales(total);
     setTodaysOrders(filterByDate.length);
     // ref.current.value = value;
     console.log(ref.current.value);
@@ -137,7 +141,7 @@ function StoreSales({ storeName, storeDetails }) {
     );
     setReceiptData(filteredOrders);
     // if (filteredOrders.length > 0) {
-      setCashout(true);
+    setCashout(true);
     // }
     console.log(orders, 10);
     console.log(new Date().getUTCDate(), ref.current.value);
@@ -146,7 +150,7 @@ function StoreSales({ storeName, storeDetails }) {
   return (
     <div
       style={{
-        width: "60%",
+        width: "80%",
         height: "auto",
         // border: "1px solid white",
         margin: "auto",
