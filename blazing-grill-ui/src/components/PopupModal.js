@@ -37,9 +37,9 @@ function OrderConfirmationModal({
   //   let min =
   // }
   const newCurrentTime = getCurrentTime();
-  if (newCurrentTime > data.time) {
-    handleDecline();
-  }
+  // if (newCurrentTime > data.time) {
+  //   handleDecline();
+  // }
   return (
     <Modal
       isOpen={isOpen}
