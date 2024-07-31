@@ -6,6 +6,8 @@ import logout from "../../components/logoutOfStore";
 import ViewDeliveryDrivers from "../../components/viewDeliveryDrivers";
 import DeliveryDriver from "./DeliveryDriver";
 import { IoArrowBackCircleSharp } from "react-icons/io5";
+import { GrUserWorker } from "react-icons/gr";
+
 import { Admin, Resource } from "react-admin";
 import { firebaseConfig } from "../../database/config";
 import {
@@ -25,12 +27,14 @@ import { TiCancel } from "react-icons/ti";
 
 import StoreSales from "./StoreSales";
 import RevokedOrders from "./RevokedOrder";
+import AddStaff from "./AddStaff";
 const accountSections = [
   "Account Details",
   "Store Sales",
   "Revoked Orders",
   "Add Delivery Drivers",
   "View Delivery Drivers",
+  "Add Staff Workers",
   "Logout of Store",
 ];
 function Account({
@@ -70,6 +74,7 @@ function Account({
     <TiCancel />,
     <MdDirectionsBike />,
     <MdOutlineRateReview />,
+    <GrUserWorker color="white" />,
     <MdLogout />,
   ];
   let body = "";
@@ -99,6 +104,9 @@ function Account({
       break;
     case "View Delivery Drivers":
       body = <ViewDeliveryDrivers storeName={storeName} />;
+      break;
+    case "Add Staff Workers":
+      body = <AddStaff />;
       break;
     case "Revoked Orders":
       body = <RevokedOrders />;

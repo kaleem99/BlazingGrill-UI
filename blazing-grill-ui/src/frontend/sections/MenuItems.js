@@ -666,26 +666,33 @@ function MenuItems({ adminUserEmail, setState }) {
           {itemsSectionComp(itemSection)}
         </>
       )}
-      <div
-        style={{
-          width: "86%",
-          display: "flex",
-          margin: "auto",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <button className="FuncButtons" onClick={() => goBack()}>
-          Back
-        </button>
-        <p>&nbsp;&nbsp; &nbsp; </p>
-        <button
-          onClick={() => updateMultipleItemsPrices()}
-          className="FuncButtons"
+      {itemSection && (
+        <div
+          style={{
+            width: "86%",
+            display: "flex",
+            margin: "auto",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          Update all {itemSection}
-        </button>
-      </div>
+          <button
+            style={{ width: "200px" }}
+            className="FuncButtons"
+            onClick={() => goBack()}
+          >
+            Back
+          </button>
+          <p>&nbsp;&nbsp; &nbsp; </p>
+          <button
+            style={{ width: "200px" }}
+            onClick={() => updateMultipleItemsPrices()}
+            className="FuncButtons"
+          >
+            Update all {itemSection}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

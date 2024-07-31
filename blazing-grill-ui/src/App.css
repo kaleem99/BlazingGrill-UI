@@ -796,6 +796,9 @@ Store Menu
   width: 100%;
   height: 90vh;
 }
+.DivAccountHover > p > svg > path {
+  stroke: white;
+}
 .right {
   text-align: right;
   margin-block-start: 5px;
