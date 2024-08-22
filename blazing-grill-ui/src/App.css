@@ -822,3 +822,10 @@ Store Menu
   height: 60vh;
   overflow: auto;
 }
+
+.ReviewRewards {
+  color: white;
+  overflow: auto;
+  height: 80vh;
+  width: 94%;
+}

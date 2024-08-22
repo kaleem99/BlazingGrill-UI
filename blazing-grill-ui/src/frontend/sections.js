@@ -22,6 +22,7 @@ import DeliveryDriver from "./sections/DeliveryDriver";
 import Account from "./sections/Account";
 import { auth } from "../database/config";
 import PlaceAnOrderMain from "./PlaceAnOrderMain";
+import ReviewRewards from "./sections/ReviewRewards";
 function Sections({
   state,
   setState,
@@ -90,6 +91,8 @@ function Sections({
       );
     case "Add Menu Item":
       return <AddMenuItems adminUserEmail={auth.currentUser.email} />;
+    case "Review Rewards":
+      return <ReviewRewards adminUserEmail={auth.currentUser.email} />;
     case "Orders":
       checkStoreStatus();
       const testing = storeDetails.filter((stores, i) => {

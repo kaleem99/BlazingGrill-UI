@@ -49,6 +49,7 @@ const sections = [
   "Orders",
   "Account",
   "Place-order",
+  "Review Rewards",
   "Driver",
 ];
 function App({ navigation }) {
