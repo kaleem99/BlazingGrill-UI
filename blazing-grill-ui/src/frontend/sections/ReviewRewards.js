@@ -16,14 +16,14 @@ function ReviewRewards({ adminUserEmail }) {
       }));
 
       // Filter out scanData where approved is false
-      const filteredRewards = rewardsList
-        .map((reward) => ({
-          ...reward,
-          scanData: reward.scanData.filter((item) => item.approved === false),
-        }))
-        .filter((reward) => reward.scanData.length > 0); // Keep only rewards with at least one unapproved item
+      //   const filteredRewards = rewardsList
+      //     .map((reward) => ({
+      //       ...reward,
+      //       scanData: reward.scanData.filter((item) => item.approved === false),
+      //     }))
+      //     .filter((reward) => reward.scanData.length > 0); // Keep only rewards with at least one unapproved item
 
-      setRewardsData(filteredRewards);
+      setRewardsData(rewardsList);
     } catch (error) {
       console.error("Error fetching rewards data:", error);
     }
@@ -33,41 +33,32 @@ function ReviewRewards({ adminUserEmail }) {
   }, []);
 
   // Handle Approve Button Click
-  const handleApprove = async (rewardId, scanItem, scanIndex) => {
+  const handleApprove = async (rewardId, scanItem) => {
     try {
       const rewardDocRef = doc(db, "Rewards", rewardId);
 
-      // Create a copy of the scanData with the updated values
-      const updatedScanData = rewardsData.map((reward) =>
-        reward.id === rewardId
-          ? {
-              ...reward,
-              scanData: reward.scanData.map((item, idx) =>
-                idx === scanIndex
-                  ? {
-                      ...item,
-                      approved: true,
-                      stars: item.reviewStars || 0, // Ensure stars is not undefined
-                    }
-                  : item
-              ),
-            }
-          : reward
-      );
+      // Find the reward data for the given email (rewardId)
+      const emailData = rewardsData.find((data) => data.id === rewardId);
 
-      // Find the updated reward
-      const updatedReward = updatedScanData.find(
-        (reward) => reward.id === rewardId
-      );
+      if (emailData) {
+        // Map through the scanData to find and update the matching item
+        const updatedScanData = emailData.scanData.map((item) =>
+          item.name === scanItem.name && item.type === scanItem.type
+            ? {
+                ...item,
+                approved: true,
+                stars: scanItem.reviewStars || 1, // Set stars to reviewStars value
+              }
+            : item
+        );
 
-      // Ensure scanData is well-defined before updating the document
-      if (updatedReward && updatedReward.scanData) {
-        await updateDoc(rewardDocRef, { scanData: updatedReward.scanData });
-        // setRewardsData(updatedScanData);
+        // Update the reward document with the modified scanData
+        await updateDoc(rewardDocRef, { scanData: updatedScanData });
+
         alert("Reward has been approved");
         await fetchRewards();
       } else {
-        console.error("Error: scanData is undefined or invalid.");
+        console.error("Error: emailData not found.");
       }
     } catch (error) {
       console.error("Error approving reward:", error);
@@ -78,43 +69,34 @@ function ReviewRewards({ adminUserEmail }) {
   const handleEmailSelect = (email) => {
     setSelectedEmail(selectedEmail === email ? null : email);
   };
-  const handleDecline = async (rewardId, scanItem, scanIndex) => {
+  const handleDecline = async (rewardId, scanItem) => {
     try {
       const rewardDocRef = doc(db, "Rewards", rewardId);
 
-      // Create a copy of the scanData with the updated values
-      const updatedScanData = rewardsData.map((reward) =>
-        reward.id === rewardId
-          ? {
-              ...reward,
-              scanData: reward.scanData.map((item, idx) =>
-                idx === scanIndex
-                  ? {
-                      ...item,
-                      approved: true,
-                      reviewStars:
-                        item.reviewStars > 0 ? item.reviewStars - 1 : 0, // Decrement reviewStars, but not below 0
-                    }
-                  : item
-              ),
-            }
-          : reward
-      );
+      // Find the reward data for the given email (rewardId)
+      const emailData = rewardsData.find((data) => data.id === rewardId);
 
-      // Find the updated reward
-      const updatedReward = updatedScanData.find(
-        (reward) => reward.id === rewardId
-      );
-
-      // Ensure scanData is well-defined before updating the document
-      if (updatedReward && updatedReward.scanData) {
-        await updateDoc(rewardDocRef, { scanData: updatedReward.scanData });
-        setRewardsData(updatedScanData);
-        alert(
-          "Reward has been updated: reviewStars decremented and approved status set."
+      if (emailData) {
+        // Map through the scanData to find and update the matching item
+        const updatedScanData = emailData.scanData.map((item) =>
+          item.name === scanItem.name && item.type === scanItem.type
+            ? {
+                ...item,
+                approved: true,
+                reviewStars: item.reviewStars > 0 ? item.reviewStars - 1 : 0, // Decrement reviewStars, not below 0
+              }
+            : item
         );
+
+        // Update the reward document with the modified scanData
+        await updateDoc(rewardDocRef, { scanData: updatedScanData });
+
+        alert(
+          "Reward has been declined: reviewStars decremented and approved status set."
+        );
+        await fetchRewards();
       } else {
-        console.error("Error: scanData is undefined or invalid.");
+        console.error("Error: emailData not found.");
       }
     } catch (error) {
       console.error("Error declining reward:", error);
@@ -134,113 +116,109 @@ function ReviewRewards({ adminUserEmail }) {
           {rewardsData.length > 0 ? (
             rewardsData.map((reward, index) => (
               <React.Fragment key={index}>
-                <tr
-                  style={{
-                    borderBottom: "1px solid #ccc",
-                    background: "#333",
-                    color: "white",
-                  }}
-                >
-                  <td
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleEmailSelect(reward.email)}
-                  >
-                    {reward.email}
-                  </td>
-                  {selectedEmail === reward.email &&
-                    reward.scanData.length > 0 && (
-                      <td colSpan="6" style={{ padding: "0" }}>
-                        {reward.scanData.map((item, idx) => (
-                          <table
-                            key={idx}
-                            style={{ width: "100%", marginBottom: "10px" }}
-                          >
-                            <thead>
-                              <th>Name</th>
-                              <th>Type</th>
-                              {/* <th>Stars</th> */}
-                              <th>Review Stars</th>
-                              <th>Images</th>
-                              <th>Actions</th>
-                            </thead>
-                            <tbody>
-                              <tr
-                                style={{
-                                  borderBottom: "1px solid #ddd",
-                                  background: "#333",
-                                  color: "white",
-                                }}
-                              >
-                                <td>{item.name}</td>
-                                <td>{item.type}</td>
-                                {/* <td>{item.stars}</td> */}
-                                <td>{item.reviewStars}</td>
-                                <td>
-                                  {reward.imageUrl &&
-                                    reward.imageUrl.length > 0 && (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          flexWrap: "wrap",
-                                          gap: "10px",
-                                        }}
-                                      >
-                                        {reward.imageUrl.map((url, imgIdx) => (
-                                          <img
-                                            key={imgIdx}
-                                            src={url}
-                                            alt={`Reward Slip ${imgIdx + 1}`}
-                                            style={{
-                                              width: "50px",
-                                              height: "auto",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              window.open(url, "_blank")
-                                            }
-                                          />
-                                        ))}
-                                      </div>
-                                    )}
-                                </td>
-                                <td>
-                                  <button
-                                    onClick={() =>
-                                      handleApprove(reward.id, item, idx)
-                                    }
-                                    style={{
-                                      padding: "5px 10px",
-                                      marginRight: "10px",
-                                      backgroundColor: "#28a745",
-                                      color: "#fff",
-                                      border: "none",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    Approve
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleDecline(reward.id, item, idx)
-                                    }
-                                    style={{
-                                      padding: "5px 10px",
-                                      backgroundColor: "#dc3545", // Red color for decline
-                                      color: "#fff",
-                                      border: "none",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    Decline
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        ))}
+                {reward.scanData.length > 0 &&
+                  reward.scanData.filter((data) => data.approved === false)
+                    .length > 0 && (
+                    <tr
+                      style={{
+                        borderBottom: "1px solid #ccc",
+                        background: "#333",
+                        color: "white",
+                      }}
+                    >
+                      <td
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleEmailSelect(reward.email)}
+                      >
+                        {reward.email}
                       </td>
-                    )}
-                </tr>
+                      {selectedEmail === reward.email &&
+                        reward.scanData.length > 0 && (
+                          <td colSpan="6" style={{ padding: "0" }}>
+                            {reward.scanData
+                              .filter((data) => data.approved === false)
+                              .map((item, idx) => (
+                                <table
+                                  key={idx}
+                                  style={{
+                                    width: "100%",
+                                    marginBottom: "10px",
+                                  }}
+                                >
+                                  <thead>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    {/* <th>Stars</th> */}
+                                    <th>Review Stars</th>
+                                    <th>Images</th>
+                                    <th>Actions</th>
+                                  </thead>
+                                  <tbody>
+                                    <tr
+                                      style={{
+                                        borderBottom: "1px solid #ddd",
+                                        background: "#333",
+                                        color: "white",
+                                      }}
+                                    >
+                                      <td>{item.name}</td>
+                                      <td>{item.type}</td>
+                                      {/* <td>{item.stars}</td> */}
+                                      <td>{item.reviewStars}</td>
+                                      <td>
+                                        <img
+                                          key={item.name}
+                                          src={item.image}
+                                          alt={`Reward Slip ${item.name + 1}`}
+                                          style={{
+                                            width: "50px",
+                                            height: "auto",
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={() =>
+                                            window.open(item.image, "_blank")
+                                          }
+                                        />
+                                      </td>
+                                      <td>
+                                        <button
+                                          onClick={() =>
+                                            handleApprove(reward.id, item, idx)
+                                          }
+                                          style={{
+                                            padding: "5px 10px",
+                                            marginRight: "10px",
+                                            backgroundColor: "#28a745",
+                                            color: "#fff",
+                                            border: "none",
+                                            cursor: "pointer",
+                                          }}
+                                        >
+                                          Approve
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            handleDecline(reward.id, item, idx)
+                                          }
+                                          style={{
+                                            padding: "5px 10px",
+                                            backgroundColor: "#dc3545", // Red color for decline
+                                            color: "#fff",
+                                            border: "none",
+                                            cursor: "pointer",
+                                          }}
+                                        >
+                                          Decline
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              ))}
+                          </td>
+                        )}
+                    </tr>
+                  )}
               </React.Fragment>
             ))
           ) : (
