@@ -22,7 +22,7 @@ function ReviewRewards({ adminUserEmail }) {
       //       scanData: reward.scanData.filter((item) => item.approved === false),
       //     }))
       //     .filter((reward) => reward.scanData.length > 0); // Keep only rewards with at least one unapproved item
-
+      console.log(rewardsList);
       setRewardsData(rewardsList);
     } catch (error) {
       console.error("Error fetching rewards data:", error);
@@ -36,27 +36,32 @@ function ReviewRewards({ adminUserEmail }) {
   const handleApprove = async (rewardId, scanItem) => {
     try {
       const rewardDocRef = doc(db, "Rewards", rewardId);
-
+  
       // Find the reward data for the given email (rewardId)
       const emailData = rewardsData.find((data) => data.id === rewardId);
-
+      let additionalPoints = 0; // Initialize cumulative points to add
+  
       if (emailData) {
         // Map through the scanData to find and update the matching item
-        const updatedScanData = emailData.scanData.map((item) =>
-          item.name === scanItem.name && item.type === scanItem.type
-            ? {
-                ...item,
-                approved: true,
-                stars: scanItem.reviewStars || 1, // Set stars to reviewStars value
-              }
-            : item
-        );
-
-        // Update the reward document with the modified scanData
-        await updateDoc(rewardDocRef, { scanData: updatedScanData });
-
+        const updatedScanData = emailData.items.map((item) => {
+          if (item.name === scanItem.name && item.type === scanItem.type && !item.approved) {
+            additionalPoints += item.points; // Add item points only if it’s not already approved
+            return {
+              ...item,
+              approved: true, // Mark as approved
+            };
+          }
+          return item; // Return item unchanged if it doesn’t match
+        });
+  
+        // Update the reward document with the modified scanData and updated points
+        await updateDoc(rewardDocRef, {
+          items: updatedScanData,
+          points: emailData.points + additionalPoints, // Add cumulative points to existing points
+        });
+  
         alert("Reward has been approved");
-        await fetchRewards();
+        await fetchRewards(); // Refresh data after update
       } else {
         console.error("Error: emailData not found.");
       }
@@ -64,6 +69,7 @@ function ReviewRewards({ adminUserEmail }) {
       console.error("Error approving reward:", error);
     }
   };
+  
 
   // Handle Email Selection
   const handleEmailSelect = (email) => {
@@ -78,7 +84,7 @@ function ReviewRewards({ adminUserEmail }) {
 
       if (emailData) {
         // Map through the scanData to find and update the matching item
-        const updatedScanData = emailData.scanData.map((item) =>
+        const updatedScanData = emailData.items.map((item) =>
           item.name === scanItem.name && item.type === scanItem.type
             ? {
                 ...item,
@@ -116,8 +122,8 @@ function ReviewRewards({ adminUserEmail }) {
           {rewardsData.length > 0 ? (
             rewardsData.map((reward, index) => (
               <React.Fragment key={index}>
-                {reward.scanData.length > 0 &&
-                  reward.scanData.filter((data) => data.approved === false)
+                {reward.items.length > 0 &&
+                  reward.items.filter((data) => data.approved === false)
                     .length > 0 && (
                     <tr
                       style={{
@@ -133,9 +139,9 @@ function ReviewRewards({ adminUserEmail }) {
                         {reward.email}
                       </td>
                       {selectedEmail === reward.email &&
-                        reward.scanData.length > 0 && (
+                        reward.items.length > 0 && (
                           <td colSpan="6" style={{ padding: "0" }}>
-                            {reward.scanData
+                            {reward.items
                               .filter((data) => data.approved === false)
                               .map((item, idx) => (
                                 <table
