@@ -684,13 +684,15 @@ function MenuItems({ adminUserEmail, setState }) {
             Back
           </button>
           <p>&nbsp;&nbsp; &nbsp; </p>
-          <button
-            style={{ width: "200px" }}
-            onClick={() => updateMultipleItemsPrices()}
-            className="FuncButtons"
-          >
-            Update all {itemSection}
-          </button>
+          {itemName === "" && (
+            <button
+              style={{ width: "200px" }}
+              onClick={() => updateMultipleItemsPrices()}
+              className="FuncButtons"
+            >
+              Update all {itemSection}
+            </button>
+          )}
         </div>
       )}
     </div>
